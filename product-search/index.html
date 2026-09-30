@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سوق المنتجات — ابحث وقارن التوفر</title>
+<meta name="description" content="ابحث عن أي منتج وشاهد توفره وأسعاره في جميع المتاجر">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="brand"><span class="logo">🔎</span> سوق المنتجات</div>
+    <h1>ابحث عن أي منتج… وشوف <em>متوفر فين</em></h1>
+    <p class="sub">قارن الأسعار والتوفر في كل المتاجر خلال ثوانٍ</p>
+    <form class="search" id="searchForm" role="search" autocomplete="off">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="جرّب: آيفون، iPhone، لابتوب، سماعة…" aria-label="بحث عن منتج" autofocus>
+      <button type="submit">بحث</button>
+      <ul id="suggest" class="suggest" hidden></ul>
+    </form>
+    <div class="chips" id="quick"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="toolbar">
+    <div class="cats" id="cats" role="tablist"></div>
+    <div class="controls">
+      <label class="toggle"><input type="checkbox" id="inOnly"><span></span> المتوفر فقط</label>
+      <select id="sort" aria-label="ترتيب">
+        <option value="rel">الأكثر صلة</option>
+        <option value="low">الأقل سعراً</option>
+        <option value="high">الأعلى سعراً</option>
+        <option value="avail">الأكثر توفراً</option>
+      </select>
+    </div>
+  </section>
+  <p class="count" id="count" aria-live="polite"></p>
+  <section class="grid" id="results"></section>
+  <div class="empty" id="empty" hidden>
+    <div>😕</div><h3>لم نجد منتجات مطابقة</h3><p>جرّب كلمة أخرى أو غيّر التصنيف.</p>
+  </div>
+</main>
+
+<footer class="foot">© سوق المنتجات — البيانات الحالية تجريبية</footer>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
