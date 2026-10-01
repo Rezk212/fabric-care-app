@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import { Alert, Pressable, ScrollView, View } from 'react-native';
 import { Button, Card, Chip, FadeIn, IconBubble, Row, Screen, Text } from '../../components/ui';
 import { useApp } from '../../lib/app-context';
+import { shareApp } from '../../lib/share';
 
 export default function Settings() {
   const { t, locale, setLocale, place, session, signOut, theme, setTheme, deleteAccount, colors, rtl } = useApp();
@@ -75,6 +76,13 @@ export default function Settings() {
             </Card>
           </FadeIn>
         ) : null}
+
+        <FadeIn delay={180}>
+          <Card style={{ gap: space.md }}>
+            <Row><IconBubble name="share-2" tone="accent" /><Text weight="semibold">{t.common.shareApp}</Text></Row>
+            <Button variant="quiet" icon="share-2" label={t.common.share} onPress={() => void shareApp(t)} />
+          </Card>
+        </FadeIn>
 
         <FadeIn delay={200}>
           <Card style={{ gap: space.xs }}>

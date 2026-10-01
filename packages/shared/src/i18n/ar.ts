@@ -120,7 +120,11 @@ export const ar: Dictionary = {
     signOut: 'تسجيل الخروج',
     account: 'الحساب',
   },
-  common: { sponsored: 'برعاية' },
+  common: {
+    share: 'مشاركة', shareApp: 'شارك نقاء مع أصدقائك',
+    shareAppText: 'نقاء: اعرف كيف تغسل كل قطعة. صورة واحدة وتحصل على خطة الغسيل.',
+    sponsored: 'برعاية',
+  },
   guide: {
     appliances: 'الغسالات والمجففات',
     appliancesHint: 'الأنواع والمزايا والعيوب والسعة',

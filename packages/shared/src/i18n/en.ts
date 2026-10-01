@@ -118,7 +118,11 @@ export const en = {
     signOut: 'Sign out',
     account: 'Account',
   },
-  common: { sponsored: 'Sponsored' },
+  common: {
+    share: 'Share', shareApp: 'Share Naqa with friends',
+    shareAppText: 'Naqa: know how to wash every garment. Photo in, wash plan out.',
+    sponsored: 'Sponsored',
+  },
   guide: {
     appliances: 'Washers & dryers',
     appliancesHint: 'Types, pros and cons, and capacity',

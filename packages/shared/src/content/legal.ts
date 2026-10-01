@@ -32,3 +32,6 @@ export const termsOfUse: LegalSection[] = [
   { title: { ar: 'استخدامك للتطبيق', en: 'Your use of the app' },
     body: { ar: 'لا ترفع صورًا غير لائقة أو لا تملك حق استخدامها، ولا تحاول تعطيل الخدمة أو تجاوز حدودها. يجوز إيقاف الحسابات المخالفة.', en: 'Do not upload inappropriate images or ones you have no right to use, and do not try to disrupt the service or bypass its limits. Accounts that break these rules may be suspended.' } },
 ];
+
+/** Public link to the app. Leave empty until the app is published, then paste the store link (or a smart link) here. */
+export const APP_LINK = '';

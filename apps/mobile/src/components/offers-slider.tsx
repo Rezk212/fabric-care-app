@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Linking, Pressable, ScrollView, View, type LayoutChangeEvent, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { useApp } from '../lib/app-context';
 import { fetchOffers } from '../lib/offers';
+import { shareOffer } from '../lib/share';
 import { Pill, Row, Text } from './ui';
 
 type FeatherName = React.ComponentProps<typeof Feather>['name'];
@@ -90,8 +91,13 @@ export function OffersSlider() {
                       <Text variant="title" weight="bold" color="#FFFFFF">{o.title[locale]}</Text>
                       {o.subtitle ? <Text variant="caption" color="#FFFFFF" style={{ opacity: 0.9 }}>{o.subtitle[locale]}</Text> : null}
                       <Row style={{ justifyContent: 'space-between', marginTop: 4 }}>
-                        <Text variant="caption" color="#FFFFFF" style={{ opacity: 0.85 }}>{o.advertiser ?? ''}</Text>
+                        <Text variant="caption" color="#FFFFFF" style={{ opacity: 0.85, flex: 1 }}>{o.advertiser ?? ''}</Text>
                         {o.linkUrl ? <Feather name={rtl ? 'arrow-left' : 'arrow-right'} size={18} color="#FFFFFF" /> : null}
+                        <Pressable accessibilityRole="button" accessibilityLabel={t.common.share} hitSlop={10}
+                          onPress={() => void shareOffer(o, locale, t)}
+                          style={{ width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.2)', marginStart: space.sm }}>
+                          <Feather name="share-2" size={17} color="#FFFFFF" />
+                        </Pressable>
                       </Row>
                     </View>
                   </LinearGradient>
