@@ -130,3 +130,54 @@ export const capacityGuide: Bilingual = {
   ar: 'السعة بالكيلوغرام للغسيل الجاف: 5–7 كجم للفرد أو الزوجين، و8–9 كجم للأسرة الصغيرة، و10 كجم فأكثر للأسر الكبيرة. لا تملأ الأسطوانة أكثر من ثلاثة أرباعها ليبقى للغسيل مجال.',
   en: 'Capacity is the dry weight of clothes: 5–7 kg for one or two people, 8–9 kg for a small family, 10 kg or more for large households. Fill the drum no more than three quarters so clothes have room.',
 };
+
+/** Upkeep tips per type. General guidance: the owner's manual for the exact model always wins. */
+export const applianceMaintenance: Record<string, Bilingual[]> = {
+  'front-load': [
+    { ar: 'امسح إطار الباب المطاطي بعد الغسيل وأبقِ الباب مفتوحًا قليلًا ليجف', en: 'Wipe the door seal after washing and leave the door ajar to dry' },
+    { ar: 'نظّف درج المنظفات شهريًا', en: 'Clean the detergent drawer monthly' },
+    { ar: 'شغّل برنامج تنظيف الأسطوانة أو غسلة ساخنة فارغة كل شهر أو شهرين', en: 'Run a drum-clean or hot empty cycle every month or two' },
+  ],
+  'top-load-agitator': [
+    { ar: 'امسح الحوض والحافة من الرواسب شهريًا', en: 'Wipe the tub and rim of residue monthly' },
+    { ar: 'نظّف فلتر النسالة إن وُجد', en: 'Clean the lint filter if your model has one' },
+    { ar: 'اترك الغطاء مفتوحًا بعد الاستعمال للتهوية', en: 'Leave the lid open after use to air out' },
+  ],
+  'top-load-impeller': [
+    { ar: 'امسح الحوض والحافة من الرواسب شهريًا', en: 'Wipe the tub and rim of residue monthly' },
+    { ar: 'نظّف فلتر النسالة إن وُجد', en: 'Clean the lint filter if your model has one' },
+    { ar: 'اترك الغطاء مفتوحًا بعد الاستعمال للتهوية', en: 'Leave the lid open after use to air out' },
+  ],
+  'twin-tub': [
+    { ar: 'أفرغ الماء وجفّف الحوضين بعد كل استعمال', en: 'Drain and dry both tubs after each use' },
+    { ar: 'نظّف شبكة النسالة بعد كل غسلة', en: 'Clean the lint net after each wash' },
+    { ar: 'لا تتجاوز الحمولة المحددة في حوض العصر', en: 'Do not exceed the stated load in the spin tub' },
+  ],
+  'washer-dryer': [
+    { ar: 'نظّف الفلتر وإطار الباب بانتظام', en: 'Clean the filter and door seal regularly' },
+    { ar: 'لا تملأ الأسطوانة عند التجفيف: السعة أقل من الغسيل', en: 'Do not fill the drum for drying: dry capacity is lower than wash capacity' },
+    { ar: 'شغّل برنامج تنظيف الأسطوانة بين فترة وأخرى', en: 'Run a drum-clean cycle now and then' },
+  ],
+  'vented-dryer': [
+    { ar: 'نظّف فلتر النسالة بعد كل دورة', en: 'Clean the lint filter after every cycle' },
+    { ar: 'نظّف خرطوم التهوية ومخرج الهواء مرتين في السنة لتقليل خطر الحريق', en: 'Clear the vent hose and outlet twice a year to reduce fire risk' },
+    { ar: 'لا تجفف قطعًا فيها بقع زيت أو مواد قابلة للاشتعال', en: 'Never dry items stained with oil or flammable substances' },
+  ],
+  'condenser-dryer': [
+    { ar: 'أفرغ خزان الماء بعد كل دورة', en: 'Empty the water tank after every cycle' },
+    { ar: 'نظّف فلتر النسالة بعد كل دورة، والمكثِّف وفق دليل الجهاز', en: 'Clean the lint filter every cycle and the condenser as the manual says' },
+    { ar: 'اترك حول الجهاز مساحة للتهوية', en: 'Leave space around the machine for airflow' },
+  ],
+  'heat-pump-dryer': [
+    { ar: 'نظّف فلتر النسالة بعد كل دورة', en: 'Clean the lint filter after every cycle' },
+    { ar: 'نظّف فلتر المبادل الحراري وفق دليل الجهاز', en: 'Clean the heat-exchanger filter as the manual says' },
+    { ar: 'أفرغ خزان الماء إن لم يكن موصولًا بالتصريف', en: 'Empty the water tank unless it drains by hose' },
+  ],
+};
+
+export const generalMaintenance: Bilingual[] = [
+  { ar: 'لا تُفرط في المنظف: الزيادة تترك رواسب وروائح', en: 'Do not overdose detergent: excess leaves residue and odours' },
+  { ar: 'أفرغ الجيوب وأغلق السحّابات قبل الغسل', en: 'Empty pockets and close zips before washing' },
+  { ar: 'ثبّت الجهاز على أرض مستوية لتقليل الاهتزاز', en: 'Level the machine on the floor to cut vibration' },
+  { ar: 'عند أي عطل أو رمز خطأ راجع دليل الجهاز أو الوكيل المعتمد', en: 'For faults or error codes, check the manual or the authorised dealer' },
+];

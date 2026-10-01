@@ -1,4 +1,4 @@
-import { applianceTypes, capacityGuide, space } from '@naqa/shared';
+import { applianceMaintenance, applianceTypes, capacityGuide, generalMaintenance, space } from '@naqa/shared';
 import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { BackHeader, BottomBack, Card, Chip, FadeIn, Row, Screen, Text } from '../../components/ui';
@@ -30,10 +30,18 @@ export default function Appliances() {
                 <Text variant="caption" weight="semibold">{t.guide.cons}</Text>
                 {a.cons.map((p, j) => <Text key={j} variant="caption" muted>{`• ${p[locale]}`}</Text>)}
               </View>
+              <View style={{ gap: 4 }}>
+                <Text variant="caption" weight="semibold">{t.guide.maintenance}</Text>
+                {(applianceMaintenance[a.id] ?? []).map((p, j) => <Text key={j} variant="caption" muted>{`• ${p[locale]}`}</Text>)}
+              </View>
               <Text variant="caption"><Text variant="caption" weight="semibold">{`${t.guide.bestFor}: `}</Text>{a.bestFor[locale]}</Text>
             </Card>
           </FadeIn>
         ))}
+        <Card style={{ gap: space.sm }}>
+          <Text weight="semibold">{t.guide.generalCare}</Text>
+          {generalMaintenance.map((p, j) => <Text key={j} variant="caption" muted>{`• ${p[locale]}`}</Text>)}
+        </Card>
         <Card style={{ gap: space.sm }}>
           <Text weight="semibold">{t.guide.capacity}</Text>
           <Text variant="caption" muted>{capacityGuide[locale]}</Text>

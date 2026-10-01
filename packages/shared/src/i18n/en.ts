@@ -116,6 +116,8 @@ export const en = {
     cons: 'Drawbacks',
     bestFor: 'Best for',
     capacity: 'Choosing capacity',
+    maintenance: 'Maintenance tips',
+    generalCare: 'For every machine',
     products: 'Products',
     productsHint: 'Detergents, softeners and where to find them',
     nearest: 'Nearest branch',

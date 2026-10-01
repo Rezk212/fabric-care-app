@@ -118,6 +118,8 @@ export const ar: Dictionary = {
     cons: 'العيوب',
     bestFor: 'الأنسب لـ',
     capacity: 'اختيار السعة',
+    maintenance: 'نصائح الصيانة',
+    generalCare: 'لكل الأجهزة',
     products: 'المنتجات',
     productsHint: 'المنظفات والمنعّمات وأين تجدها',
     nearest: 'أقرب فرع',

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { applianceTypes, matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
+import { applianceMaintenance, applianceTypes, matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
 
 const nonEmpty = (b: { ar: string; en: string }) => b.ar.trim().length > 0 && b.en.trim().length > 0;
 
@@ -76,4 +76,11 @@ test('every appliance type has Arabic and English text', () => {
     for (const l of [...a.pros, ...a.cons]) assert.ok(nonEmpty(l), a.id);
   }
   assert.ok(applianceTypes.some((a) => a.kind === 'washer') && applianceTypes.some((a) => a.kind === 'dryer'));
+});
+
+test('every appliance type has maintenance tips in both languages', () => {
+  for (const a of applianceTypes) {
+    const tips = applianceMaintenance[a.id];
+    assert.ok(tips && tips.length > 0 && tips.every(nonEmpty), a.id);
+  }
 });
