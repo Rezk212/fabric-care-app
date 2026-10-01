@@ -77,14 +77,17 @@ export default function Analyze() {
             accessibilityLabel={t.home.modelNumberOptional}
           />
         </FadeIn>
+
+        <View style={{ gap: space.sm }}>
+          {usage ? (
+            <Text variant="caption" muted>{exhausted ? t.home.quotaReached : format(t.home.usageLeft, { left: left ?? 0, limit: usage.limit })}</Text>
+          ) : null}
+          {!ready && !error && !exhausted ? <Text variant="caption" muted>{t.home.needPhoto}</Text> : null}
+          {error ? <Text color={colors.danger} accessibilityRole="alert">{error}</Text> : null}
+        </View>
       </ScrollView>
 
       <View style={{ gap: space.sm, paddingBottom: space.md }}>
-        {usage ? (
-          <Text variant="caption" muted>{exhausted ? t.home.quotaReached : format(t.home.usageLeft, { left: left ?? 0, limit: usage.limit })}</Text>
-        ) : null}
-        {!ready && !error && !exhausted ? <Text variant="caption" muted>{t.home.needPhoto}</Text> : null}
-        {error ? <Text color={colors.danger} accessibilityRole="alert">{error}</Text> : null}
         {canGoManual ? (
           <Button variant="quiet" icon="edit-3" label={t.home.manual} onPress={() => router.push({ pathname: '/result', params: { analysis: JSON.stringify(unknownAnalysis()) } })} />
         ) : null}
