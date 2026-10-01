@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
+import { matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
 
 const nonEmpty = (b: { ar: string; en: string }) => b.ar.trim().length > 0 && b.en.trim().length > 0;
 
@@ -59,4 +59,13 @@ test('machine programme matching picks the closest label on the real machine', (
   assert.equal(matchMachineProgram('quick', panel), 'Quick 15');
   assert.equal(matchMachineProgram('hand_wash', ['Cotton', 'Spin']), undefined);
   assert.equal(matchMachineProgram('cottons', []), undefined);
+});
+
+test('chain matcher recognises Omani supermarket names in both languages', () => {
+  assert.equal(matchChain('Lulu Hypermarket Al Khuwair')?.id, 'lulu');
+  assert.equal(matchChain(undefined, 'لولو هايبرماركت')?.id, 'lulu');
+  assert.equal(matchChain('Nesto Hypermarket')?.id, 'nesto');
+  assert.equal(matchChain('Hyper Max')?.id, 'hypermax');
+  assert.equal(matchChain('الميرة')?.id, 'almeera');
+  assert.equal(matchChain('Random Mosque'), undefined);
 });

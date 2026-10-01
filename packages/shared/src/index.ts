@@ -11,3 +11,4 @@ export * from './content/garments';
 export * from './content/stains';
 export * from './content/symbols';
 export * from './machine';
+export * from './data/chains';
