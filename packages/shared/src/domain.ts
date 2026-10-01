@@ -49,6 +49,8 @@ export interface Product {
   isSample: boolean;
   /** Paid placement. Must always be labelled in the UI and never changes wash advice. */
   isSponsored?: boolean;
+  /** Chains that usually stock this kind of product. Indicative, not live stock: shoppers should confirm in store. */
+  chainIds?: string[];
 }
 
 export interface Store {

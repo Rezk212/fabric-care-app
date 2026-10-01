@@ -13,6 +13,7 @@ import { withFabric } from '../lib/analyze';
 import { useApp } from '../lib/app-context';
 import { listMachines } from '../lib/data';
 import { goBack } from '../lib/nav';
+import { fetchBranches, type Branch } from '../lib/osm';
 
 const fabrics: FabricType[] = ['cotton', 'linen', 'wool', 'silk', 'polyester', 'nylon', 'denim', 'cashmere', 'viscose', 'synthetic_blend'];
 type FeatherName = React.ComponentProps<typeof Feather>['name'];
@@ -46,6 +47,13 @@ export default function Result() {
     () => (place ? recommendProducts(analysis.fabric, place.cityId, origin) : []),
     [analysis.fabric, place, origin?.lat, origin?.lng],
   );
+  const [branches, setBranches] = useState<Branch[]>([]);
+  useEffect(() => {
+    if (!origin || !known) return;
+    let live = true;
+    fetchBranches(origin).then((b) => { if (live) setBranches(b); }).catch(() => {});
+    return () => { live = false; };
+  }, [origin?.lat, origin?.lng, known]);
   const pct = Math.round(analysis.confidence * 100);
 
   // Programme names on the user's own machine: from this analysis, else from a saved machine.
@@ -158,12 +166,21 @@ export default function Result() {
                     <Text weight="semibold" style={{ flex: 1 }}>{product.name[locale]}</Text>
                     {product.isSponsored ? <Pill tone="accent" label={t.common.sponsored} /> : null}
                   </Row>
-                  <Row gap={6}>
-                    <Feather name="map-pin" size={14} color={colors.inkMuted} />
-                    <Text variant="caption" muted style={{ flex: 1 }}>
-                      {store ? `${store.name[locale]}${km != null ? ` · ${format(t.stores.away, { km: km.toFixed(1) })}` : ''}` : t.result.noStore}
-                    </Text>
-                  </Row>
+                  {(() => {
+                    const near = branches.find((b) => product.chainIds?.includes(b.chain.id));
+                    const line = near
+                      ? `${t.result.usuallyAt} ${near.chain.name[locale]} · ${format(t.stores.away, { km: near.km.toFixed(1) })}`
+                      : store ? `${store.name[locale]}${km != null ? ` · ${format(t.stores.away, { km: km.toFixed(1) })}` : ''}` : t.result.noStore;
+                    return (
+                      <>
+                        <Row gap={6}>
+                          <Feather name="map-pin" size={14} color={colors.inkMuted} />
+                          <Text variant="caption" muted style={{ flex: 1 }}>{line}</Text>
+                        </Row>
+                        {near ? <Text variant="caption" muted>{t.result.confirmStock}</Text> : null}
+                      </>
+                    );
+                  })()}
                 </Card>
               </FadeIn>
             ))}

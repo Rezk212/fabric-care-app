@@ -1,12 +1,12 @@
 import type { Product, Store } from '../domain';
 
-// SAMPLE DATA ONLY. Not real products, shops or locations. Replace with a real source.
+// SAMPLE DATA ONLY. chainIds are an indicative guess (large chains usually stock these categories), not verified stock. Not real products, shops or locations. Replace with a real source.
 export const products: Product[] = [
-  { id: 'p-detergent-gentle', kind: 'detergent', name: { ar: 'منظف لطيف (عينة)', en: 'Gentle detergent (sample)' }, forFabrics: ['cotton', 'linen', 'denim', 'polyester', 'nylon', 'synthetic_blend', 'viscose'], isSample: true, isSponsored: true },
-  { id: 'p-delicate-wash', kind: 'delicate_wash', name: { ar: 'غسول الأقمشة الرقيقة (عينة)', en: 'Delicate fabric wash (sample)' }, forFabrics: ['silk', 'viscose', 'cashmere'], isSample: true },
-  { id: 'p-wool-wash', kind: 'wool_wash', name: { ar: 'غسول الصوف (عينة)', en: 'Wool wash (sample)' }, forFabrics: ['wool', 'cashmere'], isSample: true },
-  { id: 'p-softener', kind: 'softener', name: { ar: 'مُنعّم أقمشة (عينة)', en: 'Fabric softener (sample)' }, forFabrics: ['cotton', 'linen', 'polyester', 'synthetic_blend'], isSample: true },
-  { id: 'p-stain', kind: 'stain_remover', name: { ar: 'مزيل بقع (عينة)', en: 'Stain remover (sample)' }, forFabrics: ['cotton', 'linen', 'denim', 'polyester', 'synthetic_blend'], isSample: true },
+  { id: 'p-detergent-gentle', kind: 'detergent', name: { ar: 'منظف لطيف (عينة)', en: 'Gentle detergent (sample)' }, forFabrics: ['cotton', 'linen', 'denim', 'polyester', 'nylon', 'synthetic_blend', 'viscose'], isSample: true, chainIds: ['lulu', 'hypermax', 'nesto', 'makkah', 'almeera', 'carrefour', 'sultan'], isSponsored: true },
+  { id: 'p-delicate-wash', kind: 'delicate_wash', name: { ar: 'غسول الأقمشة الرقيقة (عينة)', en: 'Delicate fabric wash (sample)' }, forFabrics: ['silk', 'viscose', 'cashmere'], isSample: true, chainIds: ['lulu', 'carrefour', 'sultan', 'nesto', 'hypermax'] },
+  { id: 'p-wool-wash', kind: 'wool_wash', name: { ar: 'غسول الصوف (عينة)', en: 'Wool wash (sample)' }, forFabrics: ['wool', 'cashmere'], isSample: true, chainIds: ['lulu', 'carrefour', 'sultan', 'nesto', 'hypermax'] },
+  { id: 'p-softener', kind: 'softener', name: { ar: 'مُنعّم أقمشة (عينة)', en: 'Fabric softener (sample)' }, forFabrics: ['cotton', 'linen', 'polyester', 'synthetic_blend'], isSample: true, chainIds: ['lulu', 'hypermax', 'nesto', 'makkah', 'almeera', 'carrefour', 'sultan'] },
+  { id: 'p-stain', kind: 'stain_remover', name: { ar: 'مزيل بقع (عينة)', en: 'Stain remover (sample)' }, forFabrics: ['cotton', 'linen', 'denim', 'polyester', 'synthetic_blend'], isSample: true, chainIds: ['lulu', 'hypermax', 'nesto', 'makkah', 'almeera', 'carrefour', 'sultan'] },
 ];
 
 export const stores: Store[] = [

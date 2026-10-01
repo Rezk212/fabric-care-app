@@ -56,6 +56,8 @@ export const ar: Dictionary = {
     buy: 'أين تشتري بالقرب منك',
     buyEmpty: 'حدّد نوع القماش لنقترح لك منتجات.',
     noStore: 'غير متوفر في مدينتك بعد',
+    usuallyAt: 'يتوفر عادةً في',
+    confirmStock: 'التوفر تقريبي، يُرجى التأكد داخل المتجر.',
     onYourMachine: 'على غسالتك اختر',
     back: 'رجوع',
   },

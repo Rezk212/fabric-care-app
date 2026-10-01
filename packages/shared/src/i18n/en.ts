@@ -54,6 +54,8 @@ export const en = {
     buy: 'Where to buy near you',
     buyEmpty: 'Tell us the fabric to see product suggestions.',
     noStore: 'Not stocked in your city yet',
+    usuallyAt: 'Usually available at',
+    confirmStock: 'Stock is indicative. Please confirm in store.',
     onYourMachine: 'On your machine, choose',
     back: 'Back',
   },
