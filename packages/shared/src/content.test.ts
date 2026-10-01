@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
+import { applianceTypes, matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
 
 const nonEmpty = (b: { ar: string; en: string }) => b.ar.trim().length > 0 && b.en.trim().length > 0;
 
@@ -68,4 +68,12 @@ test('chain matcher recognises Omani supermarket names in both languages', () =>
   assert.equal(matchChain('Hyper Max')?.id, 'hypermax');
   assert.equal(matchChain('الميرة')?.id, 'almeera');
   assert.equal(matchChain('Random Mosque'), undefined);
+});
+
+test('every appliance type has Arabic and English text', () => {
+  for (const a of applianceTypes) {
+    assert.ok(nonEmpty(a.name) && nonEmpty(a.how) && nonEmpty(a.bestFor), a.id);
+    for (const l of [...a.pros, ...a.cons]) assert.ok(nonEmpty(l), a.id);
+  }
+  assert.ok(applianceTypes.some((a) => a.kind === 'washer') && applianceTypes.some((a) => a.kind === 'dryer'));
 });
