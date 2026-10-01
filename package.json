@@ -1,0 +1,10 @@
+{
+  "name": "naqa",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "mobile": "npm run start -w apps/mobile",
+    "web": "npm run dev -w apps/web",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  }
+}

@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #F6F2EA;
+  --surface: #FFFFFF;
+  --surface-muted: #EDE7DA;
+  --ink: #14233A;
+  --ink-muted: #55627A;
+  --line: #DDD5C4;
+  --primary: #2F3FA8;
+  --primary-ink: #FFFFFF;
+  --accent: #E3A13D;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0E1626;
+    --surface: #16223A;
+    --surface-muted: #1D2B49;
+    --ink: #F2EEE4;
+    --ink-muted: #A5B0C6;
+    --line: #2B3957;
+    --primary: #8E9BFF;
+    --primary-ink: #0E1626;
+    --accent: #EBB252;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-primary: var(--primary);
+  --color-primary-ink: var(--primary-ink);
+  --color-accent: var(--accent);
+  --font-sans: "IBM Plex Sans Arabic", system-ui, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+::selection { background: var(--primary); color: var(--primary-ink); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }

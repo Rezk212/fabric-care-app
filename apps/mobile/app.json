@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "Naqa",
+    "slug": "naqa",
+    "scheme": "naqa",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": { "supportsTablet": true, "bundleIdentifier": "app.naqa.mobile" },
+    "android": {
+      "package": "app.naqa.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#2F3FA8",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": { "favicon": "./assets/favicon.png", "bundler": "metro" },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      ["expo-location", { "locationWhenInUsePermission": "Naqa uses your location to find the nearest stores." }],
+      ["expo-image-picker", { "photosPermission": "Naqa needs your photos to analyze garments and machines.", "cameraPermission": "Naqa needs the camera to photograph garments, care labels and machines." }]
+    ]
+  }
+}

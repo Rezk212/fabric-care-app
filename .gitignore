@@ -141,3 +141,11 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Expo / Next
+.expo/
+dist/
+.next/
+expo-env.d.ts
+next-env.d.ts
+*.tsbuildinfo

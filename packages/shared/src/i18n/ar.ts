@@ -1,0 +1,62 @@
+import type { Dictionary } from './en';
+
+export const ar: Dictionary = {
+  appName: 'نقاء',
+  tagline: 'الغسيل الأنسب لكل قماش',
+  welcome: {
+    title: 'اعتنِ بكل قماش، على غسالتك أنت',
+    body: 'صوّر القطعة أو بطاقة العناية بها. يخبرك نقاء بأفضل برنامج غسيل لغسالتك، وأين تجد ما تحتاجه بالقرب منك.',
+    start: 'ابدأ',
+    language: 'اللغة',
+  },
+  place: {
+    title: 'أين أنت؟',
+    country: 'الدولة',
+    city: 'المدينة',
+    useLocation: 'استخدم موقعي الحالي',
+    locationDenied: 'لم يتم السماح بالوصول إلى الموقع. يمكنك اختيار مدينتك يدويًا.',
+    continue: 'متابعة',
+  },
+  tabs: { home: 'تحليل', stores: 'المتاجر', machines: 'غسالاتي', settings: 'الإعدادات' },
+  home: {
+    title: 'ماذا سنغسل اليوم؟',
+    garment: 'صورة القطعة',
+    label: 'صورة بطاقة العناية',
+    machine: 'الغسالة',
+    machineHint: 'صورة للغسالة أو رقم الموديل',
+    modelNumber: 'رقم الموديل',
+    analyze: 'حلّل',
+  },
+  result: {
+    title: 'خطة الغسيل',
+    fabric: 'القماش',
+    program: 'البرنامج',
+    temperature: 'الحرارة',
+    spin: 'العصر',
+    tumbleDry: 'التجفيف الآلي',
+    iron: 'الكي',
+    yes: 'مسموح',
+    no: 'يُفضّل تجنبه',
+    lowConfidence: 'لسنا متأكدين تمامًا. راجع بطاقة العناية قبل الغسيل.',
+    back: 'رجوع',
+  },
+  stores: {
+    title: 'متاجر قريبة',
+    sample: 'بيانات تجريبية',
+    away: 'على بعد {km} كم',
+    empty: 'لا توجد متاجر لهذه المدينة بعد.',
+  },
+  photo: { camera: 'التقاط صورة', library: 'اختيار من المعرض', remove: 'إزالة', cancel: 'إلغاء' },
+  settings: { title: 'الإعدادات', language: 'اللغة', place: 'الموقع', arabic: 'العربية', english: 'English', change: 'تغيير' },
+  machines: { title: 'غسالاتي', empty: 'ستظهر هنا الغسالات التي تحللها.' },
+  fabrics: {
+    cotton: 'قطن', linen: 'كتان', wool: 'صوف', silk: 'حرير', polyester: 'بوليستر',
+    nylon: 'نايلون', denim: 'جينز', cashmere: 'كشمير', viscose: 'فيسكوز',
+    synthetic_blend: 'خليط صناعي', unknown: 'غير معروف',
+  },
+  programs: {
+    delicate: 'الأقمشة الرقيقة', wool: 'الصوف', synthetics: 'الصناعية',
+    cottons: 'القطن', quick: 'غسيل سريع', hand_wash: 'غسيل يدوي',
+  },
+  levels: { none: 'بدون', low: 'منخفض', medium: 'متوسط', high: 'مرتفع' },
+};

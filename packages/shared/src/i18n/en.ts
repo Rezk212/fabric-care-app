@@ -1,0 +1,62 @@
+export const en = {
+  appName: 'Naqa',
+  tagline: 'The right wash for every fabric',
+  welcome: {
+    title: 'Care for every fabric, on your machine',
+    body: 'Snap a garment or its care label. Naqa tells you the best wash program for your machine and where to buy what you need nearby.',
+    start: 'Get started',
+    language: 'Language',
+  },
+  place: {
+    title: 'Where are you?',
+    country: 'Country',
+    city: 'City',
+    useLocation: 'Use my current location',
+    locationDenied: 'Location access was not granted. You can still pick your city.',
+    continue: 'Continue',
+  },
+  tabs: { home: 'Analyze', stores: 'Stores', machines: 'My machines', settings: 'Settings' },
+  home: {
+    title: 'What are we washing?',
+    garment: 'Garment photo',
+    label: 'Care label photo',
+    machine: 'Washing machine',
+    machineHint: 'Photo of the machine, or its model number',
+    modelNumber: 'Model number',
+    analyze: 'Analyze',
+  },
+  result: {
+    title: 'Your wash plan',
+    fabric: 'Fabric',
+    program: 'Program',
+    temperature: 'Temperature',
+    spin: 'Spin',
+    tumbleDry: 'Tumble dry',
+    iron: 'Iron',
+    yes: 'Allowed',
+    no: 'Avoid',
+    lowConfidence: 'We are not fully sure. Check the care label before washing.',
+    back: 'Back',
+  },
+  stores: {
+    title: 'Nearby stores',
+    sample: 'Sample data',
+    away: '{km} km away',
+    empty: 'No stores found for this city yet.',
+  },
+  photo: { camera: 'Take a photo', library: 'Choose from library', remove: 'Remove', cancel: 'Cancel' },
+  settings: { title: 'Settings', language: 'Language', place: 'Location', arabic: 'العربية', english: 'English', change: 'Change' },
+  machines: { title: 'My machines', empty: 'Machines you analyze will appear here.' },
+  fabrics: {
+    cotton: 'Cotton', linen: 'Linen', wool: 'Wool', silk: 'Silk', polyester: 'Polyester',
+    nylon: 'Nylon', denim: 'Denim', cashmere: 'Cashmere', viscose: 'Viscose',
+    synthetic_blend: 'Synthetic blend', unknown: 'Unknown',
+  },
+  programs: {
+    delicate: 'Delicate', wool: 'Wool', synthetics: 'Synthetics',
+    cottons: 'Cottons', quick: 'Quick wash', hand_wash: 'Hand wash',
+  },
+  levels: { none: 'None', low: 'Low', medium: 'Medium', high: 'High' },
+};
+
+export type Dictionary = typeof en;
