@@ -1,28 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #F6F2EA;
+  --bg: #F3F6FB;
   --surface: #FFFFFF;
-  --surface-muted: #EDE7DA;
-  --ink: #14233A;
-  --ink-muted: #55627A;
-  --line: #DDD5C4;
-  --primary: #2F3FA8;
+  --surface-muted: #E8EDF7;
+  --ink: #0E1A33;
+  --ink-muted: #5B6783;
+  --line: #DCE3F0;
+  --primary: #3347D6;
   --primary-ink: #FFFFFF;
-  --accent: #E3A13D;
+  --primary-soft: #E4E8FD;
+  --hero-from: #4257E8;
+  --hero-to: #1B2A8F;
+  --accent: #F2A93B;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0E1626;
-    --surface: #16223A;
-    --surface-muted: #1D2B49;
-    --ink: #F2EEE4;
-    --ink-muted: #A5B0C6;
-    --line: #2B3957;
-    --primary: #8E9BFF;
-    --primary-ink: #0E1626;
-    --accent: #EBB252;
+    --bg: #0A1022;
+    --surface: #131C36;
+    --surface-muted: #1B2646;
+    --ink: #EEF1FA;
+    --ink-muted: #9DA9C8;
+    --line: #26325A;
+    --primary: #8C9CFF;
+    --primary-ink: #0A1022;
+    --primary-soft: #232E63;
+    --hero-from: #2F43CC;
+    --hero-to: #0F1A5C;
+    --accent: #F3B550;
   }
 }
 
@@ -35,8 +41,9 @@
   --color-line: var(--line);
   --color-primary: var(--primary);
   --color-primary-ink: var(--primary-ink);
+  --color-primary-soft: var(--primary-soft);
   --color-accent: var(--accent);
-  --font-sans: "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-sans: "Readex Pro", system-ui, sans-serif;
 }
 
 body {
