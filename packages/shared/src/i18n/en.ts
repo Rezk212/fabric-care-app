@@ -118,6 +118,7 @@ export const en = {
     signOut: 'Sign out',
     account: 'Account',
   },
+  share: { title: 'Share via', whatsapp: 'WhatsApp', telegram: 'Telegram', x: 'X', facebook: 'Facebook', more: 'More apps' },
   common: {
     share: 'Share', shareApp: 'Share Naqa with friends',
     shareAppText: 'Naqa: know how to wash every garment. Photo in, wash plan out.',

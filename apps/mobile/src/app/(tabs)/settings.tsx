@@ -2,13 +2,16 @@ import { Feather } from '@expo/vector-icons';
 import { countries, space } from '@naqa/shared';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { Alert, Pressable, ScrollView, View } from 'react-native';
 import { Button, Card, Chip, FadeIn, IconBubble, Row, Screen, Text } from '../../components/ui';
 import { useApp } from '../../lib/app-context';
-import { shareApp } from '../../lib/share';
+import { ShareSheet } from '../../components/share-sheet';
+import { appPayload, type SharePayload } from '../../lib/share';
 
 export default function Settings() {
   const { t, locale, setLocale, place, session, signOut, theme, setTheme, deleteAccount, colors, rtl } = useApp();
+  const [sharing, setSharing] = useState<SharePayload | null>(null);
   const country = countries.find((c) => c.code === place?.countryCode);
   const city = country?.cities.find((c) => c.id === place?.cityId);
   function confirmDelete() {
@@ -80,7 +83,7 @@ export default function Settings() {
         <FadeIn delay={180}>
           <Card style={{ gap: space.md }}>
             <Row><IconBubble name="share-2" tone="accent" /><Text weight="semibold">{t.common.shareApp}</Text></Row>
-            <Button variant="quiet" icon="share-2" label={t.common.share} onPress={() => void shareApp(t)} />
+            <Button variant="quiet" icon="share-2" label={t.common.share} onPress={() => setSharing(appPayload(t))} />
           </Card>
         </FadeIn>
 
@@ -100,6 +103,7 @@ export default function Settings() {
           </Card>
         </FadeIn>
       </ScrollView>
+      <ShareSheet payload={sharing} onClose={() => setSharing(null)} />
     </Screen>
   );
 }

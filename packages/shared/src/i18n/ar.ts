@@ -120,6 +120,7 @@ export const ar: Dictionary = {
     signOut: 'تسجيل الخروج',
     account: 'الحساب',
   },
+  share: { title: 'مشاركة عبر', whatsapp: 'واتساب', telegram: 'تيليجرام', x: 'X', facebook: 'فيسبوك', more: 'تطبيقات أخرى' },
   common: {
     share: 'مشاركة', shareApp: 'شارك نقاء مع أصدقائك',
     shareAppText: 'نقاء: اعرف كيف تغسل كل قطعة. صورة واحدة وتحصل على خطة الغسيل.',
