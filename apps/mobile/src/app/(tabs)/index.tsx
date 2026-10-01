@@ -2,6 +2,7 @@ import { format, space, type UsageInfo } from '@naqa/shared';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { OffersSlider } from '../../components/offers-slider';
 import { PhotoSlot } from '../../components/photo-slot';
 import { Button, FadeIn, Field, Pill, Row, Screen, Text } from '../../components/ui';
 import { AnalyzeError, analyzeGarment, fetchUsage, unknownAnalysis } from '../../lib/analyze';
@@ -49,6 +50,10 @@ export default function Analyze() {
             {usage ? <Pill tone={exhausted ? 'accent' : 'primary'} icon="zap" label={`${left}/${usage.limit}`} /> : null}
           </Row>
           <Text muted>{t.home.subtitle}</Text>
+        </FadeIn>
+
+        <FadeIn delay={40}>
+          <OffersSlider />
         </FadeIn>
 
         <FadeIn delay={80}>

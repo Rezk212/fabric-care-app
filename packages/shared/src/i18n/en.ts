@@ -17,6 +17,9 @@ export const en = {
   },
   tabs: { home: 'Analyze', guide: 'Guide', stores: 'Stores', machines: 'Machines', settings: 'Settings' },
   home: {
+    offers: 'Latest offers',
+    offerSample: 'Sample offer',
+    offerView: 'View offer',
     title: 'What are we washing?',
     garment: 'Garment photo',
     label: 'Care label photo',

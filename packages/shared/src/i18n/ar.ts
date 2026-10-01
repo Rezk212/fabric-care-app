@@ -19,6 +19,9 @@ export const ar: Dictionary = {
   },
   tabs: { home: 'تحليل', guide: 'دليل', stores: 'المتاجر', machines: 'غسالاتي', settings: 'الإعدادات' },
   home: {
+    offers: 'أحدث العروض',
+    offerSample: 'عرض تجريبي',
+    offerView: 'عرض التفاصيل',
     title: 'ماذا سنغسل اليوم؟',
     garment: 'صورة القطعة',
     label: 'صورة بطاقة العناية',
