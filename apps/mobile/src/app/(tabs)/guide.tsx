@@ -9,10 +9,11 @@ type FeatherName = React.ComponentProps<typeof Feather>['name'];
 
 export default function Guide() {
   const { t, colors, rtl } = useApp();
-  const items: { icon: FeatherName; title: string; hint: string; href: '/guide/garments' | '/guide/stains' | '/guide/symbols'; tone: 'primary' | 'accent' | 'success' }[] = [
+  const items: { icon: FeatherName; title: string; hint: string; href: '/guide/garments' | '/guide/stains' | '/guide/symbols' | '/guide/products'; tone: 'primary' | 'accent' | 'success' }[] = [
     { icon: 'user', title: t.guide.garments, hint: t.guide.garmentsHint, href: '/guide/garments', tone: 'primary' },
     { icon: 'droplet', title: t.guide.stains, hint: t.guide.stainsHint, href: '/guide/stains', tone: 'accent' },
     { icon: 'tag', title: t.guide.symbols, hint: t.guide.symbolsHint, href: '/guide/symbols', tone: 'success' },
+    { icon: 'shopping-bag', title: t.guide.products, hint: t.guide.productsHint, href: '/guide/products', tone: 'primary' },
   ];
   return (
     <Screen floatingTabs>

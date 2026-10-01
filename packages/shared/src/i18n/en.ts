@@ -108,6 +108,9 @@ export const en = {
   },
   common: { sponsored: 'Sponsored' },
   guide: {
+    products: 'Products',
+    productsHint: 'Detergents, softeners and where to find them',
+    nearest: 'Nearest branch',
     title: 'Care guide',
     subtitle: 'Quick answers, no photo needed.',
     garments: 'Our garments',

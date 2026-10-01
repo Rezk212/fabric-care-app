@@ -110,6 +110,9 @@ export const ar: Dictionary = {
   },
   common: { sponsored: 'برعاية' },
   guide: {
+    products: 'المنتجات',
+    productsHint: 'المنظفات والمنعّمات وأين تجدها',
+    nearest: 'أقرب فرع',
     title: 'دليل العناية',
     subtitle: 'إجابات سريعة دون الحاجة إلى صورة.',
     garments: 'ملابسنا',
