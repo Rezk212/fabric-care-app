@@ -47,6 +47,8 @@ export interface Product {
   name: { ar: string; en: string };
   forFabrics: FabricType[];
   isSample: boolean;
+  /** Paid placement. Must always be labelled in the UI and never changes wash advice. */
+  isSponsored?: boolean;
 }
 
 export interface Store {
@@ -57,4 +59,8 @@ export interface Store {
   lng: number;
   productIds: string[];
   isSample: boolean;
+  isSponsored?: boolean;
 }
+
+/** Today's analysis allowance. `limit` depends on the plan; `plus` is the future paid plan. */
+export interface UsageInfo { used: number; limit: number; plan: 'free' | 'plus' }

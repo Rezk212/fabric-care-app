@@ -1,9 +1,11 @@
 // Supabase Edge Function: analyze garment / care label / washing machine photos.
 // Which AI answers is a server setting (see providers/index.ts); the app never knows or cares.
-import { isSignedInUser } from "./auth.ts";
+import { createClient } from "npm:@supabase/supabase-js";
+import { isSignedInUser, jwtSub } from "./auth.ts";
 import { FABRICS } from "./prompt.ts";
 import { pickProvider } from "./providers/index.ts";
 import { AiError, type InputImage } from "./providers/types.ts";
+import { createQuota, limitsFromEnv, type Rpc } from "./quota.ts";
 
 const MAX_IMAGES = 3;
 const MAX_IMAGE_B64_CHARS = 2_500_000; // ~1.8 MB decoded per image
@@ -35,9 +37,29 @@ function parseInput(raw: unknown): { images: InputImage[]; modelNumber?: string 
   return { images: out, modelNumber: model || undefined };
 }
 
+// Quota is enforced with the service role: users cannot call these database functions themselves.
+function makeQuota() {
+  const url = Deno.env.get("SUPABASE_URL");
+  const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!url || !key) throw new AiError("misconfigured", "Supabase service credentials missing");
+  const admin = createClient(url, key, { auth: { persistSession: false } });
+  return createQuota(admin.rpc.bind(admin) as unknown as Rpc, limitsFromEnv((n) => Deno.env.get(n)));
+}
+
 const STATUS = {
   refused: 422, rate_limited: 429, misconfigured: 500, bad_request: 400, upstream: 502, bad_output: 502,
 } as const;
+
+async function usageResponse(req: Request): Promise<Response> {
+  const uid = jwtSub(req.headers.get("Authorization"));
+  if (!uid) return json({ error: "unauthorized" }, 401);
+  try {
+    return json({ usage: await makeQuota().peek(uid) });
+  } catch (err) {
+    console.error("usage failed", err);
+    return json({ error: "internal" }, 500);
+  }
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
@@ -49,10 +71,30 @@ Deno.serve(async (req) => {
 
   let body: unknown;
   try { body = await req.json(); } catch { return json({ error: "invalid_json" }, 400); }
+  if ((body as { action?: unknown } | null)?.action === "usage") return await usageResponse(req);
   const input = parseInput(body);
   if (typeof input === "string") return json({ error: "invalid_input", message: input }, 400);
 
+  const requireAuth = Deno.env.get("AI_REQUIRE_AUTH") !== "false";
+  const uid = jwtSub(req.headers.get("Authorization"));
+  let quota: ReturnType<typeof makeQuota> | null = null;
+  let consumed = false;
+
   try {
+    if (requireAuth) {
+      if (!uid) return json({ error: "unauthorized" }, 401);
+      quota = makeQuota();
+    }
+
+    // Free allowance check, before any AI money is spent.
+    let usage: { used: number; limit: number; plan: string } | undefined;
+    if (quota && uid) {
+      const taken = await quota.consume(uid);
+      usage = { used: taken.used, limit: taken.limit, plan: taken.plan };
+      if (!taken.allowed) return json({ error: "quota_exceeded", usage }, 429);
+      consumed = true;
+    }
+
     const provider = pickProvider((n) => Deno.env.get(n));
     const parsed = await provider.analyze(input);
 
@@ -69,8 +111,11 @@ Deno.serve(async (req) => {
         model: typeof parsed.machine_model === "string" ? parsed.machine_model : (input.modelNumber ?? null),
       },
       notes: strings(parsed.notes),
+      usage,
     });
   } catch (err) {
+    // The user got nothing for this attempt, so give the allowance back.
+    if (consumed && quota && uid) await quota.refund(uid).catch((e) => console.error("refund failed", e));
     if (err instanceof AiError) {
       if (err.code === "misconfigured" || err.code === "upstream" || err.code === "bad_output") console.error("analyze:", err.code, err.message);
       return json({ error: err.code }, STATUS[err.code]);

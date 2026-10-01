@@ -24,6 +24,8 @@ export const en = {
     machineHint: 'Photo of the machine, or its model number',
     modelNumber: 'Model number',
     analyze: 'Analyze',
+    usageLeft: 'Analyses left today: {left} of {limit}',
+    quotaReached: 'You have used today\'s free analyses. They renew at midnight (Oman time). A paid plan with more analyses is coming soon.',
     subtitle: 'Add a photo of the garment or its care label.',
     garmentHint: 'The whole garment',
     labelHint: 'The small tag with wash symbols',
@@ -63,6 +65,7 @@ export const en = {
   settings: { title: 'Settings', language: 'Language', place: 'Location', arabic: 'العربية', english: 'English', change: 'Change' },
   machines: { title: 'My machines', empty: 'Machines you analyze will appear here.', history: 'Recent analyses', historyEmpty: 'Your analyses will appear here.', remove: 'Remove', localMode: 'Sign-in is not set up yet, so nothing is saved.' },
   errors: {
+    quota: 'Today\'s free analyses are used up. Please come back tomorrow.',
     unauthorized: 'Please sign in again.',
     refused: 'We could not analyze these photos. Try a clearer photo of the garment or label.',
     rate_limited: 'Too many requests. Please try again in a minute.',
@@ -70,6 +73,8 @@ export const en = {
     server: 'Something went wrong on our side. Please try again.',
   },
   auth: {
+    google: 'Continue with Google',
+    or: 'or use your email',
     signInTitle: 'Welcome back',
     signUpTitle: 'Create your account',
     email: 'Email',
@@ -86,6 +91,7 @@ export const en = {
     signOut: 'Sign out',
     account: 'Account',
   },
+  common: { sponsored: 'Sponsored' },
   fabrics: {
     cotton: 'Cotton', linen: 'Linen', wool: 'Wool', silk: 'Silk', polyester: 'Polyester',
     nylon: 'Nylon', denim: 'Denim', cashmere: 'Cashmere', viscose: 'Viscose',

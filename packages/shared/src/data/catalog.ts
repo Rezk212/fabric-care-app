@@ -2,7 +2,7 @@ import type { Product, Store } from '../domain';
 
 // SAMPLE DATA ONLY. Not real products, shops or locations. Replace with a real source.
 export const products: Product[] = [
-  { id: 'p-detergent-gentle', kind: 'detergent', name: { ar: 'منظف لطيف (عينة)', en: 'Gentle detergent (sample)' }, forFabrics: ['cotton', 'linen', 'denim', 'polyester', 'nylon', 'synthetic_blend', 'viscose'], isSample: true },
+  { id: 'p-detergent-gentle', kind: 'detergent', name: { ar: 'منظف لطيف (عينة)', en: 'Gentle detergent (sample)' }, forFabrics: ['cotton', 'linen', 'denim', 'polyester', 'nylon', 'synthetic_blend', 'viscose'], isSample: true, isSponsored: true },
   { id: 'p-delicate-wash', kind: 'delicate_wash', name: { ar: 'غسول الأقمشة الرقيقة (عينة)', en: 'Delicate fabric wash (sample)' }, forFabrics: ['silk', 'viscose', 'cashmere'], isSample: true },
   { id: 'p-wool-wash', kind: 'wool_wash', name: { ar: 'غسول الصوف (عينة)', en: 'Wool wash (sample)' }, forFabrics: ['wool', 'cashmere'], isSample: true },
   { id: 'p-softener', kind: 'softener', name: { ar: 'مُنعّم أقمشة (عينة)', en: 'Fabric softener (sample)' }, forFabrics: ['cotton', 'linen', 'polyester', 'synthetic_blend'], isSample: true },

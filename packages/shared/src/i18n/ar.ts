@@ -26,6 +26,8 @@ export const ar: Dictionary = {
     machineHint: 'صورة للغسالة أو رقم الموديل',
     modelNumber: 'رقم الموديل',
     analyze: 'حلّل',
+    usageLeft: 'تحليلات متبقية اليوم: {left} من {limit}',
+    quotaReached: 'استهلكت تحليلاتك المجانية لليوم. تتجدد عند منتصف الليل (بتوقيت عُمان). وستتوفر قريبًا خطة مدفوعة بتحليلات أكثر.',
     subtitle: 'أضف صورة للقطعة أو لبطاقة العناية بها.',
     garmentHint: 'القطعة كاملة',
     labelHint: 'البطاقة الصغيرة التي عليها رموز الغسيل',
@@ -65,6 +67,7 @@ export const ar: Dictionary = {
   settings: { title: 'الإعدادات', language: 'اللغة', place: 'الموقع', arabic: 'العربية', english: 'English', change: 'تغيير' },
   machines: { title: 'غسالاتي', empty: 'ستظهر هنا الغسالات التي تحللها.', history: 'آخر التحليلات', historyEmpty: 'ستظهر تحليلاتك هنا.', remove: 'حذف', localMode: 'تسجيل الدخول غير مُعدّ بعد، لذلك لا يُحفظ شيء.' },
   errors: {
+    quota: 'انتهت تحليلاتك المجانية لهذا اليوم. عُد إلينا غدًا.',
     unauthorized: 'يرجى تسجيل الدخول مرة أخرى.',
     refused: 'تعذّر تحليل هذه الصور. جرّب صورة أوضح للقطعة أو للبطاقة.',
     rate_limited: 'طلبات كثيرة. حاول مرة أخرى بعد دقيقة.',
@@ -72,6 +75,8 @@ export const ar: Dictionary = {
     server: 'حدث خطأ من جهتنا. حاول مرة أخرى.',
   },
   auth: {
+    google: 'المتابعة بحساب جوجل',
+    or: 'أو استخدم بريدك الإلكتروني',
     signInTitle: 'أهلًا بعودتك',
     signUpTitle: 'أنشئ حسابك',
     email: 'البريد الإلكتروني',
@@ -88,6 +93,7 @@ export const ar: Dictionary = {
     signOut: 'تسجيل الخروج',
     account: 'الحساب',
   },
+  common: { sponsored: 'برعاية' },
   fabrics: {
     cotton: 'قطن', linen: 'كتان', wool: 'صوف', silk: 'حرير', polyester: 'بوليستر',
     nylon: 'نايلون', denim: 'جينز', cashmere: 'كشمير', viscose: 'فيسكوز',

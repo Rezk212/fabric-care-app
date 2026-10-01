@@ -22,3 +22,11 @@ test('products with no store in the city still appear, without a store', () => {
 test('unknown fabric recommends nothing rather than guessing', () => {
   assert.deepEqual(recommendProducts('unknown', 'muscat', muscat), []);
 });
+
+test('sponsored products rank first among suitable ones, and never for unsuitable fabrics', () => {
+  const cotton = recommendProducts('cotton', 'muscat', muscat);
+  assert.equal(cotton[0].product.id, 'p-detergent-gentle');
+  assert.equal(cotton[0].product.isSponsored, true);
+  const wool = recommendProducts('wool', 'muscat', muscat);
+  assert.ok(!wool.some((p) => p.product.id === 'p-detergent-gentle'));
+});

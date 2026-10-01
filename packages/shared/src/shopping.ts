@@ -22,7 +22,7 @@ export function recommendProducts(
   stores: Store[] = allStores,
 ): ProductPick[] {
   const inCity = stores.filter((s) => s.cityId === cityId);
-  return products
+  const picks = products
     .filter((p) => fabric !== 'unknown' && p.forFabrics.includes(fabric))
     .map((product) => {
       const carrying = inCity.filter((s) => s.productIds.includes(product.id));
@@ -32,4 +32,6 @@ export function recommendProducts(
       const best = ranked[0];
       return { product, store: best?.s, km: best?.km };
     });
+  // Sponsored products rank first, but only ever among products that suit the fabric.
+  return picks.sort((a, b) => Number(!!b.product.isSponsored) - Number(!!a.product.isSponsored));
 }

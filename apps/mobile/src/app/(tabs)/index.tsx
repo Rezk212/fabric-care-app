@@ -1,10 +1,11 @@
 import { space } from '@naqa/shared';
-import { router } from 'expo-router';
-import { useState } from 'react';
+import { format, type UsageInfo } from '@naqa/shared';
+import { router, useFocusEffect } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { PhotoSlot } from '../../components/photo-slot';
 import { Button, Field, Row, Screen, Text } from '../../components/ui';
-import { AnalyzeError, analyzeGarment } from '../../lib/analyze';
+import { AnalyzeError, analyzeGarment, fetchUsage } from '../../lib/analyze';
 import { saveAnalysis } from '../../lib/data';
 import { useApp } from '../../lib/app-context';
 
@@ -16,18 +17,24 @@ export default function Analyze() {
   const [modelNumber, setModel] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
+  const [usage, setUsage] = useState<UsageInfo | null>(null);
+  useFocusEffect(useCallback(() => { void fetchUsage().then(setUsage); }, []));
+  const left = usage ? Math.max(usage.limit - usage.used, 0) : null;
+  const exhausted = left === 0;
 
-  const ready = !!(garmentUri || labelUri);
+  const ready = !!(garmentUri || labelUri) && !exhausted;
 
   async function run() {
     setBusy(true);
     setError(undefined);
     try {
-      const { analysis, machine } = await analyzeGarment({ garmentUri, labelUri, machineUri, modelNumber: modelNumber.trim() || undefined });
+      const { analysis, machine, usage: used } = await analyzeGarment({ garmentUri, labelUri, machineUri, modelNumber: modelNumber.trim() || undefined });
+      if (used) setUsage(used);
       void saveAnalysis(analysis, machine);
       router.push({ pathname: '/result', params: { analysis: JSON.stringify(analysis), modelNumber: modelNumber.trim() } });
     } catch (e) {
       const code = e instanceof AnalyzeError ? e.code : 'server';
+      if (e instanceof AnalyzeError && e.usage) setUsage(e.usage);
       setError(t.errors[code]);
     } finally {
       setBusy(false);
@@ -59,7 +66,8 @@ export default function Analyze() {
         />
       </ScrollView>
       <View style={{ paddingBottom: space.lg }}>
-        {!ready && !error ? <Text variant="caption" muted style={{ marginBottom: space.sm }}>{t.home.needPhoto}</Text> : null}
+        {usage ? <Text variant="caption" muted style={{ marginBottom: space.sm }}>{exhausted ? t.home.quotaReached : format(t.home.usageLeft, { left: left ?? 0, limit: usage.limit })}</Text> : null}
+        {!ready && !error && !exhausted ? <Text variant="caption" muted style={{ marginBottom: space.sm }}>{t.home.needPhoto}</Text> : null}
         {error ? <Text color={colors.danger} style={{ marginBottom: space.md }} accessibilityRole="alert">{error}</Text> : null}
         <Button label={busy ? t.home.analyzing : t.home.analyze} onPress={run} disabled={!ready || busy} />
       </View>

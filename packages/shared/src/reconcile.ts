@@ -1,5 +1,5 @@
 import { baselineRecommendation } from './care';
-import type { FabricType, GarmentAnalysis, Temperature, WashRecommendation } from './domain';
+import type { FabricType, GarmentAnalysis, Temperature, UsageInfo, WashRecommendation } from './domain';
 
 /** Shape returned by the `analyze` edge function. */
 export interface AnalyzeResponse {
@@ -8,6 +8,7 @@ export interface AnalyzeResponse {
   careSymbols: string[];
   machine: { brand: string | null; model: string | null };
   notes: string[];
+  usage?: UsageInfo;
 }
 
 const TEMPS: Temperature[] = [20, 30, 40, 60, 90];

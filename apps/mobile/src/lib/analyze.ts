@@ -1,6 +1,6 @@
 import {
   baselineRecommendation, toAnalysis,
-  type AnalyzeResponse, type FabricType, type GarmentAnalysis,
+  type AnalyzeResponse, type FabricType, type GarmentAnalysis, type UsageInfo,
 } from '@naqa/shared';
 import { SaveFormat, manipulateAsync } from 'expo-image-manipulator';
 import { backendConfigured, supabase, supabaseAnonKey, supabaseUrl } from './supabase';
@@ -12,9 +12,9 @@ export interface AnalyzeInput {
   modelNumber?: string;
 }
 
-export type AnalyzeErrorCode = 'refused' | 'rate_limited' | 'network' | 'server' | 'unauthorized';
+export type AnalyzeErrorCode = 'refused' | 'rate_limited' | 'network' | 'server' | 'unauthorized' | 'quota';
 export class AnalyzeError extends Error {
-  constructor(public code: AnalyzeErrorCode) { super(code); }
+  constructor(public code: AnalyzeErrorCode, public usage?: UsageInfo) { super(code); }
 }
 
 /** True once the Supabase project is configured; until then the user picks the fabric by hand. */
@@ -23,6 +23,7 @@ export const aiConfigured = backendConfigured;
 export interface AnalyzeResult {
   analysis: GarmentAnalysis;
   machine?: { brand: string | null; model: string | null };
+  usage?: UsageInfo;
 }
 
 async function toPayload(role: 'garment' | 'label' | 'machine', uri: string) {
@@ -62,12 +63,33 @@ export async function analyzeGarment(input: AnalyzeInput): Promise<AnalyzeResult
 
   if (res.status === 401) throw new AnalyzeError('unauthorized');
   if (res.status === 422) throw new AnalyzeError('refused');
-  if (res.status === 429) throw new AnalyzeError('rate_limited');
+  if (res.status === 429) {
+    const body = (await res.json().catch(() => null)) as { error?: string; usage?: UsageInfo } | null;
+    throw new AnalyzeError(body?.error === 'quota_exceeded' ? 'quota' : 'rate_limited', body?.usage);
+  }
   if (!res.ok) throw new AnalyzeError('server');
   const body = (await res.json()) as AnalyzeResponse;
-  return { analysis: toAnalysis(body), machine: body.machine };
+  return { analysis: toAnalysis(body), machine: body.machine, usage: body.usage };
 }
 
 export function withFabric(a: GarmentAnalysis, fabric: FabricType): GarmentAnalysis {
   return { ...a, fabric, confidence: 1, recommendation: baselineRecommendation(fabric) };
+}
+
+/** Today's remaining allowance, without spending any. Null when unknown (offline, local mode). */
+export async function fetchUsage(): Promise<UsageInfo | null> {
+  if (!aiConfigured || !supabase) return null;
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  if (!token) return null;
+  try {
+    const res = await fetch(`${supabaseUrl}/functions/v1/analyze`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: supabaseAnonKey!, Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ action: 'usage' }),
+    });
+    return res.ok ? ((await res.json()) as { usage: UsageInfo }).usage : null;
+  } catch {
+    return null;
+  }
 }

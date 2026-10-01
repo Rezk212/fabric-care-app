@@ -12,6 +12,6 @@ export const supabaseAnonKey = anonKey;
 
 export const supabase = backendConfigured
   ? createClient(url!, anonKey!, {
-      auth: { storage: AsyncStorage, autoRefreshToken: true, persistSession: true, detectSessionInUrl: false },
+      auth: { storage: AsyncStorage, autoRefreshToken: true, persistSession: true, detectSessionInUrl: false, flowType: 'pkce' },
     })
   : null;

@@ -3,7 +3,7 @@
     "target": "ES2022", "module": "ESNext", "moduleResolution": "Bundler",
     "strict": true, "noEmit": true, "skipLibCheck": true, "lib": ["ES2022", "DOM"],
     "types": [], "allowImportingTsExtensions": true,
-    "paths": { "npm:@anthropic-ai/sdk": ["../../node_modules/@anthropic-ai/sdk"] }
+    "paths": { "npm:@anthropic-ai/sdk": ["../../node_modules/@anthropic-ai/sdk"], "npm:@supabase/supabase-js": ["../../node_modules/@supabase/supabase-js"] }
   },
   "include": ["**/*.test.ts","**/*.ts"]
 }

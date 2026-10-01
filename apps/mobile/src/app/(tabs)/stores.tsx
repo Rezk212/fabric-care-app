@@ -22,6 +22,7 @@ export default function Stores() {
           <View style={{ paddingBottom: space.lg, borderBottomWidth: 1, borderBottomColor: colors.line, gap: space.xs }}>
             <Row style={{ justifyContent: 'space-between' }}>
               <Text weight="semibold" style={{ flex: 1 }}>{item.name[locale]}</Text>
+              {item.isSponsored ? <Text variant="caption" color={colors.accentText} weight="medium">{t.common.sponsored}</Text> : null}
               {item.isSample ? <Text variant="caption" color={colors.accentText} weight="medium">{t.stores.sample}</Text> : null}
             </Row>
             {item.km != null ? <Text variant="caption" muted>{format(t.stores.away, { km: item.km.toFixed(1) })}</Text> : null}

@@ -89,7 +89,10 @@ export default function Result() {
           {!known ? <Text muted>{t.result.buyEmpty}</Text> : null}
           {picks.map(({ product, store, km }) => (
             <View key={product.id} style={{ gap: 2, paddingBottom: space.md, borderBottomWidth: 1, borderBottomColor: colors.line }}>
-              <Text weight="medium">{product.name[locale]}</Text>
+              <Row style={{ justifyContent: 'space-between' }}>
+                <Text weight="medium" style={{ flex: 1 }}>{product.name[locale]}</Text>
+                {product.isSponsored ? <Text variant="caption" weight="medium" color={colors.accentText}>{t.common.sponsored}</Text> : null}
+              </Row>
               {store ? (
                 <Text variant="caption" muted>
                   {`${store.name[locale]}${km != null ? ` · ${format(t.stores.away, { km: km.toFixed(1) })}` : ''}`}
