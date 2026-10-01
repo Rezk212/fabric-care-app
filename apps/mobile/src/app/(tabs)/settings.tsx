@@ -5,7 +5,7 @@ import { Button, Chip, Row, Screen, Text } from '../../components/ui';
 import { useApp } from '../../lib/app-context';
 
 export default function Settings() {
-  const { t, locale, setLocale, place } = useApp();
+  const { t, locale, setLocale, place, session, signOut } = useApp();
   const country = countries.find((c) => c.code === place?.countryCode);
   const city = country?.cities.find((c) => c.id === place?.cityId);
   return (
@@ -24,6 +24,13 @@ export default function Settings() {
           <Text muted>{[city?.name[locale], country?.name[locale]].filter(Boolean).join('، ')}</Text>
           <Button variant="quiet" label={t.settings.change} onPress={() => router.push('/place')} />
         </View>
+        {session ? (
+          <View style={{ gap: space.md }}>
+            <Text weight="semibold">{t.auth.account}</Text>
+            <Text muted>{session.user.email}</Text>
+            <Button variant="quiet" label={t.auth.signOut} onPress={async () => { await signOut(); router.replace('/'); }} />
+          </View>
+        ) : null}
       </View>
     </Screen>
   );

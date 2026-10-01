@@ -44,7 +44,11 @@ To add a provider of another shape, implement `AiProvider` in `functions/analyze
 register it in `providers/index.ts`. The care rules and the app stay untouched because the provider
 only returns facts (fabric, label symbols), never wash advice.
 
+## Accounts
+Email + password sign-in uses Supabase Auth (enabled by default). In Authentication → Providers keep
+Email on. If "Confirm email" is on, new users must confirm by email before signing in (the app tells them).
+
 ## Notes
-- The function currently accepts any caller holding the anon key. Before public launch, require a
-  signed-in user (accounts are the next step) so strangers cannot spend your Anthropic credits.
+- `analyze` only accepts signed-in users (the public anon key alone gets 401), so strangers cannot spend
+  your AI credits. For local development only, `supabase secrets set AI_REQUIRE_AUTH=false` disables this.
 - Photos are sent only for analysis and are not stored by the function.

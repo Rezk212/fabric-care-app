@@ -1,5 +1,6 @@
 // Supabase Edge Function: analyze garment / care label / washing machine photos.
 // Which AI answers is a server setting (see providers/index.ts); the app never knows or cares.
+import { isSignedInUser } from "./auth.ts";
 import { FABRICS } from "./prompt.ts";
 import { pickProvider } from "./providers/index.ts";
 import { AiError, type InputImage } from "./providers/types.ts";
@@ -41,6 +42,10 @@ const STATUS = {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
+  // Only signed-in users may spend AI credits. Set AI_REQUIRE_AUTH=false for local development only.
+  if (Deno.env.get("AI_REQUIRE_AUTH") !== "false" && !isSignedInUser(req.headers.get("Authorization"))) {
+    return json({ error: "unauthorized" }, 401);
+  }
 
   let body: unknown;
   try { body = await req.json(); } catch { return json({ error: "invalid_json" }, 400); }

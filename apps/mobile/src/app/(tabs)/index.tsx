@@ -5,6 +5,7 @@ import { ScrollView, View } from 'react-native';
 import { PhotoSlot } from '../../components/photo-slot';
 import { Button, Field, Row, Screen, Text } from '../../components/ui';
 import { AnalyzeError, analyzeGarment } from '../../lib/analyze';
+import { saveAnalysis } from '../../lib/data';
 import { useApp } from '../../lib/app-context';
 
 export default function Analyze() {
@@ -22,7 +23,8 @@ export default function Analyze() {
     setBusy(true);
     setError(undefined);
     try {
-      const analysis = await analyzeGarment({ garmentUri, labelUri, machineUri, modelNumber: modelNumber.trim() || undefined });
+      const { analysis, machine } = await analyzeGarment({ garmentUri, labelUri, machineUri, modelNumber: modelNumber.trim() || undefined });
+      void saveAnalysis(analysis, machine);
       router.push({ pathname: '/result', params: { analysis: JSON.stringify(analysis), modelNumber: modelNumber.trim() } });
     } catch (e) {
       const code = e instanceof AnalyzeError ? e.code : 'server';
