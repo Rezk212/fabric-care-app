@@ -22,7 +22,7 @@ type Variant = keyof typeof typeScale;
 export function Text({
   variant = 'body', weight = 'regular', muted, color, style, ...rest
 }: TextProps & { variant?: Variant; weight?: keyof typeof fontWeights; muted?: boolean; color?: string }) {
-  const { colors } = useApp();
+  const { colors, rtl } = useApp();
   const size = typeScale[variant];
   return (
     <RNText
@@ -33,7 +33,9 @@ export function Text({
           fontSize: size,
           lineHeight: Math.round(size * (variant === 'display' || variant === 'heading' ? 1.25 : 1.55)),
           color: color ?? (muted ? colors.inkMuted : colors.ink),
-          textAlign: 'auto',
+          // 'auto' follows the phone's system direction, not the app's language, so set it from the chosen language.
+          textAlign: rtl ? 'right' : 'left',
+          writingDirection: rtl ? 'rtl' : 'ltr',
         },
         style,
       ]}
@@ -190,14 +192,14 @@ export function Chip({ label, selected, onPress, tone = 'default' }: { label: st
 }
 
 export function Field({ icon, ...props }: React.ComponentProps<typeof TextInput> & { icon?: FeatherName }) {
-  const { colors } = useApp();
+  const { colors, rtl } = useApp();
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.md, minHeight: 56, borderRadius: radius.md, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: space.lg }}>
       {icon ? <Feather name={icon} size={18} color={colors.inkMuted} /> : null}
       <TextInput
         placeholderTextColor={colors.inkMuted}
         {...props}
-        style={[{ flex: 1, minHeight: 52, fontFamily: fontByWeight.regular, fontSize: typeScale.body, color: colors.ink, textAlign: 'auto' } as TextStyle, props.style]}
+        style={[{ flex: 1, minHeight: 52, fontFamily: fontByWeight.regular, fontSize: typeScale.body, color: colors.ink, textAlign: rtl ? 'right' : 'left', writingDirection: rtl ? 'rtl' : 'ltr' } as TextStyle, props.style]}
       />
     </View>
   );
