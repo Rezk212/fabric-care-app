@@ -1,8 +1,8 @@
 import { Feather } from '@expo/vector-icons';
-import { format, omanChains, products, space } from '@naqa/shared';
+import { categoryOf, format, omanChains, productCategories, products, space, type ProductCategory } from '@naqa/shared';
 import { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { BackHeader, BottomBack, Card, FadeIn, Pill, ProductThumb, Row, Screen, Text } from '../../components/ui';
+import { BackHeader, BottomBack, Card, Chip, FadeIn, Pill, ProductThumb, Row, Screen, Text } from '../../components/ui';
 import { useApp } from '../../lib/app-context';
 import { goBack } from '../../lib/nav';
 import { fetchBranches, type Branch } from '../../lib/osm';
@@ -20,11 +20,24 @@ export default function Products() {
     return () => { live = false; };
   }, [origin?.lat, origin?.lng]);
 
+  const [cat, setCat] = useState<ProductCategory | null>(null);
+  const sections = productCategories
+    .filter((c) => !cat || c.id === cat)
+    .map((c) => ({ ...c, items: products.filter((p) => categoryOf(p.kind) === c.id) }))
+    .filter((c) => c.items.length > 0);
+
   return (
     <Screen>
       <BackHeader title={t.guide.products} onBack={goBack} />
       <ScrollView contentContainerStyle={{ paddingVertical: space.lg, gap: space.md }} showsVerticalScrollIndicator={false}>
-        {products.map((p, i) => {
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space.sm }} style={{ flexGrow: 0 }}>
+          <Chip label={t.stores.all} selected={cat === null} onPress={() => setCat(null)} />
+          {productCategories.map((c) => <Chip key={c.id} label={c.name[locale]} selected={cat === c.id} onPress={() => setCat(c.id)} />)}
+        </ScrollView>
+        {sections.map((sec) => (
+          <View key={sec.id} style={{ gap: space.md }}>
+            <Text variant="title" weight="semibold" style={{ marginTop: space.sm }}>{sec.name[locale]}</Text>
+            {sec.items.map((p, i) => {
           const near = branches.find((b) => p.chainIds?.includes(b.chain.id));
           const chains = omanChains.filter((c) => p.chainIds?.includes(c.id)).map((c) => c.name[locale]).join(' · ');
           return (
@@ -47,7 +60,9 @@ export default function Products() {
               </Card>
             </FadeIn>
           );
-        })}
+            })}
+          </View>
+        ))}
         <Text variant="caption" muted>{t.result.confirmStock}</Text>
       </ScrollView>
       <BottomBack onPress={goBack} />

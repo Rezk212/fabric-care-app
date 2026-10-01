@@ -43,7 +43,7 @@ export interface Place {
 
 export interface Product {
   id: string;
-  kind: 'detergent' | 'softener' | 'stain_remover' | 'delicate_wash' | 'wool_wash';
+  kind: 'detergent' | 'softener' | 'stain_remover' | 'delicate_wash' | 'wool_wash' | 'bleach' | 'color_care';
   name: { ar: string; en: string };
   forFabrics: FabricType[];
   isSample: boolean;

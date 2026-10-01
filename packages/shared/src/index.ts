@@ -12,3 +12,4 @@ export * from './content/stains';
 export * from './content/symbols';
 export * from './machine';
 export * from './data/chains';
+export * from './data/categories';

@@ -7,6 +7,10 @@ export const products: Product[] = [
   { id: 'p-wool-wash', kind: 'wool_wash', name: { ar: 'غسول الصوف (عينة)', en: 'Wool wash (sample)' }, forFabrics: ['wool', 'cashmere'], isSample: true, chainIds: ['lulu', 'carrefour', 'sultan', 'nesto', 'hypermax'] },
   { id: 'p-softener', kind: 'softener', name: { ar: 'مُنعّم أقمشة (عينة)', en: 'Fabric softener (sample)' }, forFabrics: ['cotton', 'linen', 'polyester', 'synthetic_blend'], isSample: true, chainIds: ['lulu', 'hypermax', 'nesto', 'makkah', 'almeera', 'carrefour', 'sultan'] },
   { id: 'p-stain', kind: 'stain_remover', name: { ar: 'مزيل بقع (عينة)', en: 'Stain remover (sample)' }, forFabrics: ['cotton', 'linen', 'denim', 'polyester', 'synthetic_blend'], isSample: true, chainIds: ['lulu', 'hypermax', 'nesto', 'makkah', 'almeera', 'carrefour', 'sultan'] },
+  { id: 'p-bleach-white', kind: 'bleach', name: { ar: 'مبيّض للأبيض (عينة)', en: 'Whitening bleach (sample)' }, forFabrics: ['cotton', 'linen', 'polyester'], isSample: true, chainIds: ['lulu', 'hypermax', 'nesto', 'makkah', 'almeera', 'carrefour', 'sultan'] },
+  { id: 'p-bleach-oxygen', kind: 'bleach', name: { ar: 'مبيّض أكسجين لطيف (عينة)', en: 'Gentle oxygen bleach (sample)' }, forFabrics: ['cotton', 'linen', 'polyester', 'synthetic_blend'], isSample: true, chainIds: ['lulu', 'hypermax', 'nesto', 'makkah', 'almeera', 'carrefour', 'sultan'] },
+  { id: 'p-colour-protect', kind: 'color_care', name: { ar: 'منظف للألوان (عينة)', en: 'Colour-care detergent (sample)' }, forFabrics: ['cotton', 'denim', 'polyester', 'synthetic_blend', 'viscose'], isSample: true, chainIds: ['lulu', 'hypermax', 'nesto', 'makkah', 'almeera', 'carrefour', 'sultan'] },
+  { id: 'p-colour-catcher', kind: 'color_care', name: { ar: 'مانع انتقال الألوان (عينة)', en: 'Colour-run catcher (sample)' }, forFabrics: ['cotton', 'denim', 'polyester', 'synthetic_blend'], isSample: true, chainIds: ['lulu', 'hypermax', 'nesto', 'makkah', 'almeera', 'carrefour', 'sultan'] },
 ];
 
 export const stores: Store[] = [

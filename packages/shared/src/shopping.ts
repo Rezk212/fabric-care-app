@@ -23,7 +23,8 @@ export function recommendProducts(
 ): ProductPick[] {
   const inCity = stores.filter((s) => s.cityId === cityId);
   const picks = products
-    .filter((p) => fabric !== 'unknown' && p.forFabrics.includes(fabric))
+    // Bleach is never suggested from a photo: whether it is safe depends on colour and label, which we can't confirm.
+    .filter((p) => fabric !== 'unknown' && p.kind !== 'bleach' && p.forFabrics.includes(fabric))
     .map((product) => {
       const carrying = inCity.filter((s) => s.productIds.includes(product.id));
       const ranked = origin

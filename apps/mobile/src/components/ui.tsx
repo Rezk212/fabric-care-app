@@ -331,7 +331,7 @@ export function BottomBack({ onPress }: { onPress: () => void }) {
 /** Product picture: the partner-supplied photo when there is one, otherwise a simple bottle drawing for its kind. */
 export function ProductThumb({ imageUrl, kind, size = 64 }: { imageUrl?: string; kind: string; size?: number }) {
   const { colors } = useApp();
-  const tint = kind === 'softener' ? '#8E7CF0' : kind === 'stain_remover' ? '#E5604D' : kind === 'wool_wash' || kind === 'delicate_wash' ? '#F2A93B' : colors.primary;
+  const tint = kind === 'bleach' ? '#3FA9D6' : kind === 'color_care' ? '#D9578C' : kind === 'softener' ? '#8E7CF0' : kind === 'stain_remover' ? '#E5604D' : kind === 'wool_wash' || kind === 'delicate_wash' ? '#F2A93B' : colors.primary;
   const box = { width: size, height: size, borderRadius: radius.md, backgroundColor: colors.surfaceMuted, alignItems: 'center' as const, justifyContent: 'center' as const, overflow: 'hidden' as const };
   if (imageUrl) return <Image source={{ uri: imageUrl }} style={box} resizeMode="contain" accessibilityIgnoresInvertColors />;
   return (
