@@ -48,7 +48,10 @@ export function Screen({
   const { colors, rtl } = useApp();
   return (
     <SafeAreaView edges={edges} style={{ flex: 1, backgroundColor: background ?? colors.bg, direction: rtl ? 'rtl' : 'ltr' }}>
-      <View style={[{ flex: 1, paddingHorizontal: padded ? space.xl : 0, paddingBottom: floatingTabs ? 88 : 0 }, style]}>{children}</View>
+      <View style={[{ flex: 1, paddingHorizontal: padded ? space.xl : 0, paddingBottom: floatingTabs ? 88 : 0 }, style]}>
+        {floatingTabs ? <AppBar /> : null}
+        {children}
+      </View>
     </SafeAreaView>
   );
 }
@@ -342,5 +345,16 @@ export function ProductThumb({ imageUrl, kind, size = 64 }: { imageUrl?: string;
         <Path d="M15 24c2-2 3 2 5 0s3 2 5 0" stroke={tint} strokeWidth="1.6" strokeLinecap="round" fill="none" />
       </Svg>
     </View>
+  );
+}
+
+/** Top bar of the main tabs: the app logo and name, ready for a future notifications or profile action. */
+export function AppBar() {
+  const { colors, locale } = useApp();
+  return (
+    <Row style={{ paddingTop: space.md, paddingBottom: space.xs }} gap={space.sm}>
+      <Logo size={34} color={colors.primary} wave={colors.accent} />
+      <Text variant="title" weight="bold" color={colors.primary} style={{ flex: 1 }}>{locale === 'ar' ? 'نقاء' : 'Naqa'}</Text>
+    </Row>
   );
 }
