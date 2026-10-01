@@ -51,6 +51,9 @@ export interface Product {
   isSponsored?: boolean;
   /** Chains that usually stock this kind of product. Indicative, not live stock: shoppers should confirm in store. */
   chainIds?: string[];
+  /** Optional photo. Only use images you own or have written permission to show (brand or store partner). */
+  imageUrl?: string;
+  brand?: string;
 }
 
 export interface Store {

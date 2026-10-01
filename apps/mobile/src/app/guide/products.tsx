@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { format, omanChains, products, space } from '@naqa/shared';
 import { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { BackHeader, BottomBack, Card, FadeIn, IconBubble, Pill, Row, Screen, Text } from '../../components/ui';
+import { BackHeader, BottomBack, Card, FadeIn, Pill, ProductThumb, Row, Screen, Text } from '../../components/ui';
 import { useApp } from '../../lib/app-context';
 import { goBack } from '../../lib/nav';
 import { fetchBranches, type Branch } from '../../lib/osm';
@@ -31,7 +31,7 @@ export default function Products() {
             <FadeIn key={p.id} delay={i * 50}>
               <Card style={{ gap: space.sm }}>
                 <Row style={{ alignItems: 'flex-start' }}>
-                  <IconBubble name="package" tone="primary" />
+                  <ProductThumb imageUrl={p.imageUrl} kind={p.kind} />
                   <Text weight="semibold" style={{ flex: 1 }}>{p.name[locale]}</Text>
                   {p.isSponsored ? <Pill tone="accent" label={t.common.sponsored} /> : null}
                 </Row>

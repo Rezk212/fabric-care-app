@@ -6,6 +6,7 @@ import {
   type StyleProp, type TextProps, type TextStyle, type ViewStyle,
 } from 'react-native';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
+import { Image } from 'react-native';
 import Svg, { Circle, Path, Text as SvgText } from 'react-native-svg';
 import { useApp } from '../lib/app-context';
 
@@ -323,6 +324,23 @@ export function BottomBack({ onPress }: { onPress: () => void }) {
   return (
     <View style={{ paddingTop: space.sm, paddingBottom: space.lg }}>
       <Button variant="quiet" icon={rtl ? 'arrow-right' : 'arrow-left'} label={t.result.back} onPress={onPress} />
+    </View>
+  );
+}
+
+/** Product picture: the partner-supplied photo when there is one, otherwise a simple bottle drawing for its kind. */
+export function ProductThumb({ imageUrl, kind, size = 64 }: { imageUrl?: string; kind: string; size?: number }) {
+  const { colors } = useApp();
+  const tint = kind === 'softener' ? '#8E7CF0' : kind === 'stain_remover' ? '#E5604D' : kind === 'wool_wash' || kind === 'delicate_wash' ? '#F2A93B' : colors.primary;
+  const box = { width: size, height: size, borderRadius: radius.md, backgroundColor: colors.surfaceMuted, alignItems: 'center' as const, justifyContent: 'center' as const, overflow: 'hidden' as const };
+  if (imageUrl) return <Image source={{ uri: imageUrl }} style={box} resizeMode="contain" accessibilityIgnoresInvertColors />;
+  return (
+    <View style={box}>
+      <Svg width={size * 0.62} height={size * 0.62} viewBox="0 0 40 40" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+        <Path d="M16 4h8v4l3 3v22a3 3 0 0 1-3 3H16a3 3 0 0 1-3-3V11l3-3z" fill={tint} opacity={0.9} />
+        <Path d="M13 20h14v8H13z" fill="#FFFFFF" opacity={0.85} />
+        <Path d="M15 24c2-2 3 2 5 0s3 2 5 0" stroke={tint} strokeWidth="1.6" strokeLinecap="round" fill="none" />
+      </Svg>
     </View>
   );
 }
