@@ -68,7 +68,7 @@ export const en = {
     area: 'Or choose your area',
     all: 'All',
     searching: 'Finding branches near you…',
-    live: 'Branches from OpenStreetMap, which volunteers keep up to date. A branch may be missing or moved.',
+    live: 'Branches from OpenStreetMap (via Photon), which volunteers keep up to date. A branch may be missing or moved.',
     offline: 'Could not load live branches. Showing sample data.',
     directions: 'Directions',
     nearest: 'Nearest to you',
