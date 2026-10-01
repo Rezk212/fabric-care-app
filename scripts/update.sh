@@ -53,8 +53,9 @@ echo "Done. Version ${SHA:0:7} is in place."
 echo "If the app is running, your phone refreshes by itself. If not: cd apps/mobile && npx expo start"
 if [ "$FN_CHANGED" = 1 ]; then
   echo
-  echo "!! The analysis function changed. Deploy it with:"
+  echo "!! A backend function changed. Deploy it with:"
   echo "   npx supabase functions deploy analyze --use-api"
+  echo "   npx supabase functions deploy delete-account --use-api"
 fi
 if [ "$DB_CHANGED" = 1 ]; then
   echo

@@ -15,3 +15,4 @@ export * from './data/chains';
 export * from './data/categories';
 export * from './content/appliances';
 export * from './data/offers';
+export * from './content/legal';

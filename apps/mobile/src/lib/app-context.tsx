@@ -9,16 +9,17 @@ import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
 import type { Session } from '@supabase/supabase-js';
 import { useColorScheme } from 'react-native';
-import { backendConfigured, supabase } from './supabase';
+import { backendConfigured, supabase, supabaseAnonKey, supabaseUrl } from './supabase';
 
 WebBrowser.maybeCompleteAuthSession();
 
 const KEY = 'naqa.settings.v1';
 
-interface Persisted { locale: Locale; place: Place | null; onboarded: boolean }
+export type ThemeChoice = 'auto' | 'light' | 'dark';
+interface Persisted { locale: Locale; place: Place | null; onboarded: boolean; theme: ThemeChoice }
 // First launch follows the device language (Arabic or English); the user can change it any time.
 const deviceLocale = (): Locale => (getLocales()[0]?.languageCode === 'en' ? 'en' : 'ar');
-const defaults: Persisted = { locale: deviceLocale(), place: null, onboarded: false };
+const defaults: Persisted = { locale: deviceLocale(), place: null, onboarded: false, theme: 'auto' };
 
 export type AuthError = 'invalid' | 'exists' | 'weak' | 'generic' | 'cancelled';
 export type AuthResult = { ok: true; needsConfirmation?: boolean } | { ok: false; error: AuthError };
@@ -30,6 +31,8 @@ interface Ctx extends Persisted {
   signUp: (email: string, password: string) => Promise<AuthResult>;
   signInWithGoogle: () => Promise<AuthResult>;
   signOut: () => Promise<void>;
+  deleteAccount: () => Promise<boolean>;
+  setTheme: (t: ThemeChoice) => void;
   t: Dictionary;
   rtl: boolean;
   colors: Palette;
@@ -46,7 +49,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [authReady, setAuthReady] = useState(!backendConfigured);
-  const dark = useColorScheme() === 'dark';
+  const system = useColorScheme();
+  const dark = state.theme === 'auto' ? system === 'dark' : state.theme === 'dark';
 
   useEffect(() => {
     AsyncStorage.getItem(KEY)
@@ -99,6 +103,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return exchangeError ? { ok: false, error: 'generic' } : { ok: true };
     },
     signOut: async () => { await supabase?.auth.signOut(); },
+    deleteAccount: async () => {
+      if (!supabase) return false;
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) return false;
+      try {
+        const res = await fetch(`${supabaseUrl}/functions/v1/delete-account`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', apikey: supabaseAnonKey!, Authorization: `Bearer ${data.session.access_token}` },
+        });
+        if (!res.ok) return false;
+      } catch { return false; }
+      await supabase.auth.signOut().catch(() => {});
+      return true;
+    },
+    setTheme: (theme) => update({ theme }),
     t: dictionaries[state.locale],
     rtl: isRTL(state.locale),
     colors: dark ? palette.dark : palette.light,

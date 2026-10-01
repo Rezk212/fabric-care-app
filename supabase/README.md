@@ -20,7 +20,7 @@ The app already points at this project (`apps/mobile/src/lib/supabase.ts`). To u
 ## Database files, in order
 Run each once in Supabase → SQL Editor (New snippet → paste → Run), oldest first:
 `0001_init.sql`, `0002_usage_and_sponsored.sql`, `0003_machine_programs.sql`.
-After changing anything in `supabase/functions`, redeploy: `npx supabase functions deploy analyze --use-api`.
+After changing anything in `supabase/functions`, redeploy: `npx supabase functions deploy analyze --use-api` (and `delete-account` the same way: it lets users delete their own account).
 
 ## Switching the AI provider
 
