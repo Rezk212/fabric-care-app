@@ -1,16 +1,18 @@
 import { Feather } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
 import { View, type ColorValue } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useShadow } from '../../components/ui';
 import { useApp } from '../../lib/app-context';
+import { backendConfigured } from '../../lib/supabase';
 
 type IconName = React.ComponentProps<typeof Feather>['name'];
 
 export default function TabsLayout() {
-  const { t, colors, rtl } = useApp();
+  const { t, colors, rtl, session } = useApp();
   const insets = useSafeAreaInsets();
   const shadow = useShadow(0.9);
+  if (backendConfigured && !session) return <Redirect href="/auth" />;
 
   const icon = (name: IconName) => ({ color, size, focused }: { color: ColorValue; size: number; focused: boolean }) => (
     <View style={{ width: 56, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: focused ? colors.primarySoft : 'transparent' }}>

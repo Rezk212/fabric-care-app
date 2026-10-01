@@ -30,7 +30,7 @@ export default function PlaceScreen() {
   function save() {
     if (!cityId) return;
     setPlace({ countryCode, cityId, ...coords });
-    router.replace('/(tabs)');
+    router.replace('/');
   }
 
   return (
