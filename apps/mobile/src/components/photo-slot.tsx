@@ -5,7 +5,7 @@ import { Alert, Image, Pressable, View } from 'react-native';
 import { useApp } from '../lib/app-context';
 import { Text } from './ui';
 
-export function PhotoSlot({ label, uri, onChange }: { label: string; uri?: string; onChange: (uri?: string) => void }) {
+export function PhotoSlot({ label, hint, height = 132, uri, onChange }: { label: string; hint?: string; height?: number; uri?: string; onChange: (uri?: string) => void }) {
   const { colors, t } = useApp();
 
   async function pick(source: 'camera' | 'library') {
@@ -36,7 +36,7 @@ export function PhotoSlot({ label, uri, onChange }: { label: string; uri?: strin
       onPress={open}
       style={{
         flex: 1,
-        minHeight: 132,
+        minHeight: height,
         borderRadius: radius.lg,
         borderWidth: 1,
         borderStyle: uri ? 'solid' : 'dashed',
@@ -53,7 +53,8 @@ export function PhotoSlot({ label, uri, onChange }: { label: string; uri?: strin
       ) : (
         <View style={{ alignItems: 'center', gap: space.sm }}>
           <Feather name="camera" size={24} color={colors.primary} />
-          <Text variant="caption" weight="medium" style={{ textAlign: 'center' }}>{label}</Text>
+          <Text variant="caption" weight="semibold" style={{ textAlign: 'center' }}>{label}</Text>
+          {hint ? <Text variant="caption" muted style={{ textAlign: 'center' }}>{hint}</Text> : null}
         </View>
       )}
     </Pressable>

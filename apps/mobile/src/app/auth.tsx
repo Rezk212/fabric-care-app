@@ -34,7 +34,7 @@ export default function AuthScreen() {
             secureTextEntry autoCapitalize="none" textContentType={mode === 'in' ? 'password' : 'newPassword'} />
         </View>
         {message ? (
-          <Text accessibilityRole="alert" color={message.ok ? colors.success : colors.danger}>{message.text}</Text>
+          <Text accessibilityRole="alert" color={message.ok ? colors.successText : colors.danger}>{message.text}</Text>
         ) : null}
         <View style={{ gap: space.md }}>
           <Button label={mode === 'in' ? t.auth.signIn : t.auth.signUp} onPress={submit} disabled={busy || !email || password.length < 6} />

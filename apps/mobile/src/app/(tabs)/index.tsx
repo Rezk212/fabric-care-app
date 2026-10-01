@@ -37,34 +37,29 @@ export default function Analyze() {
   return (
     <Screen>
       <ScrollView contentContainerStyle={{ gap: space.xl, paddingVertical: space.xl }} keyboardShouldPersistTaps="handled">
-        <Text variant="heading" weight="bold">{t.home.title}</Text>
+        <View style={{ gap: space.sm }}>
+          <Text variant="heading" weight="bold">{t.home.title}</Text>
+          <Text muted>{t.home.subtitle}</Text>
+        </View>
+
+        <PhotoSlot label={t.home.garment} hint={t.home.garmentHint} height={176} uri={garmentUri} onChange={setGarment} />
 
         <Row style={{ alignItems: 'stretch' }} gap={space.md}>
-          <PhotoSlot label={t.home.garment} uri={garmentUri} onChange={setGarment} />
-          <PhotoSlot label={t.home.label} uri={labelUri} onChange={setLabel} />
+          <PhotoSlot label={t.home.label} hint={t.home.labelHint} uri={labelUri} onChange={setLabel} />
+          <PhotoSlot label={t.home.machine} hint={t.home.machineHint2} uri={machineUri} onChange={setMachine} />
         </Row>
 
-        <View style={{ gap: space.md }}>
-          <Text weight="semibold">{t.home.machine}</Text>
-          <Text variant="caption" muted>{t.home.machineHint}</Text>
-          <Row style={{ alignItems: 'stretch' }} gap={space.md}>
-            <View style={{ flex: 1 }}>
-              <PhotoSlot label={t.home.machine} uri={machineUri} onChange={setMachine} />
-            </View>
-            <View style={{ flex: 1.3, justifyContent: 'center' }}>
-              <Field
-                value={modelNumber}
-                onChangeText={setModel}
-                placeholder={t.home.modelNumber}
-                autoCapitalize="characters"
-                autoCorrect={false}
-                accessibilityLabel={t.home.modelNumber}
-              />
-            </View>
-          </Row>
-        </View>
+        <Field
+          value={modelNumber}
+          onChangeText={setModel}
+          placeholder={t.home.modelNumberOptional}
+          autoCapitalize="characters"
+          autoCorrect={false}
+          accessibilityLabel={t.home.modelNumberOptional}
+        />
       </ScrollView>
       <View style={{ paddingBottom: space.lg }}>
+        {!ready && !error ? <Text variant="caption" muted style={{ marginBottom: space.sm }}>{t.home.needPhoto}</Text> : null}
         {error ? <Text color={colors.danger} style={{ marginBottom: space.md }} accessibilityRole="alert">{error}</Text> : null}
         <Button label={busy ? t.home.analyzing : t.home.analyze} onPress={run} disabled={!ready || busy} />
       </View>

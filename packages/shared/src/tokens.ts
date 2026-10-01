@@ -10,7 +10,9 @@ export const palette = {
     primary: '#2F3FA8',
     primaryInk: '#FFFFFF',
     accent: '#E3A13D',
+    accentText: '#8A5A00', // accent as text: 5.3:1 on bg (raw accent is 2:1, decoration only)
     success: '#2E8B6E',
+    successText: '#1F6B53', // 5.7:1 on bg
     danger: '#C2413B',
   },
   dark: {
@@ -23,7 +25,9 @@ export const palette = {
     primary: '#8E9BFF',
     primaryInk: '#0E1626',
     accent: '#EBB252',
+    accentText: '#EBB252',
     success: '#5CC5A0',
+    successText: '#5CC5A0',
     danger: '#F0817B',
   },
 } as const;

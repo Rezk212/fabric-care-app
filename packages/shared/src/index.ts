@@ -6,3 +6,4 @@ export * from './i18n';
 export * from './data/places';
 export * from './data/catalog';
 export * from './reconcile';
+export * from './shopping';
