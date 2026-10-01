@@ -1,12 +1,18 @@
 import { Feather } from '@expo/vector-icons';
 import { radius, space } from '@naqa/shared';
 import * as ImagePicker from 'expo-image-picker';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Alert, Image, Pressable, View } from 'react-native';
 import { useApp } from '../lib/app-context';
-import { Text } from './ui';
+import { IconBubble, Pill, Text, useShadow } from './ui';
 
-export function PhotoSlot({ label, hint, height = 132, uri, onChange }: { label: string; hint?: string; height?: number; uri?: string; onChange: (uri?: string) => void }) {
+type FeatherName = React.ComponentProps<typeof Feather>['name'];
+
+export function PhotoSlot({
+  label, hint, icon = 'camera', height = 132, uri, onChange,
+}: { label: string; hint?: string; icon?: FeatherName; height?: number; uri?: string; onChange: (uri?: string) => void }) {
   const { colors, t } = useApp();
+  const shadow = useShadow(0.6);
 
   async function pick(source: 'camera' | 'library') {
     const perm = source === 'camera'
@@ -34,27 +40,37 @@ export function PhotoSlot({ label, hint, height = 132, uri, onChange }: { label:
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={open}
-      style={{
-        flex: 1,
-        minHeight: height,
-        borderRadius: radius.lg,
-        borderWidth: 1,
-        borderStyle: uri ? 'solid' : 'dashed',
-        borderColor: colors.line,
-        backgroundColor: colors.surface,
-        overflow: 'hidden',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: space.md,
-      }}
+      style={({ pressed }) => [
+        {
+          flex: 1,
+          minHeight: height,
+          borderRadius: radius.lg,
+          backgroundColor: uri ? colors.surfaceMuted : colors.primarySoft,
+          overflow: 'hidden',
+          justifyContent: 'center',
+          padding: space.lg,
+          transform: [{ scale: pressed ? 0.985 : 1 }],
+        },
+        uri ? shadow : null,
+      ]}
     >
       {uri ? (
-        <Image source={{ uri }} style={{ position: 'absolute', width: '100%', height: '100%' }} resizeMode="cover" />
+        <>
+          <Image source={{ uri }} style={{ position: 'absolute', width: '100%', height: '100%' }} resizeMode="cover" />
+          <LinearGradient colors={['transparent', 'rgba(8,14,40,0.62)']} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '55%' }} />
+          <View style={{ position: 'absolute', left: space.lg, right: space.lg, bottom: space.md, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text weight="semibold" color="#FFFFFF" variant="caption">{label}</Text>
+            <Pill label={t.photo.retake} tone="hero" icon="edit-2" />
+          </View>
+        </>
       ) : (
-        <View style={{ alignItems: 'center', gap: space.sm }}>
-          <Feather name="camera" size={24} color={colors.primary} />
-          <Text variant="caption" weight="semibold" style={{ textAlign: 'center' }}>{label}</Text>
-          {hint ? <Text variant="caption" muted style={{ textAlign: 'center' }}>{hint}</Text> : null}
+        <View style={{ gap: space.md, alignItems: 'flex-start' }}>
+          <IconBubble name={icon} />
+          <View style={{ gap: 2 }}>
+            <Text weight="semibold">{label}</Text>
+            {hint ? <Text variant="caption" muted>{hint}</Text> : null}
+          </View>
+          <Pill tone="surface" icon="plus" label={t.photo.add} />
         </View>
       )}
     </Pressable>

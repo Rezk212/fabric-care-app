@@ -1,7 +1,8 @@
 import { Feather } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import type { ColorValue } from 'react-native';
+import { View, type ColorValue } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useShadow } from '../../components/ui';
 import { useApp } from '../../lib/app-context';
 
 type IconName = React.ComponentProps<typeof Feather>['name'];
@@ -9,8 +10,13 @@ type IconName = React.ComponentProps<typeof Feather>['name'];
 export default function TabsLayout() {
   const { t, colors, rtl } = useApp();
   const insets = useSafeAreaInsets();
-  const icon = (name: IconName) => ({ color, size }: { color: ColorValue; size: number }) =>
-    <Feather name={name} size={size} color={color} />;
+  const shadow = useShadow(0.9);
+
+  const icon = (name: IconName) => ({ color, size, focused }: { color: ColorValue; size: number; focused: boolean }) => (
+    <View style={{ width: 56, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: focused ? colors.primarySoft : 'transparent' }}>
+      <Feather name={name} size={size - 2} color={color} />
+    </View>
+  );
 
   return (
     <Tabs
@@ -18,11 +24,13 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.inkMuted,
-        tabBarStyle: {
-          backgroundColor: colors.surface, borderTopColor: colors.line, direction: rtl ? 'rtl' : 'ltr',
-          height: 76 + insets.bottom, paddingTop: 8, paddingBottom: 8 + insets.bottom,
-        },
-        tabBarLabelStyle: { fontFamily: 'IBMPlexSansArabic_500Medium', fontSize: 12, lineHeight: 18 },
+        // Floating bar: lifted off the edge, content scrolls beneath it (screens reserve space with floatingTabs).
+        tabBarStyle: [{
+          position: 'absolute', left: 16, right: 16, bottom: Math.max(insets.bottom, 12),
+          height: 76, paddingTop: 8, paddingBottom: 8, borderRadius: 32, borderTopWidth: 0,
+          backgroundColor: colors.surface, direction: rtl ? 'rtl' : 'ltr',
+        }, shadow],
+        tabBarLabelStyle: { fontFamily: 'ReadexPro_500Medium', fontSize: 11, lineHeight: 16 },
       }}
     >
       <Tabs.Screen name="index" options={{ title: t.tabs.home, tabBarIcon: icon('camera') }} />

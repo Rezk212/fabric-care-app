@@ -1,7 +1,6 @@
 import {
-  IBMPlexSansArabic_400Regular, IBMPlexSansArabic_500Medium,
-  IBMPlexSansArabic_600SemiBold, IBMPlexSansArabic_700Bold, useFonts,
-} from '@expo-google-fonts/ibm-plex-sans-arabic';
+  ReadexPro_400Regular, ReadexPro_500Medium, ReadexPro_600SemiBold, ReadexPro_700Bold, useFonts,
+} from '@expo-google-fonts/readex-pro';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -12,10 +11,7 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 
 function Shell() {
   const { ready, dark, colors } = useApp();
-  const [fontsLoaded] = useFonts({
-    IBMPlexSansArabic_400Regular, IBMPlexSansArabic_500Medium,
-    IBMPlexSansArabic_600SemiBold, IBMPlexSansArabic_700Bold,
-  });
+  const [fontsLoaded] = useFonts({ ReadexPro_400Regular, ReadexPro_500Medium, ReadexPro_600SemiBold, ReadexPro_700Bold });
 
   useEffect(() => {
     if (ready && fontsLoaded) SplashScreen.hideAsync().catch(() => {});
@@ -25,7 +21,7 @@ function Shell() {
   return (
     <>
       <StatusBar style={dark ? 'light' : 'dark'} />
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }} />
+      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg }, animation: 'fade' }} />
     </>
   );
 }

@@ -1,13 +1,12 @@
-import { space } from '@naqa/shared';
-import { format, type UsageInfo } from '@naqa/shared';
+import { format, space, type UsageInfo } from '@naqa/shared';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { PhotoSlot } from '../../components/photo-slot';
-import { Button, Field, Row, Screen, Text } from '../../components/ui';
+import { Button, FadeIn, Field, Pill, Row, Screen, Text } from '../../components/ui';
 import { AnalyzeError, analyzeGarment, fetchUsage } from '../../lib/analyze';
-import { saveAnalysis } from '../../lib/data';
 import { useApp } from '../../lib/app-context';
+import { saveAnalysis } from '../../lib/data';
 
 export default function Analyze() {
   const { t, colors } = useApp();
@@ -42,34 +41,47 @@ export default function Analyze() {
   }
 
   return (
-    <Screen>
-      <ScrollView contentContainerStyle={{ gap: space.xl, paddingVertical: space.xl }} keyboardShouldPersistTaps="handled">
-        <View style={{ gap: space.sm }}>
-          <Text variant="heading" weight="bold">{t.home.title}</Text>
+    <Screen floatingTabs>
+      <ScrollView contentContainerStyle={{ gap: space.xl, paddingTop: space.xl, paddingBottom: space.lg }} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+        <FadeIn style={{ gap: space.sm }}>
+          <Row style={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <Text variant="heading" weight="bold" style={{ flex: 1 }}>{t.home.title}</Text>
+            {usage ? <Pill tone={exhausted ? 'accent' : 'primary'} icon="zap" label={`${left}/${usage.limit}`} /> : null}
+          </Row>
           <Text muted>{t.home.subtitle}</Text>
-        </View>
+        </FadeIn>
 
-        <PhotoSlot label={t.home.garment} hint={t.home.garmentHint} height={176} uri={garmentUri} onChange={setGarment} />
+        <FadeIn delay={80}>
+          <PhotoSlot label={t.home.garment} hint={t.home.garmentHint} icon="camera" height={200} uri={garmentUri} onChange={setGarment} />
+        </FadeIn>
 
-        <Row style={{ alignItems: 'stretch' }} gap={space.md}>
-          <PhotoSlot label={t.home.label} hint={t.home.labelHint} uri={labelUri} onChange={setLabel} />
-          <PhotoSlot label={t.home.machine} hint={t.home.machineHint2} uri={machineUri} onChange={setMachine} />
-        </Row>
+        <FadeIn delay={140}>
+          <Row style={{ alignItems: 'stretch' }} gap={space.md}>
+            <PhotoSlot label={t.home.label} hint={t.home.labelHint} icon="tag" height={168} uri={labelUri} onChange={setLabel} />
+            <PhotoSlot label={t.home.machine} hint={t.home.machineHint2} icon="disc" height={168} uri={machineUri} onChange={setMachine} />
+          </Row>
+        </FadeIn>
 
-        <Field
-          value={modelNumber}
-          onChangeText={setModel}
-          placeholder={t.home.modelNumberOptional}
-          autoCapitalize="characters"
-          autoCorrect={false}
-          accessibilityLabel={t.home.modelNumberOptional}
-        />
+        <FadeIn delay={200}>
+          <Field
+            icon="hash"
+            value={modelNumber}
+            onChangeText={setModel}
+            placeholder={t.home.modelNumberOptional}
+            autoCapitalize="characters"
+            autoCorrect={false}
+            accessibilityLabel={t.home.modelNumberOptional}
+          />
+        </FadeIn>
       </ScrollView>
-      <View style={{ paddingBottom: space.lg }}>
-        {usage ? <Text variant="caption" muted style={{ marginBottom: space.sm }}>{exhausted ? t.home.quotaReached : format(t.home.usageLeft, { left: left ?? 0, limit: usage.limit })}</Text> : null}
-        {!ready && !error && !exhausted ? <Text variant="caption" muted style={{ marginBottom: space.sm }}>{t.home.needPhoto}</Text> : null}
-        {error ? <Text color={colors.danger} style={{ marginBottom: space.md }} accessibilityRole="alert">{error}</Text> : null}
-        <Button label={busy ? t.home.analyzing : t.home.analyze} onPress={run} disabled={!ready || busy} />
+
+      <View style={{ gap: space.sm, paddingBottom: space.md }}>
+        {usage ? (
+          <Text variant="caption" muted>{exhausted ? t.home.quotaReached : format(t.home.usageLeft, { left: left ?? 0, limit: usage.limit })}</Text>
+        ) : null}
+        {!ready && !error && !exhausted ? <Text variant="caption" muted>{t.home.needPhoto}</Text> : null}
+        {error ? <Text color={colors.danger} accessibilityRole="alert">{error}</Text> : null}
+        <Button icon="search" label={busy ? t.home.analyzing : t.home.analyze} onPress={run} disabled={!ready || busy} />
       </View>
     </Screen>
   );

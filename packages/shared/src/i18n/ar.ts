@@ -63,7 +63,7 @@ export const ar: Dictionary = {
     away: 'على بعد {km} كم',
     empty: 'لا توجد متاجر لهذه المدينة بعد.',
   },
-  photo: { camera: 'التقاط صورة', library: 'اختيار من المعرض', remove: 'إزالة', cancel: 'إلغاء' },
+  photo: { camera: 'التقاط صورة', library: 'اختيار من المعرض', remove: 'إزالة', cancel: 'إلغاء', add: 'أضف صورة', retake: 'تغيير' },
   settings: { title: 'الإعدادات', language: 'اللغة', place: 'الموقع', arabic: 'العربية', english: 'English', change: 'تغيير' },
   machines: { title: 'غسالاتي', empty: 'ستظهر هنا الغسالات التي تحللها.', history: 'آخر التحليلات', historyEmpty: 'ستظهر تحليلاتك هنا.', remove: 'حذف', localMode: 'تسجيل الدخول غير مُعدّ بعد، لذلك لا يُحفظ شيء.' },
   errors: {

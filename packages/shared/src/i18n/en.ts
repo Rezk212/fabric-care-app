@@ -61,7 +61,7 @@ export const en = {
     away: '{km} km away',
     empty: 'No stores found for this city yet.',
   },
-  photo: { camera: 'Take a photo', library: 'Choose from library', remove: 'Remove', cancel: 'Cancel' },
+  photo: { camera: 'Take a photo', library: 'Choose from library', remove: 'Remove', cancel: 'Cancel', add: 'Add photo', retake: 'Change' },
   settings: { title: 'Settings', language: 'Language', place: 'Location', arabic: 'العربية', english: 'English', change: 'Change' },
   machines: { title: 'My machines', empty: 'Machines you analyze will appear here.', history: 'Recent analyses', historyEmpty: 'Your analyses will appear here.', remove: 'Remove', localMode: 'Sign-in is not set up yet, so nothing is saved.' },
   errors: {

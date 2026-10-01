@@ -2,7 +2,7 @@ import { space } from '@naqa/shared';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, View } from 'react-native';
-import { Button, Field, Screen, Text } from '../components/ui';
+import { Button, Field, FadeIn, Logo, Row, Screen, Text } from '../components/ui';
 import { useApp } from '../lib/app-context';
 
 export default function AuthScreen() {
@@ -35,11 +35,14 @@ export default function AuthScreen() {
   return (
     <Screen>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, justifyContent: 'center', gap: space.xl }}>
-        <Text variant="heading" weight="bold">{mode === 'in' ? t.auth.signInTitle : t.auth.signUpTitle}</Text>
+        <FadeIn style={{ gap: space.lg }}>
+          <Logo size={48} color={colors.primary} wave={colors.accent} />
+          <Text variant="display" weight="bold">{mode === 'in' ? t.auth.signInTitle : t.auth.signUpTitle}</Text>
+        </FadeIn>
         <View style={{ gap: space.md }}>
-          <Field value={email} onChangeText={setEmail} placeholder={t.auth.email} accessibilityLabel={t.auth.email}
+          <Field icon="mail" value={email} onChangeText={setEmail} placeholder={t.auth.email} accessibilityLabel={t.auth.email}
             autoCapitalize="none" autoCorrect={false} keyboardType="email-address" textContentType="emailAddress" />
-          <Field value={password} onChangeText={setPassword} placeholder={t.auth.password} accessibilityLabel={t.auth.password}
+          <Field icon="lock" value={password} onChangeText={setPassword} placeholder={t.auth.password} accessibilityLabel={t.auth.password}
             secureTextEntry autoCapitalize="none" textContentType={mode === 'in' ? 'password' : 'newPassword'} />
         </View>
         {message ? (
