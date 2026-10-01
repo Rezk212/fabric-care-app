@@ -17,6 +17,7 @@ export default function Stores() {
   const [branches, setBranches] = useState<Branch[]>([]);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [errorText, setErrorText] = useState('');
   const [denied, setDenied] = useState(false);
   const [chainId, setChainId] = useState<string | null>(null);
 
@@ -31,7 +32,7 @@ export default function Stores() {
     setLoading(true); setFailed(false);
     fetchBranches(point)
       .then((b) => { if (live) setBranches(b); })
-      .catch(() => { if (live) { setBranches([]); setFailed(true); } })
+      .catch((e) => { if (live) { setBranches([]); setFailed(true); setErrorText(e instanceof Error ? e.message : String(e)); } })
       .finally(() => { if (live) setLoading(false); });
     return () => { live = false; };
   }, [point.lat, point.lng]);
@@ -82,7 +83,7 @@ export default function Stores() {
               </ScrollView>
             ) : null}
             {loading ? <Row gap={space.sm}><ActivityIndicator color={colors.primary} /><Text muted>{t.stores.searching}</Text></Row> : null}
-            {failed ? <Text variant="caption" muted>{t.stores.offline}</Text> : null}
+            {failed ? <Text variant="caption" muted>{t.stores.offline}{errorText ? `\n${errorText}` : ''}</Text> : null}
           </View>
         }
         ListEmptyComponent={loading ? null : <Text muted>{failed ? t.stores.empty : t.stores.none}</Text>}

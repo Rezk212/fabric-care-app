@@ -38,7 +38,7 @@ export async function fetchBranches(origin: LatLng): Promise<Branch[]> {
   if (hit && Date.now() - hit.at < 6 * 3600_000) return hit.data;
 
   let json: any;
-  let lastError: unknown;
+  const errors: string[] = [];
   for (const url of ENDPOINTS) {
     const t = withTimeout(20_000);
     try {
@@ -47,9 +47,9 @@ export async function fetchBranches(origin: LatLng): Promise<Branch[]> {
       if (!res.ok) throw new Error(`overpass ${res.status}`);
       json = await res.json();
       break;
-    } catch (e) { lastError = e; } finally { t.done(); }
+    } catch (e) { errors.push(`${new URL(url).host}: ${e instanceof Error ? e.message : String(e)}`); } finally { t.done(); }
   }
-  if (!json) throw lastError ?? new Error('overpass failed');
+  if (!json) throw new Error(errors.join(' | '));
 
   const seen = new Set<string>();
   const out: Branch[] = [];
