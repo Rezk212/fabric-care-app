@@ -1,14 +1,15 @@
 import { CHECK_LABEL_NOTE, space, symbolGuide } from '@naqa/shared';
 import { router } from 'expo-router';
 import { ScrollView } from 'react-native';
-import { BackHeader, Card, Row, Screen, SymbolGlyph, Text } from '../../components/ui';
+import { BackHeader, BottomBack, Card, Row, Screen, SymbolGlyph, Text } from '../../components/ui';
+import { goBack } from '../../lib/nav';
 import { useApp } from '../../lib/app-context';
 
 export default function Symbols() {
   const { t, locale, colors } = useApp();
   return (
     <Screen>
-      <BackHeader title={t.guide.symbols} onBack={() => router.back()} />
+      <BackHeader title={t.guide.symbols} onBack={goBack} />
       <ScrollView contentContainerStyle={{ paddingVertical: space.lg }} showsVerticalScrollIndicator={false}>
         <Card padded={false} style={{ paddingHorizontal: space.lg }}>
           {symbolGuide.map((s, i) => (
@@ -20,6 +21,7 @@ export default function Symbols() {
         </Card>
         <Text variant="caption" muted style={{ marginTop: space.lg }}>{CHECK_LABEL_NOTE[locale]}</Text>
       </ScrollView>
+      <BottomBack onPress={goBack} />
     </Screen>
   );
 }

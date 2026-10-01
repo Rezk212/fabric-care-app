@@ -8,10 +8,11 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScrollView, View } from 'react-native';
-import { Button, Card, Chip, FadeIn, IconBubble, Pill, Row, Screen, SymbolGlyph, Text } from '../components/ui';
+import { BottomBack, Card, Chip, FadeIn, IconBubble, Pill, Row, Screen, SymbolGlyph, Text } from '../components/ui';
 import { withFabric } from '../lib/analyze';
 import { useApp } from '../lib/app-context';
 import { listMachines } from '../lib/data';
+import { goBack } from '../lib/nav';
 
 const fabrics: FabricType[] = ['cotton', 'linen', 'wool', 'silk', 'polyester', 'nylon', 'denim', 'cashmere', 'viscose', 'synthetic_blend'];
 type FeatherName = React.ComponentProps<typeof Feather>['name'];
@@ -167,10 +168,9 @@ export default function Result() {
               </FadeIn>
             ))}
           </View>
-
-          <Button variant="quiet" icon={rtl ? 'arrow-right' : 'arrow-left'} label={t.result.back} onPress={() => router.back()} />
         </View>
       </ScrollView>
+      <View style={{ paddingHorizontal: space.xl }}><BottomBack onPress={goBack} /></View>
     </Screen>
   );
 }

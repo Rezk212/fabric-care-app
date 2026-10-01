@@ -2,7 +2,8 @@ import { Feather } from '@expo/vector-icons';
 import { CHECK_LABEL_NOTE, gulfGarments, space } from '@naqa/shared';
 import { router } from 'expo-router';
 import { Pressable, ScrollView } from 'react-native';
-import { BackHeader, Card, FadeIn, IconBubble, Row, Screen, Text } from '../../components/ui';
+import { BackHeader, BottomBack, Card, FadeIn, IconBubble, Row, Screen, Text } from '../../components/ui';
+import { goBack } from '../../lib/nav';
 import { useApp } from '../../lib/app-context';
 
 type FeatherName = React.ComponentProps<typeof Feather>['name'];
@@ -11,7 +12,7 @@ export default function Garments() {
   const { t, locale, colors, rtl } = useApp();
   return (
     <Screen>
-      <BackHeader title={t.guide.garments} onBack={() => router.back()} />
+      <BackHeader title={t.guide.garments} onBack={goBack} />
       <ScrollView contentContainerStyle={{ paddingVertical: space.lg, gap: space.md }} showsVerticalScrollIndicator={false}>
         <Text variant="caption" muted>{CHECK_LABEL_NOTE[locale]}</Text>
         {gulfGarments.map((g, i) => (
@@ -28,6 +29,7 @@ export default function Garments() {
           </FadeIn>
         ))}
       </ScrollView>
+      <BottomBack onPress={goBack} />
     </Screen>
   );
 }

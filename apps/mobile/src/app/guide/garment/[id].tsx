@@ -2,7 +2,8 @@ import { Feather } from '@expo/vector-icons';
 import { CHECK_LABEL_NOTE, baselineRecommendation, gulfGarments, space } from '@naqa/shared';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ScrollView, View } from 'react-native';
-import { BackHeader, Button, Card, Pill, Row, Screen, Text } from '../../../components/ui';
+import { BackHeader, BottomBack, Button, Card, Pill, Row, Screen, Text } from '../../../components/ui';
+import { goBack } from '../../../lib/nav';
 import { useApp } from '../../../lib/app-context';
 
 export default function GarmentDetail() {
@@ -24,7 +25,7 @@ export default function GarmentDetail() {
 
   return (
     <Screen>
-      <BackHeader title={g.name[locale]} onBack={() => router.back()} />
+      <BackHeader title={g.name[locale]} onBack={goBack} />
       <ScrollView contentContainerStyle={{ paddingVertical: space.lg, gap: space.xl }} showsVerticalScrollIndicator={false}>
         <Card style={{ gap: space.sm }}>
           <Pill tone="primary" icon="layers" label={`${t.guide.usualFabric}: ${t.fabrics[g.fabric]}`} />
@@ -54,6 +55,7 @@ export default function GarmentDetail() {
         <Text variant="caption" muted>{CHECK_LABEL_NOTE[locale]}</Text>
         <Button icon="droplet" label={t.guide.openPlan} onPress={openPlan} />
       </ScrollView>
+      <BottomBack onPress={goBack} />
     </Screen>
   );
 }

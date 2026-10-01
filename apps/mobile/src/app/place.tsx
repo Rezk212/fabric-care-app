@@ -4,7 +4,8 @@ import * as Location from 'expo-location';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { Button, Chip, FadeIn, IconBubble, Row, Screen, Text, useShadow } from '../components/ui';
+import { BackHeader, BottomBack, Button, Chip, FadeIn, IconBubble, Row, Screen, Text, useShadow } from '../components/ui';
+import { goBack } from '../lib/nav';
 import { useApp } from '../lib/app-context';
 
 export default function PlaceScreen() {
@@ -17,6 +18,7 @@ export default function PlaceScreen() {
   );
   const [denied, setDenied] = useState(false);
 
+  const canGoBack = router.canGoBack();
   const country = countries.find((c) => c.code === countryCode) ?? countries[0];
 
   async function useMyLocation() {
@@ -35,10 +37,13 @@ export default function PlaceScreen() {
 
   return (
     <Screen>
+      {canGoBack ? <BackHeader title={t.place.title} onBack={goBack} /> : null}
       <ScrollView contentContainerStyle={{ gap: space.xl, paddingVertical: space.xl }} showsVerticalScrollIndicator={false}>
-        <FadeIn style={{ gap: space.sm }}>
-          <Text variant="heading" weight="bold">{t.place.title}</Text>
-        </FadeIn>
+        {!canGoBack ? (
+          <FadeIn style={{ gap: space.sm }}>
+            <Text variant="heading" weight="bold">{t.place.title}</Text>
+          </FadeIn>
+        ) : null}
 
         <View style={{ gap: space.md }}>
           <Text weight="semibold">{t.place.country}</Text>
@@ -86,6 +91,7 @@ export default function PlaceScreen() {
       </ScrollView>
       <View style={{ paddingBottom: space.xl }}>
         <Button label={t.place.continue} onPress={save} disabled={!cityId} />
+        {canGoBack ? <BottomBack onPress={goBack} /> : null}
       </View>
     </Screen>
   );

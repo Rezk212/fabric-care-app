@@ -316,3 +316,13 @@ export function SymbolGlyph({ kind, level, banned, size = 44 }: { kind: SymbolKi
     </Svg>
   );
 }
+
+/** Sticky back button for the bottom of a screen: easy to reach with a thumb, and never hidden under overlays. */
+export function BottomBack({ onPress }: { onPress: () => void }) {
+  const { t, rtl } = useApp();
+  return (
+    <View style={{ paddingTop: space.sm, paddingBottom: space.lg }}>
+      <Button variant="quiet" icon={rtl ? 'arrow-right' : 'arrow-left'} label={t.result.back} onPress={onPress} />
+    </View>
+  );
+}

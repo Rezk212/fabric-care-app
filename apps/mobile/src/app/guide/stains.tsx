@@ -3,7 +3,8 @@ import { CHECK_LABEL_NOTE, radius, space, stainAdvice, stainGuides, type FabricT
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { BackHeader, Card, Chip, FadeIn, IconBubble, Row, Screen, Text, useShadow } from '../../components/ui';
+import { BackHeader, BottomBack, Card, Chip, FadeIn, IconBubble, Row, Screen, Text, useShadow } from '../../components/ui';
+import { goBack } from '../../lib/nav';
 import { useApp } from '../../lib/app-context';
 
 const fabrics: FabricType[] = ['cotton', 'linen', 'denim', 'polyester', 'nylon', 'synthetic_blend', 'silk', 'wool', 'cashmere', 'viscose', 'unknown'];
@@ -18,7 +19,7 @@ export default function Stains() {
 
   return (
     <Screen>
-      <BackHeader title={t.guide.stains} onBack={() => router.back()} />
+      <BackHeader title={t.guide.stains} onBack={goBack} />
       <ScrollView contentContainerStyle={{ paddingVertical: space.lg, gap: space.xl }} showsVerticalScrollIndicator={false}>
         <View style={{ gap: space.md }}>
           <Text weight="semibold">{t.guide.pickStain}</Text>
@@ -74,6 +75,7 @@ export default function Stains() {
 
         <Text variant="caption" muted>{`${t.guide.testFirst} ${CHECK_LABEL_NOTE[locale]}`}</Text>
       </ScrollView>
+      <BottomBack onPress={goBack} />
     </Screen>
   );
 }
