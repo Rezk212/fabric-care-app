@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { PhotoSlot } from '../../components/photo-slot';
 import { Button, FadeIn, Field, Pill, Row, Screen, Text } from '../../components/ui';
-import { AnalyzeError, analyzeGarment, fetchUsage } from '../../lib/analyze';
+import { AnalyzeError, analyzeGarment, fetchUsage, unknownAnalysis } from '../../lib/analyze';
 import { useApp } from '../../lib/app-context';
 import { saveAnalysis } from '../../lib/data';
 
@@ -16,6 +16,7 @@ export default function Analyze() {
   const [modelNumber, setModel] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
+  const [canGoManual, setCanGoManual] = useState(false);
   const [usage, setUsage] = useState<UsageInfo | null>(null);
   useFocusEffect(useCallback(() => { void fetchUsage().then(setUsage); }, []));
   const left = usage ? Math.max(usage.limit - usage.used, 0) : null;
@@ -26,6 +27,7 @@ export default function Analyze() {
   async function run() {
     setBusy(true);
     setError(undefined);
+    setCanGoManual(false);
     try {
       const { analysis, machine, usage: used } = await analyzeGarment({ garmentUri, labelUri, machineUri, modelNumber: modelNumber.trim() || undefined });
       if (used) setUsage(used);
@@ -35,6 +37,8 @@ export default function Analyze() {
       const code = e instanceof AnalyzeError ? e.code : 'server';
       if (e instanceof AnalyzeError && e.usage) setUsage(e.usage);
       setError(t.errors[code]);
+      // When the AI is unavailable the user can still continue by picking the fabric themselves.
+      setCanGoManual(code === 'server' || code === 'network' || code === 'rate_limited');
     } finally {
       setBusy(false);
     }
@@ -81,6 +85,9 @@ export default function Analyze() {
         ) : null}
         {!ready && !error && !exhausted ? <Text variant="caption" muted>{t.home.needPhoto}</Text> : null}
         {error ? <Text color={colors.danger} accessibilityRole="alert">{error}</Text> : null}
+        {canGoManual ? (
+          <Button variant="quiet" icon="edit-3" label={t.home.manual} onPress={() => router.push({ pathname: '/result', params: { analysis: JSON.stringify(unknownAnalysis()) } })} />
+        ) : null}
         <Button icon="search" label={busy ? t.home.analyzing : t.home.analyze} onPress={run} disabled={!ready || busy} />
       </View>
     </Screen>

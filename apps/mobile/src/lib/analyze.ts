@@ -34,7 +34,7 @@ async function toPayload(role: 'garment' | 'label' | 'machine', uri: string) {
   return { role, mediaType: 'image/jpeg' as const, data: img.base64 ?? '' };
 }
 
-const unknownAnalysis = (): GarmentAnalysis => ({
+export const unknownAnalysis = (): GarmentAnalysis => ({
   fabric: 'unknown', confidence: 0, careSymbolsDetected: [], recommendation: baselineRecommendation('unknown'),
 });
 

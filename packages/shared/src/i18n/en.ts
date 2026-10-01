@@ -24,6 +24,7 @@ export const en = {
     machineHint: 'Photo of the machine, or its model number',
     modelNumber: 'Model number',
     analyze: 'Analyze',
+    manual: 'Choose the fabric myself',
     usageLeft: 'Analyses left today: {left} of {limit}',
     quotaReached: 'You have used today\'s free analyses. They renew at midnight (Oman time). A paid plan with more analyses is coming soon.',
     subtitle: 'Add a photo of the garment or its care label.',
