@@ -74,7 +74,7 @@ export const ar: Dictionary = {
     offline: 'تعذّر تحميل الفروع الحيّة. نعرض بيانات تجريبية.',
     directions: 'الاتجاهات',
     nearest: 'الأقرب إليك',
-    none: 'لا توجد فروع ضمن ٦٠ كم. جرّب منطقة أخرى.',
+    none: 'لا توجد فروع ضمن ٤٠ كم. جرّب منطقة أخرى.',
   },
   photo: { camera: 'التقاط صورة', library: 'اختيار من المعرض', remove: 'إزالة', cancel: 'إلغاء', add: 'أضف صورة', retake: 'تغيير' },
   settings: { title: 'الإعدادات', language: 'اللغة', place: 'الموقع', arabic: 'العربية', english: 'English', change: 'تغيير' },

@@ -72,7 +72,7 @@ export const en = {
     offline: 'Could not load live branches. Showing sample data.',
     directions: 'Directions',
     nearest: 'Nearest to you',
-    none: 'No branches found within 60 km. Try another area.',
+    none: 'No branches found within 40 km. Try another area.',
   },
   photo: { camera: 'Take a photo', library: 'Choose from library', remove: 'Remove', cancel: 'Cancel', add: 'Add photo', retake: 'Change' },
   settings: { title: 'Settings', language: 'Language', place: 'Location', arabic: 'العربية', english: 'English', change: 'Change' },

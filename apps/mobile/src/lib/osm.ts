@@ -10,8 +10,8 @@ export interface Branch extends LatLng {
 
 const ENDPOINTS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter', 'https://overpass.private.coffee/api/interpreter'];
 const cache = new Map<string, { at: number; data: Branch[] }>();
-const RADIUS_M = 60_000;
-const OVERPASS_NAMES = ['Lulu', 'لولو', 'Hypermax', 'Hyper Max', 'هايبرماكس', 'Nesto', 'نيستو', 'Makkah', 'مكة', 'Meera', 'الميرة', 'Carrefour', 'كارفور', 'Sultan Center', 'مركز السلطان', 'Ramez', 'رامز'];
+const RADIUS_M = 40_000;
+const OVERPASS_NAMES = ['Lulu', 'LULU', 'لولو', 'Hypermax', 'HYPERMAX', 'Hyper Max', 'هايبرماكس', 'Nesto', 'NESTO', 'نيستو', 'Makkah', 'MAKKAH', 'مكة', 'Meera', 'MEERA', 'الميرة', 'Carrefour', 'CARREFOUR', 'كارفور', 'Sultan Center', 'مركز السلطان', 'Ramez', 'رامز'];
 
 function withTimeout(ms: number) {
   const ctl = new AbortController();
@@ -20,15 +20,10 @@ function withTimeout(ms: number) {
 }
 
 function query(o: LatLng) {
-  // Plain alternatives only: Overpass regex does not support \\s or \\? style escapes reliably.
   const rx = OVERPASS_NAMES.join('|');
   const around = `(around:${RADIUS_M},${o.lat},${o.lng})`;
-  const kinds = '["shop"~"supermarket|department_store|wholesale|convenience"]';
-  return `[out:json][timeout:25];(`
-    + `nwr${kinds}["name"~"${rx}",i]${around};`
-    + `nwr${kinds}["name:ar"~"${rx}",i]${around};`
-    + `nwr${kinds}["brand"~"${rx}",i]${around};`
-    + `);out center tags 300;`;
+  // Two cheap clauses (English/Arabic names) instead of three regex scans with extra filters.
+  return `[out:json][timeout:25];(nwr["name"~"${rx}"]${around};nwr["brand"~"${rx}"]${around};);out center tags 150;`;
 }
 
 /** Real branches of the trusted chains near a point, nearest first. Throws when offline. */
@@ -40,7 +35,7 @@ export async function fetchBranches(origin: LatLng): Promise<Branch[]> {
   let json: any;
   const errors: string[] = [];
   for (const url of ENDPOINTS) {
-    const t = withTimeout(20_000);
+    const t = withTimeout(30_000);
     try {
       const res = await fetch(url, { method: 'POST', signal: t.signal, body: `data=${encodeURIComponent(query(origin))}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
