@@ -16,13 +16,18 @@ export const SCHEMA = {
     },
     machine_brand: { type: ["string", "null"] },
     machine_model: { type: ["string", "null"] },
+    machine_programs: {
+      type: "array",
+      items: { type: "string" },
+      description: "Programme names printed on the washing machine's dial or panel, exactly as written (e.g. 'Cotton', 'Delicates', 'Wool'). Empty if no panel is visible.",
+    },
     notes: {
       type: "array",
       items: { type: "string" },
       description: "Short practical warnings for this garment, in English.",
     },
   },
-  required: ["fabric", "confidence", "care_symbols", "machine_brand", "machine_model", "notes"],
+  required: ["fabric", "confidence", "care_symbols", "machine_brand", "machine_model", "machine_programs", "notes"],
   additionalProperties: false,
 } as const;
 
@@ -31,6 +36,7 @@ Photos may include: a garment, its care label, and a washing machine (panel or r
 - Report the fabric only from evidence in the photos (label text, texture, visible weave). If you cannot tell, use "unknown" with low confidence. Never guess a fabric to look helpful.
 - Care labels override visual guesses. Read symbols and text exactly.
 - For the machine, report brand and model only if they are legible in a photo or given by the user; otherwise null.
+- If the machine panel or dial is visible, list the programme names exactly as printed. Do not invent names you cannot read.
 - Do not recommend wash programs. The app derives those from your fabric and symbols.`;
 
 export function userText(modelNumber?: string): string {

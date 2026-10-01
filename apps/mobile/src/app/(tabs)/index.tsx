@@ -30,7 +30,7 @@ export default function Analyze() {
       const { analysis, machine, usage: used } = await analyzeGarment({ garmentUri, labelUri, machineUri, modelNumber: modelNumber.trim() || undefined });
       if (used) setUsage(used);
       void saveAnalysis(analysis, machine);
-      router.push({ pathname: '/result', params: { analysis: JSON.stringify(analysis), modelNumber: modelNumber.trim() } });
+      router.push({ pathname: '/result', params: { analysis: JSON.stringify(analysis), modelNumber: modelNumber.trim(), machinePrograms: JSON.stringify(machine?.programs ?? []) } });
     } catch (e) {
       const code = e instanceof AnalyzeError ? e.code : 'server';
       if (e instanceof AnalyzeError && e.usage) setUsage(e.usage);

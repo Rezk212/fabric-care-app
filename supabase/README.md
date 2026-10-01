@@ -17,6 +17,11 @@ supabase functions deploy analyze
 The app already points at this project (`apps/mobile/src/lib/supabase.ts`). To use a different project, copy
 `apps/mobile/.env.example` to `.env` and fill in its URL and publishable key.
 
+## Database files, in order
+Run each once in Supabase → SQL Editor (New snippet → paste → Run), oldest first:
+`0001_init.sql`, `0002_usage_and_sponsored.sql`, `0003_machine_programs.sql`.
+After changing anything in `supabase/functions`, redeploy: `npx supabase functions deploy analyze --use-api`.
+
 ## Switching the AI provider
 
 The provider is a server setting; the app does not change and needs no update.

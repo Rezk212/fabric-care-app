@@ -6,7 +6,7 @@ export interface AnalyzeResponse {
   fabric: FabricType;
   confidence: number;
   careSymbols: string[];
-  machine: { brand: string | null; model: string | null };
+  machine: { brand: string | null; model: string | null; programs?: string[] };
   notes: string[];
   usage?: UsageInfo;
 }

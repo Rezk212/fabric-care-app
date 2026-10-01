@@ -7,3 +7,7 @@ export * from './data/places';
 export * from './data/catalog';
 export * from './reconcile';
 export * from './shopping';
+export * from './content/garments';
+export * from './content/stains';
+export * from './content/symbols';
+export * from './machine';

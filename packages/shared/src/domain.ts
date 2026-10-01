@@ -64,3 +64,5 @@ export interface Store {
 
 /** Today's analysis allowance. `limit` depends on the plan; `plus` is the future paid plan. */
 export interface UsageInfo { used: number; limit: number; plan: 'free' | 'plus' }
+
+export interface Bilingual { ar: string; en: string }

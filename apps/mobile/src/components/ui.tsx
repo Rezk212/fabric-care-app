@@ -1,12 +1,12 @@
 import { Feather } from '@expo/vector-icons';
-import { fontWeights, radius, space, typeScale } from '@naqa/shared';
+import { fontWeights, radius, space, typeScale, type SymbolKind } from '@naqa/shared';
 import { useEffect, useRef, type ReactNode } from 'react';
 import {
   Animated, Easing, Pressable, Text as RNText, TextInput, View,
   type StyleProp, type TextProps, type TextStyle, type ViewStyle,
 } from 'react-native';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
-import Svg, { Circle, Path } from 'react-native-svg';
+import Svg, { Circle, Path, Text as SvgText } from 'react-native-svg';
 import { useApp } from '../lib/app-context';
 
 const fontByWeight = {
@@ -227,6 +227,92 @@ export function DrumArt({ size = 280 }: { size?: number }) {
       <Circle cx="246" cy="96" r="7" fill="#FFFFFF" opacity={0.36} />
       <Circle cx="48" cy="70" r="9" fill="#FFFFFF" opacity={0.25} />
       <Circle cx="34" cy="206" r="12" fill="#F2A93B" opacity={0.85} />
+    </Svg>
+  );
+}
+
+/** Screen header with a back arrow that points the right way in Arabic. */
+export function BackHeader({ title, onBack }: { title: string; onBack: () => void }) {
+  const { colors, rtl } = useApp();
+  return (
+    <Row style={{ paddingTop: space.lg, paddingBottom: space.sm }} gap={space.sm}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Back"
+        onPress={onBack}
+        style={{ width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surface }}
+      >
+        <Feather name={rtl ? 'arrow-right' : 'arrow-left'} size={20} color={colors.ink} />
+      </Pressable>
+      <Text variant="title" weight="semibold" style={{ flex: 1 }}>{title}</Text>
+    </Row>
+  );
+}
+
+/** Simplified drawings of the ISO care symbols. Meaning is always shown as text beside them. */
+export function SymbolGlyph({ kind, level, banned, size = 44 }: { kind: SymbolKind; level?: number; banned?: boolean; size?: number }) {
+  const { colors } = useApp();
+  const c = colors.ink;
+  const stroke = { stroke: c, strokeWidth: 2.4, fill: 'none', strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const };
+  const tub = <Path d="M8 14 H40 L36 38 H12 Z" {...stroke} />;
+  let body: React.ReactNode;
+  switch (kind) {
+    case 'wash':
+    case 'gentle':
+    case 'nowash':
+      body = (<>
+        {tub}
+        <Path d="M12 22c3-3 5 3 8 0s5 3 8 0 5 3 8 0" {...stroke} />
+        {level ? <SvgText x="24" y="35" fontSize="10" fontWeight="700" fill={c} textAnchor="middle">{level}</SvgText> : null}
+        {kind === 'gentle' ? <Path d="M10 43 H38" {...stroke} /> : null}
+      </>);
+      break;
+    case 'handwash':
+      body = (<>{tub}<Path d="M19 33 v-7 M23 33 v-9 M27 33 v-8 M31 33 v-6" {...stroke} /></>);
+      break;
+    case 'bleach':
+    case 'nobleach':
+    case 'bleach_oxygen':
+      body = (<>
+        <Path d="M24 8 L42 40 H6 Z" {...stroke} />
+        {kind === 'bleach_oxygen' ? <Path d="M17 34 L26 18 M24 36 L31 24" {...stroke} /> : null}
+      </>);
+      break;
+    case 'tumble':
+    case 'notumble':
+      body = (<><Path d="M8 8 H40 V40 H8 Z" {...stroke} /><Circle cx="24" cy="24" r="11" {...stroke} /></>);
+      break;
+    case 'iron':
+    case 'noiron':
+      body = (<>
+        <Path d="M8 36 H40 C40 26 34 18 26 18 H12 Z" {...stroke} />
+        {Array.from({ length: Math.min(3, level ?? 0) }).map((_, i) => <Circle key={i} cx={19 + i * 5} cy="28" r="1.6" fill={c} />)}
+      </>);
+      break;
+    case 'dryclean':
+    case 'nodryclean':
+      body = <Circle cx="24" cy="24" r="16" {...stroke} />;
+      break;
+    case 'linedry':
+      body = (<><Path d="M8 8 H40 V40 H8 Z" {...stroke} /><Path d="M24 8 V26" {...stroke} /></>);
+      break;
+    case 'dripdry':
+      body = (<><Path d="M8 8 H40 V40 H8 Z" {...stroke} /><Path d="M17 14 V34 M24 14 V34 M31 14 V34" {...stroke} /></>);
+      break;
+    case 'dryflat':
+      body = (<><Path d="M8 8 H40 V40 H8 Z" {...stroke} /><Path d="M13 24 H35" {...stroke} /></>);
+      break;
+    case 'shade':
+      body = (<><Path d="M8 8 H40 V40 H8 Z" {...stroke} /><Path d="M8 8 L18 18" {...stroke} /></>);
+      break;
+    default:
+      body = (<><Circle cx="24" cy="24" r="16" {...stroke} /><Path d="M24 22 V32 M24 16 V17" {...stroke} /></>);
+  }
+  const showCross = banned || kind === 'nowash' || kind === 'nobleach' || kind === 'notumble' || kind === 'noiron' || kind === 'nodryclean' || kind === 'nowring';
+  return (
+    <Svg width={size} height={size} viewBox="0 0 48 48" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+      {body}
+      {showCross ? <Path d="M6 6 L42 42 M42 6 L6 42" stroke={colors.danger} strokeWidth="3" strokeLinecap="round" /> : null}
     </Svg>
   );
 }

@@ -1,16 +1,17 @@
 import { Feather } from '@expo/vector-icons';
 import {
-  countries, format, radius, recommendProducts, space,
+  countries, explainSymbols, format, matchMachineProgram, radius, recommendProducts, space,
   type FabricType, type GarmentAnalysis,
 } from '@naqa/shared';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScrollView, View } from 'react-native';
-import { Button, Card, Chip, FadeIn, IconBubble, Pill, Row, Screen, Text } from '../components/ui';
+import { Button, Card, Chip, FadeIn, IconBubble, Pill, Row, Screen, SymbolGlyph, Text } from '../components/ui';
 import { withFabric } from '../lib/analyze';
 import { useApp } from '../lib/app-context';
+import { listMachines } from '../lib/data';
 
 const fabrics: FabricType[] = ['cotton', 'linen', 'wool', 'silk', 'polyester', 'nylon', 'denim', 'cashmere', 'viscose', 'synthetic_blend'];
 type FeatherName = React.ComponentProps<typeof Feather>['name'];
@@ -32,7 +33,7 @@ function Setting({ icon, label, value, allowed, last }: { icon: FeatherName; lab
 export default function Result() {
   const { t, locale, colors, place, rtl } = useApp();
   const insets = useSafeAreaInsets();
-  const params = useLocalSearchParams<{ analysis: string }>();
+  const params = useLocalSearchParams<{ analysis: string; machinePrograms?: string }>();
   const initial = useMemo<GarmentAnalysis>(() => JSON.parse(params.analysis), [params.analysis]);
   const [analysis, setAnalysis] = useState(initial);
   const r = analysis.recommendation;
@@ -45,6 +46,20 @@ export default function Result() {
     [analysis.fabric, place, origin?.lat, origin?.lng],
   );
   const pct = Math.round(analysis.confidence * 100);
+
+  // Programme names on the user's own machine: from this analysis, else from a saved machine.
+  const [machineLabels, setMachineLabels] = useState<string[]>(() => {
+    try { return JSON.parse(params.machinePrograms ?? '[]') as string[]; } catch { return []; }
+  });
+  useEffect(() => {
+    if (machineLabels.length > 0) return;
+    void listMachines().then((ms) => {
+      const m = ms.find((x) => x.programs && x.programs.length > 0);
+      if (m?.programs) setMachineLabels(m.programs);
+    });
+  }, [machineLabels.length]);
+  const machineLabel = matchMachineProgram(r.program, machineLabels);
+  const symbols = useMemo(() => explainSymbols(analysis.careSymbolsDetected), [analysis.careSymbolsDetected]);
 
   return (
     <Screen padded={false} edges={['bottom', 'left', 'right']}>
@@ -88,6 +103,18 @@ export default function Result() {
             </FadeIn>
           ) : null}
 
+          {machineLabel ? (
+            <FadeIn delay={100}>
+              <Card style={{ flexDirection: 'row', alignItems: 'center', gap: space.md }}>
+                <IconBubble name="disc" tone="success" />
+                <View style={{ flex: 1 }}>
+                  <Text variant="caption" muted>{t.result.onYourMachine}</Text>
+                  <Text weight="bold">{machineLabel}</Text>
+                </View>
+              </Card>
+            </FadeIn>
+          ) : null}
+
           <FadeIn delay={120}>
             <Card>
               <Setting icon="thermometer" label={t.result.temperature} value={`${r.temperature}°C`} />
@@ -98,6 +125,20 @@ export default function Result() {
               <Setting icon="droplet" label={t.result.bleach} value={r.bleachAllowed ? t.result.yes : t.result.no} allowed={r.bleachAllowed} last />
             </Card>
           </FadeIn>
+
+          {symbols.length > 0 ? (
+            <View style={{ gap: space.md }}>
+              <Text variant="title" weight="semibold">{t.guide.yourLabel}</Text>
+              <Card padded={false} style={{ paddingHorizontal: space.lg }}>
+                {symbols.map((sy, i) => (
+                  <Row key={i} style={{ minHeight: 60, borderBottomWidth: i === symbols.length - 1 ? 0 : 1, borderBottomColor: colors.line }}>
+                    <SymbolGlyph kind={sy.kind} level={sy.level} banned={sy.banned} size={38} />
+                    <Text style={{ flex: 1 }}>{sy.text[locale]}</Text>
+                  </Row>
+                ))}
+              </Card>
+            </View>
+          ) : null}
 
           {r.notes.length > 0 ? (
             <View style={{ gap: space.sm }}>

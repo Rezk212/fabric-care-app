@@ -15,7 +15,7 @@ export default function TabsLayout() {
   if (backendConfigured && !session) return <Redirect href="/auth" />;
 
   const icon = (name: IconName) => ({ color, size, focused }: { color: ColorValue; size: number; focused: boolean }) => (
-    <View style={{ width: 56, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: focused ? colors.primarySoft : 'transparent' }}>
+    <View style={{ width: 48, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: focused ? colors.primarySoft : 'transparent' }}>
       <Feather name={name} size={size - 2} color={color} />
     </View>
   );
@@ -36,6 +36,7 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen name="index" options={{ title: t.tabs.home, tabBarIcon: icon('camera') }} />
+      <Tabs.Screen name="guide" options={{ title: t.tabs.guide, tabBarIcon: icon('book-open') }} />
       <Tabs.Screen name="stores" options={{ title: t.tabs.stores, tabBarIcon: icon('map-pin') }} />
       <Tabs.Screen name="machines" options={{ title: t.tabs.machines, tabBarIcon: icon('disc') }} />
       <Tabs.Screen name="settings" options={{ title: t.tabs.settings, tabBarIcon: icon('settings') }} />

@@ -109,6 +109,7 @@ Deno.serve(async (req) => {
       machine: {
         brand: typeof parsed.machine_brand === "string" ? parsed.machine_brand : null,
         model: typeof parsed.machine_model === "string" ? parsed.machine_model : (input.modelNumber ?? null),
+        programs: strings(parsed.machine_programs).map((p) => (p as string).slice(0, 40)).slice(0, 24),
       },
       notes: strings(parsed.notes),
       usage,
