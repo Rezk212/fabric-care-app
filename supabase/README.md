@@ -24,10 +24,19 @@ The provider is a server setting; the app does not change and needs no update.
 | Goal | Secrets to set |
 |---|---|
 | Claude (default) | `ANTHROPIC_API_KEY`, optional `AI_MODEL` (default `claude-opus-5-5`) |
-| OpenAI or any OpenAI-compatible API | `AI_PROVIDER=openai-compatible`, `AI_BASE_URL` (e.g. `https://api.openai.com/v1`), `AI_API_KEY`, `AI_MODEL`, optional `AI_JSON_MODE=object` for servers without JSON-schema support |
+| OpenAI | `AI_PROVIDER=openai`, `AI_API_KEY`, `AI_MODEL` |
+| DeepSeek | `AI_PROVIDER=deepseek`, `AI_API_KEY`, `AI_MODEL` |
+| Kimi (Moonshot) | `AI_PROVIDER=kimi`, `AI_API_KEY`, `AI_MODEL` (mainland China: also `AI_BASE_URL=https://api.moonshot.cn/v1`) |
+| Any other OpenAI-compatible API | `AI_PROVIDER=openai-compatible`, `AI_BASE_URL`, `AI_API_KEY`, `AI_MODEL` |
+
+Add `AI_JSON_MODE=object` for servers that do not support JSON-schema output.
+
+**Vision is required.** This app sends photos, so `AI_MODEL` must be a model that accepts images.
+Text-only models fail on every request. Check the vendor's docs for which model ids accept images
+(DeepSeek's and Moonshot's model lineups change often; ids are not hard-coded here on purpose).
 
 ```bash
-supabase secrets set AI_PROVIDER=openai-compatible AI_BASE_URL=https://api.openai.com/v1 AI_API_KEY=... AI_MODEL=...
+supabase secrets set AI_PROVIDER=kimi AI_API_KEY=... AI_MODEL=<vision model id>
 supabase functions deploy analyze   # only needed after code changes; secrets apply on next call
 ```
 
