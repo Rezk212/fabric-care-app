@@ -40,7 +40,15 @@ export default function Stores() {
     const perm = await Location.requestForegroundPermissionsAsync();
     if (!perm.granted) { setDenied(true); return; }
     setDenied(false);
-    const pos = await Location.getCurrentPositionAsync({});
+    // A cached fix is instant; otherwise ask for a fresh, coarse one but never wait forever.
+    let pos = await Location.getLastKnownPositionAsync();
+    if (!pos) {
+      pos = await Promise.race([
+        Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced }),
+        new Promise<null>((r) => setTimeout(() => r(null), 12_000)),
+      ]);
+    }
+    if (!pos) { setDenied(true); return; }
     setOrigin({ kind: 'gps', at: { lat: pos.coords.latitude, lng: pos.coords.longitude } });
   }
 

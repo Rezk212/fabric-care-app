@@ -8,12 +8,20 @@ export interface Branch extends LatLng {
   address?: string;
 }
 
-const ENDPOINTS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
+const ENDPOINTS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter', 'https://overpass.private.coffee/api/interpreter'];
 const cache = new Map<string, { at: number; data: Branch[] }>();
 const RADIUS_M = 60_000;
+const OVERPASS_NAMES = ['Lulu', 'لولو', 'Hypermax', 'Hyper Max', 'هايبرماكس', 'Nesto', 'نيستو', 'Makkah', 'مكة', 'Meera', 'الميرة', 'Carrefour', 'كارفور', 'Sultan Center', 'مركز السلطان', 'Ramez', 'رامز'];
+
+function withTimeout(ms: number) {
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), ms);
+  return { signal: ctl.signal, done: () => clearTimeout(timer) };
+}
 
 function query(o: LatLng) {
-  const rx = omanChains.map((c) => c.match.source).join('|');
+  // Plain alternatives only: Overpass regex does not support \\s or \\? style escapes reliably.
+  const rx = OVERPASS_NAMES.join('|');
   const around = `(around:${RADIUS_M},${o.lat},${o.lng})`;
   const kinds = '["shop"~"supermarket|department_store|wholesale|convenience"]';
   return `[out:json][timeout:25];(`
@@ -32,13 +40,14 @@ export async function fetchBranches(origin: LatLng): Promise<Branch[]> {
   let json: any;
   let lastError: unknown;
   for (const url of ENDPOINTS) {
+    const t = withTimeout(20_000);
     try {
-      const res = await fetch(url, { method: 'POST', body: `data=${encodeURIComponent(query(origin))}`,
+      const res = await fetch(url, { method: 'POST', signal: t.signal, body: `data=${encodeURIComponent(query(origin))}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
       if (!res.ok) throw new Error(`overpass ${res.status}`);
       json = await res.json();
       break;
-    } catch (e) { lastError = e; }
+    } catch (e) { lastError = e; } finally { t.done(); }
   }
   if (!json) throw lastError ?? new Error('overpass failed');
 
