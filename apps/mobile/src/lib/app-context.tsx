@@ -4,12 +4,15 @@ import {
   type Dictionary, type Locale, type Palette, type Place,
 } from '@naqa/shared';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { getLocales } from 'expo-localization';
 import { useColorScheme } from 'react-native';
 
 const KEY = 'naqa.settings.v1';
 
 interface Persisted { locale: Locale; place: Place | null; onboarded: boolean }
-const defaults: Persisted = { locale: 'ar', place: null, onboarded: false };
+// First launch follows the device language (Arabic or English); the user can change it any time.
+const deviceLocale = (): Locale => (getLocales()[0]?.languageCode === 'en' ? 'en' : 'ar');
+const defaults: Persisted = { locale: deviceLocale(), place: null, onboarded: false };
 
 interface Ctx extends Persisted {
   ready: boolean;
