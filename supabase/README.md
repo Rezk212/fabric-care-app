@@ -14,8 +14,8 @@ supabase secrets set ANTHROPIC_API_KEY=<your key>   # secret: never commit, neve
 supabase functions deploy analyze
 ```
 
-Then in `apps/mobile`, copy `.env.example` to `.env` and fill in the project URL and the **anon** key
-(Project Settings → API). Restart `npm run mobile`.
+The app already points at this project (`apps/mobile/src/lib/supabase.ts`). To use a different project, copy
+`apps/mobile/.env.example` to `.env` and fill in its URL and publishable key.
 
 ## Switching the AI provider
 
