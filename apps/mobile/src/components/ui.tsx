@@ -352,10 +352,10 @@ export function ProductThumb({ imageUrl, kind, size = 64 }: { imageUrl?: string;
 export function AppBar() {
   const { colors, locale } = useApp();
   const ar = locale === 'ar';
-  // The brand lockup is the same in both languages: logo first on the left, name beside it. Arabic letters
-  // sit a little smaller than Latin at the same size, so the Arabic name gets a slight bump to match visually.
+  // Follows the reading direction: logo at the start (right in Arabic, left in English), name beside it.
+  // Arabic letters sit a little smaller than Latin at the same size, so the Arabic name gets a slight bump.
   return (
-    <View style={{ direction: 'ltr', flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingTop: space.md, paddingBottom: space.xs }}>
+    <View style={{ direction: ar ? 'rtl' : 'ltr', flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingTop: space.md, paddingBottom: space.xs }}>
       <Logo size={34} color={colors.primary} wave={colors.accent} />
       <Text variant="title" weight="bold" color={colors.primary} style={{ fontSize: ar ? 24 : 21, lineHeight: 30, writingDirection: ar ? 'rtl' : 'ltr' }}>{ar ? 'نقاء' : 'Naqa'}</Text>
     </View>
