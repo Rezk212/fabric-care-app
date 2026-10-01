@@ -26,6 +26,7 @@ export const ar: Dictionary = {
     machineHint: 'صورة للغسالة أو رقم الموديل',
     modelNumber: 'رقم الموديل',
     analyze: 'حلّل',
+    analyzing: 'جارٍ التحليل…',
   },
   result: {
     title: 'خطة الغسيل',
@@ -49,6 +50,12 @@ export const ar: Dictionary = {
   photo: { camera: 'التقاط صورة', library: 'اختيار من المعرض', remove: 'إزالة', cancel: 'إلغاء' },
   settings: { title: 'الإعدادات', language: 'اللغة', place: 'الموقع', arabic: 'العربية', english: 'English', change: 'تغيير' },
   machines: { title: 'غسالاتي', empty: 'ستظهر هنا الغسالات التي تحللها.' },
+  errors: {
+    refused: 'تعذّر تحليل هذه الصور. جرّب صورة أوضح للقطعة أو للبطاقة.',
+    rate_limited: 'طلبات كثيرة. حاول مرة أخرى بعد دقيقة.',
+    network: 'لا يوجد اتصال. تحقق من الإنترنت وحاول مرة أخرى.',
+    server: 'حدث خطأ من جهتنا. حاول مرة أخرى.',
+  },
   fabrics: {
     cotton: 'قطن', linen: 'كتان', wool: 'صوف', silk: 'حرير', polyester: 'بوليستر',
     nylon: 'نايلون', denim: 'جينز', cashmere: 'كشمير', viscose: 'فيسكوز',

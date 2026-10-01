@@ -24,6 +24,7 @@ export const en = {
     machineHint: 'Photo of the machine, or its model number',
     modelNumber: 'Model number',
     analyze: 'Analyze',
+    analyzing: 'Analyzing…',
   },
   result: {
     title: 'Your wash plan',
@@ -47,6 +48,12 @@ export const en = {
   photo: { camera: 'Take a photo', library: 'Choose from library', remove: 'Remove', cancel: 'Cancel' },
   settings: { title: 'Settings', language: 'Language', place: 'Location', arabic: 'العربية', english: 'English', change: 'Change' },
   machines: { title: 'My machines', empty: 'Machines you analyze will appear here.' },
+  errors: {
+    refused: 'We could not analyze these photos. Try a clearer photo of the garment or label.',
+    rate_limited: 'Too many requests. Please try again in a minute.',
+    network: 'No connection. Check your internet and try again.',
+    server: 'Something went wrong on our side. Please try again.',
+  },
   fabrics: {
     cotton: 'Cotton', linen: 'Linen', wool: 'Wool', silk: 'Silk', polyester: 'Polyester',
     nylon: 'Nylon', denim: 'Denim', cashmere: 'Cashmere', viscose: 'Viscose',

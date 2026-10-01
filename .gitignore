@@ -149,3 +149,9 @@ dist/
 expo-env.d.ts
 next-env.d.ts
 *.tsbuildinfo
+
+# Secrets
+.env
+.env.*
+!.env.example
+supabase/.temp/

@@ -4,24 +4,29 @@ import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { PhotoSlot } from '../../components/photo-slot';
 import { Button, Field, Row, Screen, Text } from '../../components/ui';
-import { analyzeGarment } from '../../lib/analyze';
+import { AnalyzeError, analyzeGarment } from '../../lib/analyze';
 import { useApp } from '../../lib/app-context';
 
 export default function Analyze() {
-  const { t } = useApp();
+  const { t, colors } = useApp();
   const [garmentUri, setGarment] = useState<string>();
   const [labelUri, setLabel] = useState<string>();
   const [machineUri, setMachine] = useState<string>();
   const [modelNumber, setModel] = useState('');
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string>();
 
   const ready = !!(garmentUri || labelUri);
 
   async function run() {
     setBusy(true);
+    setError(undefined);
     try {
       const analysis = await analyzeGarment({ garmentUri, labelUri, machineUri, modelNumber: modelNumber.trim() || undefined });
       router.push({ pathname: '/result', params: { analysis: JSON.stringify(analysis), modelNumber: modelNumber.trim() } });
+    } catch (e) {
+      const code = e instanceof AnalyzeError ? e.code : 'server';
+      setError(t.errors[code]);
     } finally {
       setBusy(false);
     }
@@ -58,7 +63,8 @@ export default function Analyze() {
         </View>
       </ScrollView>
       <View style={{ paddingBottom: space.lg }}>
-        <Button label={t.home.analyze} onPress={run} disabled={!ready || busy} />
+        {error ? <Text color={colors.danger} style={{ marginBottom: space.md }} accessibilityRole="alert">{error}</Text> : null}
+        <Button label={busy ? t.home.analyzing : t.home.analyze} onPress={run} disabled={!ready || busy} />
       </View>
     </Screen>
   );
