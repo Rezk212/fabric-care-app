@@ -33,8 +33,9 @@ export function Text({
           fontSize: size,
           lineHeight: Math.round(size * (variant === 'display' || variant === 'heading' ? 1.25 : 1.55)),
           color: color ?? (muted ? colors.inkMuted : colors.ink),
-          // 'auto' follows the phone's system direction, not the app's language, so set it from the chosen language.
-          textAlign: rtl ? 'right' : 'left',
+          // React Native flips 'left'/'right' on its own when the screen direction is RTL, so 'left' always means
+          // "start of the line": right in Arabic, left in English. ('auto' ignored the app language on iOS.)
+          textAlign: 'left',
           writingDirection: rtl ? 'rtl' : 'ltr',
         },
         style,
@@ -199,7 +200,7 @@ export function Field({ icon, ...props }: React.ComponentProps<typeof TextInput>
       <TextInput
         placeholderTextColor={colors.inkMuted}
         {...props}
-        style={[{ flex: 1, minHeight: 52, fontFamily: fontByWeight.regular, fontSize: typeScale.body, color: colors.ink, textAlign: rtl ? 'right' : 'left', writingDirection: rtl ? 'rtl' : 'ltr' } as TextStyle, props.style]}
+        style={[{ flex: 1, minHeight: 52, fontFamily: fontByWeight.regular, fontSize: typeScale.body, color: colors.ink, textAlign: 'auto', writingDirection: rtl ? 'rtl' : 'ltr' } as TextStyle, props.style]}
       />
     </View>
   );
