@@ -48,7 +48,7 @@ export const ar: Dictionary = {
     otherStain: 'بقعة أخرى',
     otherStainBody: 'امسحها برفق دون فرك، ثم اشطفها بماء بارد من الجهة الخلفية للقماش، وجرّب أي منتج على مكان خفي أولًا. وإن كان القماش رقيقًا أو بقي أثر للبقعة، فالأفضل أخذها إلى التنظيف الجاف.',
     title: 'خطة الغسيل',
-    summary: 'الأنسب: برنامج {program} على {temp}°م',
+    summary: 'الأنسب: {program} بحرارة {temp}°م',
     fabric: 'القماش',
     program: 'البرنامج',
     temperature: 'درجة الحرارة',
@@ -201,8 +201,8 @@ export const ar: Dictionary = {
     synthetic_blend: 'خليط صناعي', unknown: 'غير معروف',
   },
   programs: {
-    delicate: 'الأقمشة الرقيقة', wool: 'الصوف', synthetics: 'الأقمشة الصناعية',
-    cottons: 'القطن', quick: 'الغسيل السريع', hand_wash: 'الغسيل اليدوي',
+    delicate: 'غسيل الأقمشة الحساسة', wool: 'غسيل الصوف', synthetics: 'غسيل الأقمشة الصناعية',
+    cottons: 'غسيل القطن', quick: 'غسيل سريع', hand_wash: 'غسيل يدوي',
   },
   levels: { none: 'بدون', low: 'منخفض', medium: 'متوسط', high: 'مرتفع' },
 };
