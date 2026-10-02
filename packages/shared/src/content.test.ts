@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { applianceMaintenance, applianceTypes, matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
+import { applyDetails, fabricFromDetails, fabricOptions, colorOptions, garmentGroups, orderedFabricOptions, toAnalysis, wardrobeItems, applianceMaintenance, applianceTypes, matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
 
 const nonEmpty = (b: { ar: string; en: string }) => b.ar.trim().length > 0 && b.en.trim().length > 0;
 
@@ -83,4 +83,41 @@ test('every appliance type has maintenance tips in both languages', () => {
     const tips = applianceMaintenance[a.id];
     assert.ok(tips && tips.length > 0 && tips.every(nonEmpty), a.id);
   }
+});
+
+test('wardrobe: ids unique, every label has both languages, fabrics are valid', () => {
+  const ids = wardrobeItems.map((g) => g.id);
+  assert.equal(new Set(ids).size, ids.length);
+  for (const g of wardrobeItems) {
+    assert.ok(nonEmpty(g.name) && g.fabrics.length > 0, g.id);
+    assert.ok(garmentGroups.some((x) => x.id === g.group), g.id);
+    if (g.note) assert.ok(nonEmpty(g.note), g.id);
+    if (g.tipId) assert.ok(gulfGarments.some((x) => x.id === g.tipId), g.id);
+  }
+  for (const f of fabricOptions) assert.ok(nonEmpty(f.name), f.id);
+  for (const c of colorOptions) assert.ok(nonEmpty(c.name) && nonEmpty(c.note), c.id);
+  // every group has something to pick
+  for (const grp of garmentGroups) assert.ok(wardrobeItems.some((g) => g.group === grp.id), grp.id);
+});
+
+test('applyDetails only makes advice safer', () => {
+  const base = toAnalysis({ fabric: 'cotton', confidence: 1, careSymbols: [], machine: { brand: null, model: null }, notes: [] });
+  const dark = applyDetails(base, { garmentId: 'tshirt', colorId: 'dark' }, 'en');
+  assert.ok(dark.recommendation.temperature <= 30);
+  assert.ok(dark.recommendation.notes.length > base.recommendation.notes.length);
+  const stained = applyDetails(base, { garmentId: 'tshirt', colorId: 'white', stains: ['coffee-tea'] }, 'en');
+  assert.equal(stained.recommendation.tumbleDry, false);
+  const abaya = applyDetails(toAnalysis({ fabric: 'polyester', confidence: 1, careSymbols: [], machine: { brand: null, model: null }, notes: [] }), { garmentId: 'abaya', colorId: 'dark' }, 'ar');
+  assert.equal(abaya.recommendation.program, 'delicate');
+  assert.equal(abaya.recommendation.tumbleDry, false);
+  const leather = applyDetails(base, { garmentId: 'jacket', fabricOptionId: 'leather', colorId: 'dark' }, 'en');
+  assert.equal(leather.recommendation.bleachAllowed, false);
+  // never hotter than the fabric baseline
+  assert.ok(applyDetails(base, { colorId: 'white' }, 'en').recommendation.temperature <= base.recommendation.temperature);
+  // user-typed colour is treated cautiously
+  assert.ok(applyDetails(base, { colorOther: 'turquoise' }, 'en').recommendation.temperature <= 30);
+  assert.equal(fabricFromDetails({ fabricOptionId: 'satin' }), 'viscose');
+  assert.equal(fabricFromDetails({}), 'unknown');
+  const o = orderedFabricOptions('jeans');
+  assert.deepEqual(o.common.map((f) => f.id), ['denim']);
 });

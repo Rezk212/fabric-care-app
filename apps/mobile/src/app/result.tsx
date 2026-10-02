@@ -1,7 +1,8 @@
 import { Feather } from '@expo/vector-icons';
 import {
-  countries, explainSymbols, format, matchMachineProgram, radius, recommendProducts, space,
-  type FabricType, type GarmentAnalysis,
+  applyDetails, colourLabel, countries, explainSymbols, fabricLabel, format, garmentLabel, gulfGarments, matchMachineProgram,
+  radius, recommendProducts, space, stainAdvice, wardrobeItems,
+  type FabricType, type GarmentAnalysis, type GarmentDetails,
 } from '@naqa/shared';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -35,10 +36,13 @@ function Setting({ icon, label, value, allowed, last }: { icon: FeatherName; lab
 export default function Result() {
   const { t, locale, colors, place, rtl } = useApp();
   const insets = useSafeAreaInsets();
-  const params = useLocalSearchParams<{ analysis: string; machinePrograms?: string }>();
+  const params = useLocalSearchParams<{ analysis: string; machinePrograms?: string; details?: string }>();
+  const details = useMemo<GarmentDetails | null>(() => { try { return params.details ? (JSON.parse(params.details) as GarmentDetails) : null; } catch { return null; } }, [params.details]);
   const initial = useMemo<GarmentAnalysis>(() => JSON.parse(params.analysis), [params.analysis]);
   const [analysis, setAnalysis] = useState(initial);
-  const r = analysis.recommendation;
+  // What the user told us (garment, colour, stains) can only make the plan safer; the fabric rules stay the base.
+  const shown = useMemo(() => (details ? applyDetails(analysis, details, locale) : analysis), [analysis, details, locale]);
+  const r = shown.recommendation;
   const known = analysis.fabric !== 'unknown';
 
   const city = countries.find((c) => c.code === place?.countryCode)?.cities.find((c) => c.id === place?.cityId);
@@ -78,7 +82,7 @@ export default function Result() {
             style={{ paddingHorizontal: space.xl, paddingTop: insets.top + space.xl, paddingBottom: space.xxl, borderBottomLeftRadius: radius.xl, borderBottomRightRadius: radius.xl, gap: space.lg }}>
             <Row style={{ justifyContent: 'space-between' }}>
               <Text variant="caption" weight="medium" color={colors.onHeroMuted}>{t.result.title}</Text>
-              <Pill tone="hero" icon="layers" label={t.fabrics[analysis.fabric]} />
+              <Pill tone="hero" icon="layers" label={(details && fabricLabel(details, locale)) || t.fabrics[analysis.fabric]} />
             </Row>
             <Text variant="display" weight="bold" color={colors.onHero}>
               {format(t.result.summary, { program: t.programs[r.program], temp: r.temperature })}
@@ -148,6 +152,57 @@ export default function Result() {
               </Card>
             </View>
           ) : null}
+
+          {details ? (
+            <FadeIn delay={130}>
+              <Card style={{ gap: space.sm }}>
+                <Text weight="semibold">{t.result.yourChoice}</Text>
+                {[
+                  [garmentLabel(details, locale), 'user'],
+                  [fabricLabel(details, locale) ?? t.fabrics.unknown, 'layers'],
+                  [colourLabel(details, locale), 'droplet'],
+                ].filter(([v]) => v).map(([v, icon]) => (
+                  <Row key={icon} gap={space.sm}><Feather name={icon as FeatherName} size={16} color={colors.inkMuted} /><Text muted style={{ flex: 1 }}>{v}</Text></Row>
+                ))}
+              </Card>
+            </FadeIn>
+          ) : null}
+
+          {details && ((details.stains?.length ?? 0) > 0 || details.stainOther) ? (
+            <View style={{ gap: space.md }}>
+              <Text variant="title" weight="semibold">{t.result.stainSection}</Text>
+              {(details.stains ?? []).map((id) => {
+                const adv = stainAdvice(id, analysis.fabric);
+                if (!adv) return null;
+                return (
+                  <Card key={id} style={{ gap: space.sm }}>
+                    <Text weight="semibold">{adv.stain.name[locale]}</Text>
+                    {adv.delicate ? <Text variant="caption" color={colors.accentText}>{t.guide.delicateWarn}</Text> : null}
+                    {adv.steps.map((st, i) => <Text key={i} muted>{`${i + 1}. ${st[locale]}`}</Text>)}
+                    {adv.avoid.map((st, i) => <Text key={`a${i}`} variant="caption" color={colors.danger}>{`${t.guide.avoid}: ${st[locale]}`}</Text>)}
+                  </Card>
+                );
+              })}
+              {details.stainOther ? (
+                <Card style={{ gap: space.sm }}>
+                  <Text weight="semibold">{details.stainOther}</Text>
+                  <Text muted>{t.result.otherStainBody}</Text>
+                  <Text variant="caption" muted>{t.guide.testFirst}</Text>
+                </Card>
+              ) : null}
+            </View>
+          ) : null}
+
+          {(() => {
+            const tip = details?.garmentId ? gulfGarments.find((g) => g.id === wardrobeItems.find((w) => w.id === details.garmentId)?.tipId) : undefined;
+            return tip ? (
+              <View style={{ gap: space.sm }}>
+                <Text variant="title" weight="semibold">{t.result.garmentTips}</Text>
+                {tip.tips.map((x, i) => <Text key={i} muted>{`• ${x[locale]}`}</Text>)}
+                {tip.avoid.map((x, i) => <Text key={`v${i}`} variant="caption" color={colors.danger}>{`${t.guide.avoid}: ${x[locale]}`}</Text>)}
+              </View>
+            ) : null;
+          })()}
 
           {r.notes.length > 0 ? (
             <View style={{ gap: space.sm }}>
