@@ -23,17 +23,17 @@ export const gulfGarments: GulfGarment[] = [
     icon: 'user',
     fabric: 'synthetic_blend',
     fabricNote: {
-      ar: 'غالبًا قماش من البوليستر أو خليط قطن وبوليستر. تحقق من البطاقة.',
+      ar: 'غالبًا قماش من البوليستر أو خليط قطن وبوليستر. راجع ملصق العناية.',
       en: 'Often polyester or a cotton-polyester blend. Check the label.',
     },
     tips: [
       { ar: 'اغسلها وحدها أو مع الأبيض فقط، حتى لا تأخذ لونًا من غيرها.', en: 'Wash alone or with whites only so it does not pick up colour.' },
       { ar: 'عالج الياقة والأكمام قبل الغسيل: افرك قليلًا من المنظف على البقع، واتركه 15 دقيقة.', en: 'Pre-treat collar and cuffs: rub in a little detergent and leave 15 minutes.' },
-      { ar: 'للاصفرار من العرق أو الغبار: انقعها في ماء فاتر مع مبيّض أكسجيني، ثم اغسلها.', en: 'For yellowing from sweat or dust: soak in lukewarm water with an oxygen-based whitener, then wash.' },
+      { ar: 'للاصفرار من العرق أو الغبار: انقعها في ماء فاتر مع مبيّض أكسجين، ثم اغسلها.', en: 'For yellowing from sweat or dust: soak in lukewarm water with an oxygen-based whitener, then wash.' },
       { ar: 'اكوِها وهي رطبة قليلًا على حرارة متوسطة، فتزول التجاعيد بسهولة.', en: 'Iron while slightly damp on medium heat; creases come out easily.' },
     ],
     avoid: [
-      { ar: 'لا تستخدم مبيّض الكلور على الأقمشة الصناعية أو المطرزة، فقد يصفرّها.', en: 'Avoid chlorine bleach on synthetic or embroidered fabric; it can yellow it.' },
+      { ar: 'لا تستخدم مبيّض الكلور على الأقمشة الصناعية أو المطرزة، وقد يُصفّرها.', en: 'Avoid chlorine bleach on synthetic or embroidered fabric; it can yellow it.' },
       { ar: 'لا تتركها مبللة في سلة الغسيل.', en: 'Do not leave it damp in the laundry basket.' },
     ],
   },
@@ -62,12 +62,12 @@ export const gulfGarments: GulfGarment[] = [
     icon: 'moon',
     fabric: 'polyester',
     fabricNote: {
-      ar: 'كثير من العبايات من أقمشة صناعية ناعمة (كريب أو نيدا). تحقق من البطاقة.',
+      ar: 'كثير من العبايات من أقمشة صناعية ناعمة (كريب أو نيدا). راجع ملصق العناية.',
       en: 'Many abayas are soft synthetics (crepe or nida). Check the label.',
     },
     tips: [
       { ar: 'اغسلها مقلوبة في كيس غسيل شبكي، بماء بارد (30°م) وبرنامج لطيف.', en: 'Wash inside out in a mesh bag, cold (30°C), gentle cycle.' },
-      { ar: 'استخدم منظفًا للملابس الداكنة لتقليل البهتان.', en: 'Use a detergent made for dark clothes to reduce fading.' },
+      { ar: 'استخدم منظفًا للملابس الداكنة حتى لا يبهت اللون.', en: 'Use a detergent made for dark clothes to reduce fading.' },
       { ar: 'جفّفها في الظل معلّقة على علاقة، ولا تعصرها بقوة.', en: 'Dry in the shade on a hanger; do not wring hard.' },
       { ar: 'للكي: اكوِها مقلوبة على حرارة منخفضة، أو استخدم البخار فقط.', en: 'To iron: inside out on low heat, or just steam it.' },
       { ar: 'إن كان عليها خرز أو تطريز، اغسلها يدويًا بلطف.', en: 'If it has beads or embroidery, hand wash gently.' },
@@ -120,11 +120,11 @@ export const gulfGarments: GulfGarment[] = [
     icon: 'layers',
     fabric: 'wool',
     fabricNote: {
-      ar: 'قد يكون صوفًا أو باشمينا أو خليطًا، وبه أهداب. غير مؤكد، فتحقق من البطاقة.',
+      ar: 'قد يكون صوفًا أو باشمينا أو خليطًا، وبه أهداب. غير مؤكد، فراجع ملصق العناية.',
       en: 'May be wool, pashmina or a blend, with fringes. Not certain, so check the label.',
     },
     tips: [
-      { ar: 'إن كانت البطاقة تقول "تنظيف جاف" فاتبعها.', en: 'If the label says dry clean, follow it.' },
+      { ar: 'إن كان الملصق يقول "تنظيف جاف" فاتبعها.', en: 'If the label says dry clean, follow it.' },
       { ar: 'للغسيل اليدوي: ماء بارد وغسول للصوف، وحركة لطيفة دون فرك.', en: 'To hand wash: cold water and wool wash, gentle movement, no rubbing.' },
       { ar: 'جفّفه مفروشًا، وأزل التجاعيد بالبخار من بعيد.', en: 'Dry flat and remove creases with steam from a distance.' },
     ],
@@ -139,7 +139,7 @@ export const gulfGarments: GulfGarment[] = [
     icon: 'wind',
     fabric: 'polyester',
     fabricNote: {
-      ar: 'الشيفون عادة بوليستر خفيف يتشعّب بسهولة.',
+      ar: 'الشيفون عادةً بوليستر خفيف تنسحب خيوطه بسهولة.',
       en: 'Chiffon is usually light polyester that snags easily.',
     },
     tips: [
@@ -155,6 +155,6 @@ export const gulfGarments: GulfGarment[] = [
 
 /** Shown on every garment/stain page. */
 export const CHECK_LABEL_NOTE: Bilingual = {
-  ar: 'نصائح عامة. اتبع بطاقة العناية في قطعتك أولًا.',
+  ar: 'نصائح عامة. اتبع ملصق العناية في قطعتك أولًا.',
   en: 'General advice. Always follow your garment\'s own care label first.',
 };

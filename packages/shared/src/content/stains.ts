@@ -18,13 +18,13 @@ export const stainGuides: StainGuide[] = [
     icon: 'coffee',
     sturdy: [
       { ar: 'امسح الزائد بقطعة نظيفة دون فرك.', en: 'Blot the excess with a clean cloth; do not rub.' },
-      { ar: 'اشطف من ظهر القماش بماء بارد.', en: 'Rinse from the back of the fabric with cold water.' },
+      { ar: 'اشطف البقعة بماء بارد من الجهة الخلفية للقماش.', en: 'Rinse from the back of the fabric with cold water.' },
       { ar: 'افرك قليلًا من المنظف على البقعة، واتركه 10 دقائق.', en: 'Work in a little detergent and leave 10 minutes.' },
-      { ar: 'اغسل بالبرنامج المعتاد. للأبيض القطني يمكن النقع في مبيّض أكسجيني.', en: 'Wash as usual. For white cotton you can soak in an oxygen-based whitener.' },
+      { ar: 'اغسل بالبرنامج المعتاد. للأبيض القطني يمكن النقع في مبيّض أكسجين.', en: 'Wash as usual. For white cotton you can soak in an oxygen-based whitener.' },
     ],
     delicate: [
       { ar: 'امسح الزائد برفق ودون فرك.', en: 'Blot the excess gently, no rubbing.' },
-      { ar: 'اشطف بماء بارد من الخلف.', en: 'Rinse with cold water from the back.' },
+      { ar: 'اشطف بماء بارد من الجهة الخلفية للقماش.', en: 'Rinse with cold water from the back.' },
       { ar: 'إن بقي أثر، فالأسلم أخذها إلى التنظيف الجاف.', en: 'If a mark remains, taking it to a dry cleaner is the safer choice.' },
     ],
     avoid: [{ ar: 'لا تستخدم ماءً ساخنًا ولا مجففًا قبل زوال البقعة.', en: 'No hot water or dryer until the stain is gone.' }],
@@ -35,9 +35,9 @@ export const stainGuides: StainGuide[] = [
     icon: 'droplet',
     sturdy: [
       { ar: 'امسح الزائد بقطعة نظيفة.', en: 'Blot the excess with a clean cloth.' },
-      { ar: 'انثر بيكربونات الصوديوم أو نشا الذرة على البقعة، واتركه 20 إلى 30 دقيقة ليمتص الدهن.', en: 'Sprinkle baking soda or cornstarch on it and leave 20 to 30 minutes to absorb the grease.' },
-      { ar: 'انفضه، ثم افرك سائل غسيل الأواني بلطف.', en: 'Brush it off, then gently rub in a little dish soap.' },
-      { ar: 'اغسل بأدفأ ماء تسمح به البطاقة. تأكد أن البقعة زالت قبل التجفيف.', en: 'Wash in the warmest water the label allows. Check the stain is gone before drying.' },
+      { ar: 'انثر بيكربونات الصودا أو نشا الذرة على البقعة، واتركه 20 إلى 30 دقيقة ليمتص الدهن.', en: 'Sprinkle baking soda or cornstarch on it and leave 20 to 30 minutes to absorb the grease.' },
+      { ar: 'انفضه، ثم افرك سائل غسل الصحون بلطف.', en: 'Brush it off, then gently rub in a little dish soap.' },
+      { ar: 'اغسل بأدفأ ماء يسمح به الملصق. تأكد أن البقعة زالت قبل التجفيف.', en: 'Wash in the warmest water the label allows. Check the stain is gone before drying.' },
     ],
     delicate: [
       { ar: 'امسح الزائد، وانثر نشا الذرة واتركه ساعة، ثم انفضه.', en: 'Blot, sprinkle cornstarch, leave an hour, then brush off.' },
@@ -51,8 +51,8 @@ export const stainGuides: StainGuide[] = [
     icon: 'sun',
     sturdy: [
       { ar: 'اكشط الزائد بملعقة، ولا تفركه.', en: 'Scrape off the excess with a spoon; do not rub.' },
-      { ar: 'اشطف بماء بارد من الخلف.', en: 'Rinse with cold water from the back.' },
-      { ar: 'افرك سائل غسيل الأواني، واتركه 15 دقيقة، ثم اغسل.', en: 'Rub in dish soap, leave 15 minutes, then wash.' },
+      { ar: 'اشطف بماء بارد من الجهة الخلفية للقماش.', en: 'Rinse with cold water from the back.' },
+      { ar: 'افرك سائل غسل الصحون، واتركه 15 دقيقة، ثم اغسل.', en: 'Rub in dish soap, leave 15 minutes, then wash.' },
       { ar: 'إن بقي أثر أصفر على قماش قطني أبيض، فالتجفيف في ضوء الشمس غير المباشر قد يخففه.', en: 'If a yellow trace remains on white cotton, drying in indirect sunlight can fade it.' },
     ],
     delicate: [
@@ -81,8 +81,8 @@ export const stainGuides: StainGuide[] = [
     name: { ar: 'حناء', en: 'Henna' },
     icon: 'feather',
     sturdy: [
-      { ar: 'اشطف بماء بارد وفير فورًا من الخلف.', en: 'Rinse straight away with plenty of cold water from the back.' },
-      { ar: 'انقعها في ماء فاتر مع منظف نحو ساعة. للأبيض القطني أضف مبيّضًا أكسجينيًا.', en: 'Soak in lukewarm water with detergent for about an hour. For white cotton add an oxygen-based whitener.' },
+      { ar: 'اشطف فورًا بكمية وفيرة من الماء البارد من الجهة الخلفية للقماش.', en: 'Rinse straight away with plenty of cold water from the back.' },
+      { ar: 'انقعها في ماء فاتر مع منظف نحو ساعة. للأبيض القطني أضف مبيّض أكسجين.', en: 'Soak in lukewarm water with detergent for about an hour. For white cotton add an oxygen-based whitener.' },
       { ar: 'اغسلها بالبرنامج المعتاد. قد تحتاج تكرار النقع.', en: 'Wash as usual. You may need to repeat the soak.' },
     ],
     delicate: [
@@ -110,7 +110,7 @@ export const stainGuides: StainGuide[] = [
     name: { ar: 'دم', en: 'Blood' },
     icon: 'heart',
     sturdy: [
-      { ar: 'اشطف بماء بارد جدًا من الخلف في أسرع وقت.', en: 'Rinse with very cold water from the back as soon as possible.' },
+      { ar: 'اشطف بماء بارد جدًا من الجهة الخلفية للقماش في أسرع وقت.', en: 'Rinse with very cold water from the back as soon as possible.' },
       { ar: 'انقعها في ماء بارد مع قليل من المنظف.', en: 'Soak in cold water with a little detergent.' },
       { ar: 'اغسلها بماء بارد. إن بقي أثر على قطن أبيض فاختبر قليلًا من ماء الأكسجين 3٪ على جزء مخفي أولًا.', en: 'Wash cold. If a mark remains on white cotton, test a little 3% hydrogen peroxide on a hidden spot first.' },
     ],
@@ -125,9 +125,9 @@ export const stainGuides: StainGuide[] = [
     name: { ar: 'عرق واصفرار', en: 'Sweat and yellowing' },
     icon: 'cloud-drizzle',
     sturdy: [
-      { ar: 'اصنع عجينة من المنظف ومبيّض أكسجيني وقليل من الماء، وافركها على المنطقة.', en: 'Make a paste of detergent, oxygen-based whitener and a little water; rub it into the area.' },
+      { ar: 'اصنع عجينة من المنظف ومبيّض أكسجين وقليل من الماء، وافركها على المنطقة.', en: 'Make a paste of detergent, oxygen-based whitener and a little water; rub it into the area.' },
       { ar: 'اتركها 30 إلى 60 دقيقة.', en: 'Leave 30 to 60 minutes.' },
-      { ar: 'اغسل بأدفأ ماء تسمح به البطاقة.', en: 'Wash in the warmest water the label allows.' },
+      { ar: 'اغسل بأدفأ ماء يسمح به الملصق.', en: 'Wash in the warmest water the label allows.' },
     ],
     delicate: [
       { ar: 'رطّب المنطقة برفق بماء بارد ومنظف لطيف للأقمشة الرقيقة.', en: 'Gently dampen the area with cold water and a mild delicates wash.' },
@@ -141,7 +141,7 @@ export const stainGuides: StainGuide[] = [
     icon: 'smile',
     sturdy: [
       { ar: 'ارفع الزائد بقطعة نظيفة دون فرك.', en: 'Lift off the excess with a clean cloth without rubbing.' },
-      { ar: 'ضع ماء ميسيلار أو سائل غسيل الأواني، وافرك بلطف.', en: 'Apply micellar water or dish soap and rub gently.' },
+      { ar: 'ضع ماء ميسيلار أو سائل غسل الصحون، وافرك بلطف.', en: 'Apply micellar water or dish soap and rub gently.' },
       { ar: 'اغسل بالبرنامج المعتاد.', en: 'Wash as usual.' },
     ],
     delicate: [

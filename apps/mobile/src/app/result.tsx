@@ -130,7 +130,7 @@ export default function Result() {
 
           <FadeIn delay={120}>
             <Card>
-              <Setting icon="thermometer" label={t.result.temperature} value={`${r.temperature}°C`} />
+              <Setting icon="thermometer" label={t.result.temperature} value={`${r.temperature}${locale === 'ar' ? '°م' : '°C'}`} />
               <Setting icon="sliders" label={t.result.program} value={t.programs[r.program]} />
               <Setting icon="rotate-cw" label={t.result.spin} value={t.levels[r.spin]} />
               <Setting icon="wind" label={t.result.tumbleDry} value={r.tumbleDry ? t.result.yes : t.result.no} allowed={r.tumbleDry} />

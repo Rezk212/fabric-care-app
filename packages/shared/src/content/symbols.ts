@@ -39,8 +39,8 @@ export function explainSymbol(raw: string): SymbolInfo {
   if (/(do not|don'?t|no)\s+tumble/.test(s)) return make('notumble', { ar: 'لا تجفّفها في المجفف الآلي', en: 'Do not tumble dry' }, true);
   if (/tumble/.test(s)) return make('tumble', { ar: 'يُسمح بالتجفيف الآلي', en: 'Tumble dry allowed' });
   if (/(do not|don'?t|no)\s+iron/.test(s)) return make('noiron', { ar: 'لا تكوِها', en: 'Do not iron' }, true);
-  if (/(do not|don'?t|no)\s+dry\s*clean/.test(s)) return make('nodryclean', { ar: 'لا تنظّف جافًا', en: 'Do not dry clean' }, true);
-  if (/dry\s*clean|professional/.test(s)) return make('dryclean', { ar: 'تنظيف جاف مهني', en: 'Dry clean (professional)' });
+  if (/(do not|don'?t|no)\s+dry\s*clean/.test(s)) return make('nodryclean', { ar: 'لا يُنظَّف جافًا', en: 'Do not dry clean' }, true);
+  if (/dry\s*clean|professional/.test(s)) return make('dryclean', { ar: 'تنظيف جاف لدى مختص', en: 'Dry clean (professional)' });
   if (/iron/.test(s)) {
     const dots = /(\d)\s*dot/.exec(s)?.[1];
     const level = dots ? Number(dots) : /low|cool/.test(s) ? 1 : /high/.test(s) ? 3 : /medium|warm/.test(s) ? 2 : 2;
@@ -92,8 +92,8 @@ export const symbolGuide: SymbolInfo[] = [
   make('iron', IRON_TEXT[2], false, 2),
   make('iron', IRON_TEXT[3], false, 3),
   make('noiron', { ar: 'لا تكوِها', en: 'Do not iron' }, true),
-  make('dryclean', { ar: 'تنظيف جاف مهني', en: 'Dry clean (professional)' }),
-  make('nodryclean', { ar: 'لا تنظّف جافًا', en: 'Do not dry clean' }, true),
+  make('dryclean', { ar: 'تنظيف جاف لدى مختص', en: 'Dry clean (professional)' }),
+  make('nodryclean', { ar: 'لا يُنظَّف جافًا', en: 'Do not dry clean' }, true),
   make('linedry', { ar: 'انشرها للتجفيف', en: 'Line dry' }),
   make('dripdry', { ar: 'جفّفها بالتنقيط دون عصر', en: 'Drip dry' }),
   make('dryflat', { ar: 'جفّفها مفروشة أفقيًا', en: 'Dry flat' }),

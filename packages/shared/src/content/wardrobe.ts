@@ -63,9 +63,9 @@ export const wardrobeItems: WardrobeItem[] = [
   W('cardigan', 'tops', 'كارديجان', 'Cardigan', ['wool', 'cotton', 'synthetic_blend', 'cashmere'], { delicate: true, maxTemp: 30 }),
   W('hoodie', 'tops', 'هودي', 'Hoodie', ['cotton', 'polyester', 'synthetic_blend']),
   W('sweatshirt', 'tops', 'سويت شيرت', 'Sweatshirt', ['cotton', 'polyester']),
-  W('tank-top', 'tops', 'بدي / تانك توب', 'Tank top', ['cotton', 'polyester', 'synthetic_blend']),
+  W('tank-top', 'tops', 'فنيلة بدون أكمام', 'Tank top', ['cotton', 'polyester', 'synthetic_blend']),
   // Bottoms
-  W('jeans', 'bottoms', 'جينز', 'Jeans', ['denim'], { maxTemp: 30, note: { ar: 'اقلبه على الداخل ليبقى لونه.', en: 'Turn inside out to keep the colour.' } }),
+  W('jeans', 'bottoms', 'جينز', 'Jeans', ['denim'], { maxTemp: 30, note: { ar: 'اغسله مقلوبًا ليبقى لونه.', en: 'Turn inside out to keep the colour.' } }),
   W('trousers', 'bottoms', 'بنطلون', 'Trousers', ['cotton', 'polyester', 'synthetic_blend', 'wool']),
   W('formal-trousers', 'bottoms', 'بنطلون رسمي', 'Dress trousers', ['wool', 'polyester', 'synthetic_blend']),
   W('shorts', 'bottoms', 'شورت', 'Shorts', ['cotton', 'polyester', 'denim']),
@@ -99,7 +99,7 @@ export const wardrobeItems: WardrobeItem[] = [
   W('swimwear', 'sport', 'ملابس سباحة', 'Swimwear', ['nylon', 'synthetic_blend'], { delicate: true, maxTemp: 30,
     note: { ar: 'اشطفها بماء عذب بعد البحر أو المسبح، وتجنّب العصر الشديد.', en: 'Rinse in fresh water after sea or pool and avoid hard wringing.' } }),
   // Kids and babies
-  W('baby-clothes', 'kids', 'ملابس رضّع', 'Baby clothes', ['cotton'], { maxTemp: 40,
+  W('baby-clothes', 'kids', 'ملابس حديثي الولادة', 'Baby clothes', ['cotton'], { maxTemp: 40,
     note: { ar: 'استخدم منظفًا لطيفًا خاليًا من العطور، واشطفها جيدًا.', en: 'Use a mild, fragrance-free detergent and rinse thoroughly.' } }),
   W('school-uniform', 'kids', 'زي مدرسي', 'School uniform', ['cotton', 'polyester', 'synthetic_blend']),
   W('kids-clothes', 'kids', 'ملابس أطفال', 'Kids\' clothes', ['cotton', 'polyester', 'synthetic_blend']),
@@ -167,11 +167,11 @@ export const colorOptions: ColorOption[] = [
   { id: 'light', swatch: ['#CFE3F5'], name: { ar: 'فاتح (كريمي، بيج، باستيل)', en: 'Light (cream, beige, pastel)' }, maxTemp: 40,
     note: { ar: 'اغسله مع الألوان الفاتحة فقط.', en: 'Wash with light colours only.' } },
   { id: 'dark', swatch: ['#1B2233'], name: { ar: 'داكن (أسود، كحلي، رمادي غامق)', en: 'Dark (black, navy, charcoal)' }, maxTemp: 30,
-    note: { ar: 'اقلبه على الداخل واغسله مع الداكن، وجفّفه بعيدًا عن الشمس المباشرة كي لا يبهت.', en: 'Turn it inside out, wash with darks and dry away from direct sun so it does not fade.' } },
-  { id: 'bright', swatch: ['#E5483B'], name: { ar: 'زاهٍ (أحمر، أزرق ساطع، أخضر)', en: 'Bright (red, vivid blue, green)' }, maxTemp: 30,
-    note: { ar: 'اغسله وحده في الغسلات الأولى فقد يسيل لونه، ولا تتركه منقوعًا طويلًا. ورقة التقاط الألوان تفيد.', en: 'Wash it alone for the first washes as the dye can run, and do not soak it long. A colour-catcher sheet helps.' } },
+    note: { ar: 'اغسله مقلوبًا مع الملابس الداكنة، وجفّفه بعيدًا عن الشمس المباشرة كي لا يبهت.', en: 'Turn it inside out, wash with darks and dry away from direct sun so it does not fade.' } },
+  { id: 'bright', swatch: ['#E5483B'], name: { ar: 'ألوان زاهية (أحمر، أزرق ساطع، أخضر)', en: 'Bright (red, vivid blue, green)' }, maxTemp: 30,
+    note: { ar: 'اغسله وحده في الغسلات الأولى فقد يسيل لونه، ولا تتركه منقوعًا طويلًا. ورقة حماية الألوان تفيد.', en: 'Wash it alone for the first washes as the dye can run, and do not soak it long. A colour-catcher sheet helps.' } },
   { id: 'multi', swatch: ['#E5483B', '#F2A93B', '#3347D6'], name: { ar: 'متعدد الألوان أو مطبوع', en: 'Multicolour or printed' }, maxTemp: 30,
-    note: { ar: 'اغسله بماء بارد مع ألوان مشابهة، ويفضّل ورقة التقاط الألوان.', en: 'Wash cold with similar colours; a colour-catcher sheet is wise.' } },
+    note: { ar: 'اغسله بماء بارد مع ألوان مشابهة، ويُفضَّل استخدام ورقة حماية الألوان.', en: 'Wash cold with similar colours; a colour-catcher sheet is wise.' } },
 ];
 
 /** Colour to assume when the user types their own: treat it like a strong dye, the cautious choice. */

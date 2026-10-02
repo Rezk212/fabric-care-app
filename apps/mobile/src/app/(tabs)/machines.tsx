@@ -66,7 +66,7 @@ export default function Machines() {
                     <IconBubble name="layers" tone="success" />
                     <View style={{ flex: 1 }}>
                       <Text weight="semibold">{t.fabrics[a.fabric as keyof typeof t.fabrics] ?? t.fabrics.unknown}</Text>
-                      <Text variant="caption" muted>{`${t.programs[a.recommendation.program]} · ${a.recommendation.temperature}°C · ${fmt(a.created_at)}`}</Text>
+                      <Text variant="caption" muted>{`${t.programs[a.recommendation.program]} · ${a.recommendation.temperature}${locale === 'ar' ? '°م' : '°C'} · ${fmt(a.created_at)}`}</Text>
                     </View>
                     <Feather name={rtl ? 'chevron-left' : 'chevron-right'} size={20} color={colors.inkMuted} />
                   </Row>
