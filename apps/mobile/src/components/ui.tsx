@@ -377,3 +377,28 @@ export function AppBar() {
     </View>
   );
 }
+
+/** Tick box with a label. `required` only affects how the label is announced. */
+export function Checkbox({ checked, onChange, children, hint }: { checked: boolean; onChange: (v: boolean) => void; children: ReactNode; hint?: string }) {
+  const { colors } = useApp();
+  return (
+    <Pressable accessibilityRole="checkbox" accessibilityState={{ checked }} onPress={() => onChange(!checked)}
+      style={{ flexDirection: 'row', alignItems: 'flex-start', gap: space.md, minHeight: 44 }}>
+      <Feather name={checked ? 'check-square' : 'square'} size={24} color={checked ? colors.primary : colors.inkMuted} style={{ marginTop: 2 }} />
+      <View style={{ flex: 1, gap: 2 }}>
+        {children}
+        {hint ? <Text variant="caption" muted>{hint}</Text> : null}
+      </View>
+    </Pressable>
+  );
+}
+
+/** Small underlined link-style text. */
+export function TextLink({ label, onPress }: { label: string; onPress: () => void }) {
+  const { colors } = useApp();
+  return (
+    <Pressable accessibilityRole="link" onPress={onPress} hitSlop={8} style={{ minHeight: 32, justifyContent: 'center' }}>
+      <Text variant="caption" weight="semibold" color={colors.primary} style={{ textDecorationLine: 'underline' }}>{label}</Text>
+    </Pressable>
+  );
+}

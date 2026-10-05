@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { careProductAdvice, careProductOptions, products, fabricFamilies, applyDetails, fabricFromDetails, fabricOptions, colorOptions, garmentGroups, orderedFabricOptions, toAnalysis, wardrobeItems, applianceMaintenance, applianceTypes, matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
+import { CONSENT_VERSION, disclaimer, careProductAdvice, careProductOptions, products, fabricFamilies, applyDetails, fabricFromDetails, fabricOptions, colorOptions, garmentGroups, orderedFabricOptions, toAnalysis, wardrobeItems, applianceMaintenance, applianceTypes, matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
 
 const nonEmpty = (b: { ar: string; en: string }) => b.ar.trim().length > 0 && b.en.trim().length > 0;
 
@@ -142,4 +142,10 @@ test('care product advice', () => {
   assert.ok(careProductAdvice({ ...base, program: 'cottons', detergents: ['det_handwash'] }).some((l) => l.tone === 'warn'));
   for (const o of careProductOptions) assert.ok(nonEmpty(o.name), o.id);
   for (const p of products) if (p.description) assert.ok(nonEmpty(p.description) && (p.usage ?? []).every(nonEmpty), p.id);
+});
+
+test('disclaimer and consent text exist in both languages', () => {
+  assert.ok(disclaimer.length >= 5);
+  for (const s of disclaimer) assert.ok(nonEmpty(s.title) && nonEmpty(s.body));
+  assert.ok(CONSENT_VERSION.length > 0);
 });

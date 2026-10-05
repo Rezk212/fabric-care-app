@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  dictionaries, isRTL, palette,
+  CONSENT_VERSION, dictionaries, isRTL, palette,
   type ApplianceProfile, type Dictionary, type Locale, type Palette, type Place,
 } from '@naqa/shared';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
@@ -26,6 +26,8 @@ interface Persisted {
   fabrics: string[]; fabricsOther: string;
   /** Ids from `careProductOptions` the user already uses, plus free text. */
   detergents: string[]; detergentsOther: string; softeners: string[]; softenersOther: string;
+  /** Acceptance of the terms, privacy policy and disclaimer, and the optional notifications choice. */
+  consent?: { version: string; at: string; notifications: boolean };
 }
 // First launch follows the device language (Arabic or English); the user can change it any time.
 const deviceLocale = (): Locale => (getLocales()[0]?.languageCode === 'en' ? 'en' : 'ar');
@@ -38,11 +40,13 @@ interface Ctx extends Persisted {
   ready: boolean;
   session: Session | null;
   signIn: (email: string, password: string) => Promise<AuthResult>;
-  signUp: (email: string, password: string) => Promise<AuthResult>;
+  signUp: (email: string, password: string, notifications?: boolean) => Promise<AuthResult>;
   signInWithGoogle: () => Promise<AuthResult>;
   signOut: () => Promise<void>;
   deleteAccount: () => Promise<boolean>;
   setTheme: (t: ThemeChoice) => void;
+  acceptConsent: (notifications: boolean) => void;
+  setNotifications: (on: boolean) => void;
   saveProfile: (patch: Partial<Pick<Persisted, 'place' | 'washer' | 'dryer' | 'wardrobe' | 'wardrobeOther' | 'fabrics' | 'fabricsOther' | 'detergents' | 'detergentsOther' | 'softeners' | 'softenersOther'>> & { done?: boolean }) => void;
   t: Dictionary;
   rtl: boolean;
@@ -98,8 +102,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const { error } = await supabase!.auth.signInWithPassword({ email, password });
       return error ? { ok: false, error: /invalid/i.test(error.message) ? 'invalid' : 'generic' } : { ok: true };
     },
-    signUp: async (email, password) => {
-      const { data, error } = await supabase!.auth.signUp({ email, password });
+    signUp: async (email, password, notifications = false) => {
+      // The acceptance is also kept on the account itself (user metadata), not only on this phone.
+      const { data, error } = await supabase!.auth.signUp({ email, password, options: { data: { consent_version: CONSENT_VERSION, consent_at: new Date().toISOString(), notifications_opt_in: notifications } } });
       if (error) {
         const m = error.message;
         return { ok: false, error: /registered|exists/i.test(m) ? 'exists' : /password/i.test(m) ? 'weak' : 'generic' };
@@ -134,6 +139,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return true;
     },
     setTheme: (theme) => update({ theme }),
+    acceptConsent: (notifications) => update({ consent: { version: CONSENT_VERSION, at: new Date().toISOString(), notifications } }),
+    setNotifications: (on) => setState((prev) => {
+      const next = { ...prev, consent: { version: prev.consent?.version ?? CONSENT_VERSION, at: prev.consent?.at ?? new Date().toISOString(), notifications: on } };
+      AsyncStorage.setItem(KEY, JSON.stringify(next)).catch(() => {});
+      return next;
+    }),
     saveProfile: ({ done, ...patch }) => update(done ? { ...patch, profileDone: true } : patch),
     t: dictionaries[state.locale],
     rtl: isRTL(state.locale),

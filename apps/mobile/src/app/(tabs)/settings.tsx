@@ -10,7 +10,7 @@ import { ShareSheet } from '../../components/share-sheet';
 import { appPayload, type SharePayload } from '../../lib/share';
 
 export default function Settings() {
-  const { t, locale, setLocale, place, session, signOut, theme, setTheme, deleteAccount, colors, rtl, washer, dryer } = useApp();
+  const { consent, setNotifications, t, locale, setLocale, place, session, signOut, theme, setTheme, deleteAccount, colors, rtl, washer, dryer } = useApp();
   const [sharing, setSharing] = useState<SharePayload | null>(null);
   const country = countries.find((c) => c.code === place?.countryCode);
   const city = country?.cities.find((c) => c.id === place?.cityId);
@@ -29,7 +29,7 @@ export default function Settings() {
     const type = p.typeOther ?? applianceTypes.find((a) => a.id === p.typeId)?.name[locale];
     return [type, p.brand, p.model].filter(Boolean).join(' · ') || t.appliances.notSet;
   };
-  const link = (label: string, href: '/legal/privacy' | '/legal/terms') => (
+  const link = (label: string, href: '/legal/privacy' | '/legal/terms' | '/legal/disclaimer') => (
     <Pressable accessibilityRole="button" onPress={() => router.push(href)} style={{ minHeight: 44, justifyContent: 'center' }}>
       <Row style={{ justifyContent: 'space-between' }}>
         <Text>{label}</Text>
@@ -104,6 +104,19 @@ export default function Settings() {
           </FadeIn>
         ) : null}
 
+        <FadeIn delay={170}>
+          <Card style={{ gap: space.md }}>
+            <Row><IconBubble name="bell" tone="accent" /><View style={{ flex: 1 }}>
+              <Text weight="semibold">{t.settings.notifications}</Text>
+              <Text variant="caption" muted>{t.settings.notificationsHint}</Text>
+            </View></Row>
+            <Row>
+              <Chip label={t.settings.notificationsOn} selected={!!consent?.notifications} onPress={() => setNotifications(true)} />
+              <Chip label={t.settings.notificationsOff} selected={!consent?.notifications} onPress={() => setNotifications(false)} />
+            </Row>
+          </Card>
+        </FadeIn>
+
         <FadeIn delay={180}>
           <Card style={{ gap: space.md }}>
             <Row><IconBubble name="share-2" tone="accent" /><Text weight="semibold">{t.common.shareApp}</Text></Row>
@@ -116,6 +129,7 @@ export default function Settings() {
             <Row><IconBubble name="shield" tone="success" /><Text weight="semibold">{t.settings.legal}</Text></Row>
             {link(t.settings.privacy, '/legal/privacy')}
             {link(t.settings.terms, '/legal/terms')}
+            {link(t.settings.disclaimerLink, '/legal/disclaimer')}
           </Card>
         </FadeIn>
 
