@@ -8,7 +8,7 @@ import { useApp } from '../lib/app-context';
 import { Button, Text } from './ui';
 
 type FeatherName = React.ComponentProps<typeof Feather>['name'];
-const SLIDE_MS = 6500;
+const SLIDE_MS = 7000;
 
 /** Soft rising bubbles behind the icon, so each slide feels alive like a short video. */
 function Bubbles() {

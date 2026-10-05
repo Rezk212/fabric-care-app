@@ -9,7 +9,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Pressable, ScrollView, View } from 'react-native';
-import { BottomBack, Card, Chip, FadeIn, IconBubble, Pill, Row, Screen, SymbolGlyph, Text } from '../components/ui';
+import { BottomBack, Card, GuideButton, Chip, FadeIn, IconBubble, Pill, Row, Screen, SymbolGlyph, Text } from '../components/ui';
 import { withFabric } from '../lib/analyze';
 import { useApp } from '../lib/app-context';
 import { listMachines } from '../lib/data';
@@ -86,7 +86,10 @@ export default function Result() {
             style={{ paddingHorizontal: space.xl, paddingTop: insets.top + space.xl, paddingBottom: space.xxl, borderBottomLeftRadius: radius.xl, borderBottomRightRadius: radius.xl, gap: space.lg }}>
             <Row style={{ justifyContent: 'space-between' }}>
               <Text variant="caption" weight="medium" color={colors.onHeroMuted}>{t.result.title}</Text>
-              <Pill tone="hero" icon="layers" label={(details && fabricLabel(details, locale)) || t.fabrics[analysis.fabric]} />
+              <Row gap={space.sm}>
+                <Pill tone="hero" icon="layers" label={(details && fabricLabel(details, locale)) || t.fabrics[analysis.fabric]} />
+                <GuideButton tourKey="result" auto />
+              </Row>
             </Row>
             <Text variant="display" weight="bold" color={colors.onHero}>
               {format(t.result.summary, { program: t.programs[r.program], temp: r.temperature })}

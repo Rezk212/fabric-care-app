@@ -19,7 +19,7 @@ export default function Stains() {
 
   return (
     <Screen>
-      <BackHeader title={t.guide.stains} onBack={goBack} />
+      <BackHeader title={t.guide.stains} onBack={goBack} tour="stains" />
       <ScrollView contentContainerStyle={{ paddingVertical: space.lg, gap: space.xl }} showsVerticalScrollIndicator={false}>
         <View style={{ gap: space.md }}>
           <Text weight="semibold">{t.guide.pickStain}</Text>

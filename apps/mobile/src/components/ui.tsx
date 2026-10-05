@@ -252,7 +252,7 @@ export function DrumArt({ size = 280 }: { size?: number }) {
 }
 
 /** Screen header with a back arrow that points the right way in Arabic. */
-export function BackHeader({ title, onBack }: { title: string; onBack: () => void }) {
+export function BackHeader({ title, onBack, tour }: { title: string; onBack: () => void; tour?: TourKey }) {
   const { colors, rtl } = useApp();
   return (
     <Row style={{ paddingTop: space.lg, paddingBottom: space.sm }} gap={space.sm}>
@@ -265,6 +265,7 @@ export function BackHeader({ title, onBack }: { title: string; onBack: () => voi
         <Feather name={rtl ? 'arrow-right' : 'arrow-left'} size={20} color={colors.ink} />
       </Pressable>
       <Text variant="title" weight="semibold" style={{ flex: 1 }}>{title}</Text>
+      {tour ? <GuideButton tourKey={tour} /> : null}
     </Row>
   );
 }
@@ -371,38 +372,42 @@ function LazyTour(props: { slides: import('@naqa/shared').TourSlide[]; onClose: 
   return <TourPlayer {...props} />;
 }
 
-/** Top bar of the main tabs: logo and name, plus a small (!) that opens this section's guide any time. */
+/** Small (!) that opens a guide. With `auto`, the guide also opens once by itself for someone who skipped the first-run tour. */
+export function GuideButton({ tourKey, auto }: { tourKey: TourKey; auto?: boolean }) {
+  const { colors, t, tour, markSectionSeen } = useApp();
+  const [open, setOpen] = useState(false);
+
+  useFocusEffect(useCallback(() => {
+    if (auto && tour.intro === 'skipped' && !tour.seen.includes(tourKey)) setOpen(true);
+  }, [auto, tour.intro, tour.seen, tourKey]));
+
+  const close = () => { setOpen(false); if (auto) markSectionSeen(tourKey); };
+  return (
+    <>
+      <Pressable accessibilityRole="button" accessibilityLabel={t.tour.help} onPress={() => setOpen(true)} hitSlop={10}
+        style={{ width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primarySoft }}>
+        <Feather name="alert-circle" size={20} color={colors.primary} />
+      </Pressable>
+      <Modal visible={open} animationType="slide" onRequestClose={close}>
+        {open ? <LazyTour slides={tours[tourKey]} onClose={close} /> : null}
+      </Modal>
+    </>
+  );
+}
+
+/** Top bar of the main tabs: logo and name, plus the (!) guide button of the current section. */
 export function AppBar() {
-  const { colors, locale, t, tour, markSectionSeen } = useApp();
+  const { colors, locale } = useApp();
   const segments = useSegments();
   const raw = (segments as string[])[1] ?? 'index';
   const key = (raw === 'index' ? 'analyze' : raw) as TourKey;
   const known = (SECTION_TOURS as readonly string[]).includes(key);
-  const [open, setOpen] = useState(false);
   const ar = locale === 'ar';
-
-  // Whoever skipped the first-run tour gets each section's guide automatically, once.
-  useFocusEffect(useCallback(() => {
-    if (known && tour.intro === 'skipped' && !tour.seen.includes(key)) setOpen(true);
-  }, [known, tour.intro, tour.seen, key]));
-
-  const close = () => { setOpen(false); if (known) markSectionSeen(key); };
-
   return (
     <View style={{ direction: ar ? 'rtl' : 'ltr', flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingTop: space.md, paddingBottom: space.xs }}>
       <Logo size={34} color={colors.primary} wave={colors.accent} />
       <Text variant="title" weight="bold" color={colors.primary} style={{ flex: 1, fontSize: ar ? 24 : 21, lineHeight: 30, writingDirection: ar ? 'rtl' : 'ltr' }}>{ar ? 'نقاء' : 'Naqa'}</Text>
-      {known ? (
-        <Pressable accessibilityRole="button" accessibilityLabel={t.tour.help} onPress={() => setOpen(true)} hitSlop={10}
-          style={{ width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primarySoft }}>
-          <Feather name="alert-circle" size={20} color={colors.primary} />
-        </Pressable>
-      ) : null}
-      {known ? (
-        <Modal visible={open} animationType="slide" onRequestClose={close}>
-          {open ? <LazyTour slides={tours[key]} onClose={close} /> : null}
-        </Modal>
-      ) : null}
+      {known ? <GuideButton tourKey={key} auto /> : null}
     </View>
   );
 }

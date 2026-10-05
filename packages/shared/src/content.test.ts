@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { CONSENT_VERSION, disclaimer, careProductAdvice, careProductOptions, products, fabricFamilies, applyDetails, fabricFromDetails, fabricOptions, colorOptions, garmentGroups, orderedFabricOptions, toAnalysis, wardrobeItems, applianceMaintenance, applianceTypes, matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
+import { SECTION_TOURS, tours, CONSENT_VERSION, disclaimer, careProductAdvice, careProductOptions, products, fabricFamilies, applyDetails, fabricFromDetails, fabricOptions, colorOptions, garmentGroups, orderedFabricOptions, toAnalysis, wardrobeItems, applianceMaintenance, applianceTypes, matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
 
 const nonEmpty = (b: { ar: string; en: string }) => b.ar.trim().length > 0 && b.en.trim().length > 0;
 
@@ -148,4 +148,16 @@ test('disclaimer and consent text exist in both languages', () => {
   assert.ok(disclaimer.length >= 5);
   for (const s of disclaimer) assert.ok(nonEmpty(s.title) && nonEmpty(s.body));
   assert.ok(CONSENT_VERSION.length > 0);
+});
+
+test('guided tours: every tour has bilingual slides and the intro covers each main area', () => {
+  for (const [key, slides] of Object.entries(tours)) {
+    assert.ok(slides.length >= 2, key);
+    const ids = slides.map((s) => s.id);
+    assert.equal(new Set(ids).size, ids.length, key);
+    for (const s of slides) assert.ok(nonEmpty(s.title) && nonEmpty(s.body) && s.icon.length > 0, `${key}.${s.id}`);
+  }
+  for (const k of SECTION_TOURS) assert.ok(tours[k].length >= 3, k);
+  const introText = tours.intro.map((s) => s.title.ar + s.body.ar).join(' ');
+  for (const word of ['صوّر', 'خطة', 'منتجات', 'المتاجر', 'العروض', 'دليل', 'أجهزتك', 'تحليلاتك', 'الإشعارات', 'نحن معك']) assert.ok(introText.includes(word), word);
 });

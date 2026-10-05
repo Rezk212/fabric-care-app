@@ -9,7 +9,7 @@ export default function Symbols() {
   const { t, locale, colors } = useApp();
   return (
     <Screen>
-      <BackHeader title={t.guide.symbols} onBack={goBack} />
+      <BackHeader title={t.guide.symbols} onBack={goBack} tour="symbols" />
       <ScrollView contentContainerStyle={{ paddingVertical: space.lg }} showsVerticalScrollIndicator={false}>
         <Card padded={false} style={{ paddingHorizontal: space.lg }}>
           {symbolGuide.map((s, i) => (

@@ -29,7 +29,7 @@ export default function Products() {
 
   return (
     <Screen>
-      <BackHeader title={t.guide.products} onBack={goBack} />
+      <BackHeader title={t.guide.products} onBack={goBack} tour="productsGuide" />
       <ScrollView contentContainerStyle={{ paddingVertical: space.lg, gap: space.md }} showsVerticalScrollIndicator={false}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space.sm }} style={{ flexGrow: 0 }}>
           <Chip label={t.stores.all} selected={cat === null} onPress={() => setCat(null)} />

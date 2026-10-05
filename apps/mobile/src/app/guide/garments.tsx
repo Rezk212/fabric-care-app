@@ -12,7 +12,7 @@ export default function Garments() {
   const { t, locale, colors, rtl } = useApp();
   return (
     <Screen>
-      <BackHeader title={t.guide.garments} onBack={goBack} />
+      <BackHeader title={t.guide.garments} onBack={goBack} tour="garments" />
       <ScrollView contentContainerStyle={{ paddingVertical: space.lg, gap: space.md }} showsVerticalScrollIndicator={false}>
         <Text variant="caption" muted>{CHECK_LABEL_NOTE[locale]}</Text>
         {gulfGarments.map((g, i) => (

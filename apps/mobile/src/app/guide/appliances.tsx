@@ -12,7 +12,7 @@ export default function Appliances() {
   const items = applianceTypes.filter((a) => a.kind === kind);
   return (
     <Screen>
-      <BackHeader title={t.guide.appliances} onBack={goBack} />
+      <BackHeader title={t.guide.appliances} onBack={goBack} tour="appliancesGuide" />
       <ScrollView contentContainerStyle={{ paddingVertical: space.lg, gap: space.md }} showsVerticalScrollIndicator={false}>
         <Row style={{ flexWrap: 'wrap' }}>
           <Chip label={t.guide.washers} selected={kind === 'washer'} onPress={() => setKind('washer')} />

@@ -38,7 +38,7 @@ export default function ProductScreen() {
 
   return (
     <Screen>
-      <BackHeader title={t.product.title} onBack={goBack} />
+      <BackHeader title={t.product.title} onBack={goBack} tour="product" />
       <ScrollView contentContainerStyle={{ paddingVertical: space.lg, gap: space.lg }} showsVerticalScrollIndicator={false}>
         <Row style={{ alignItems: 'flex-start' }} gap={space.lg}>
           <ProductThumb imageUrl={product.imageUrl} kind={product.kind} size={96} />
