@@ -7,11 +7,11 @@ import Svg, { Circle, Path, Rect } from 'react-native-svg';
 import { useApp } from '../lib/app-context';
 import { PhotoSlot } from './photo-slot';
 import { Setting } from './setting-row';
-import { Button, Card, Chip, Row, Text } from './ui';
+import { Button, Card, Chip, Logo, Row, Text, useShadow } from './ui';
 
 /** The demo is drawn at phone width and scaled to fit, so it is the same screen with the same spacing. */
 const MOCK_W = 360;
-const MOCK_H = 760;
+const MOCK_H = 950;
 
 const START_MS = 300;
 const TRAVEL_MS = 800;
@@ -95,6 +95,38 @@ function Target({ active, height, children }: { active: boolean; height: number;
   );
 }
 
+/** The same top bar and floating tab bar as the real tabs, so the icons and labels match. */
+function DemoAppBar() {
+  const { colors, locale } = useApp();
+  const ar = locale === 'ar';
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingTop: space.md, paddingBottom: space.xs }}>
+      <Logo size={34} color={colors.primary} wave={colors.accent} />
+      <Text variant="title" weight="bold" color={colors.primary} style={{ flex: 1, fontSize: ar ? 24 : 21, lineHeight: 30 }}>{ar ? 'نقاء' : 'Naqa'}</Text>
+      <View style={{ width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primarySoft }}>
+        <Feather name="alert-circle" size={20} color={colors.primary} />
+      </View>
+    </View>
+  );
+}
+function DemoTabs() {
+  const { t, colors } = useApp();
+  const shadow = useShadow(0.9);
+  const tabs = [['camera', t.tabs.home], ['book-open', t.tabs.guide], ['map-pin', t.tabs.stores], ['disc', t.tabs.machines], ['settings', t.tabs.settings]] as const;
+  return (
+    <View style={[{ position: 'absolute', left: 16, right: 16, bottom: 16, height: 76, paddingTop: 8, paddingBottom: 8, borderRadius: 32, backgroundColor: colors.surface, flexDirection: 'row' }, shadow]}>
+      {tabs.map(([icon, label], i) => (
+        <View key={icon} style={{ flex: 1, alignItems: 'center', gap: 2 }}>
+          <View style={{ width: 48, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: i === 0 ? colors.primarySoft : 'transparent' }}>
+            <Feather name={icon} size={22} color={i === 0 ? colors.primary : colors.inkMuted} />
+          </View>
+          <Text weight="medium" color={i === 0 ? colors.primary : colors.inkMuted} style={{ fontSize: 11, lineHeight: 16 }}>{label}</Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
 const SAMPLE = { program: 'cottons', temp: 40 } as const;
 
 /**
@@ -140,7 +172,8 @@ export function TourDemoStage({ kind, runKey }: { kind: TourDemo; runKey: string
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} onLayout={onLayout}>
       {scale > 0 ? (
         <View style={{ width: MOCK_W * scale + 6, height: MOCK_H * scale + 6, borderRadius: 26 * scale + 6, overflow: 'hidden', direction: 'ltr', backgroundColor: colors.bg, borderWidth: 3, borderColor: 'rgba(255,255,255,0.55)' }}>
-          <View pointerEvents="none" style={{ width: MOCK_W, height: MOCK_H, transform: [{ translateX: -(MOCK_W * (1 - scale)) / 2 }, { translateY: -(MOCK_H * (1 - scale)) / 2 }, { scale }], direction: rtl ? 'rtl' : 'ltr', backgroundColor: colors.bg, paddingHorizontal: space.xl, paddingTop: space.xl, gap: space.xl }}>
+          <View pointerEvents="none" style={{ width: MOCK_W, height: MOCK_H, transform: [{ translateX: -(MOCK_W * (1 - scale)) / 2 }, { translateY: -(MOCK_H * (1 - scale)) / 2 }, { scale }], direction: rtl ? 'rtl' : 'ltr', backgroundColor: colors.bg, paddingHorizontal: space.xl, paddingTop: space.sm, gap: space.xl }}>
+            <DemoAppBar />
             <View style={{ gap: space.sm }}>
               <Text variant="heading" weight="bold">{t.home.title}</Text>
               <Text muted>{t.home.subtitle}</Text>
@@ -170,18 +203,18 @@ export function TourDemoStage({ kind, runKey }: { kind: TourDemo; runKey: string
             ) : (
               <>
                 <Row style={{ alignItems: 'stretch' }}>
-                  <Target active={arrived('garment')} height={204}>
-                    <PhotoSlot label={t.home.garment} hint={t.home.garmentHint} icon="camera" height={196} onChange={noop} preview={garment ? <ShirtArt /> : undefined} />
+                  <Target active={arrived('garment')} height={170}>
+                    <PhotoSlot label={t.home.garment} hint={t.home.garmentHint} icon="camera" height={170} onChange={noop} preview={garment ? <ShirtArt /> : undefined} />
                     {finger === 'garment' ? <Finger runKey={runKey} onTap={onTap} /> : null}
                   </Target>
                 </Row>
                 <Row style={{ alignItems: 'stretch' }} gap={space.md}>
-                  <Target active={arrived('label')} height={196}>
-                    <PhotoSlot label={t.home.label} hint={t.home.labelHint} icon="tag" height={188} onChange={noop} preview={label ? <LabelArt kind="details" /> : undefined} />
+                  <Target active={arrived('label')} height={224}>
+                    <PhotoSlot label={t.home.label} hint={t.home.labelHint} icon="tag" height={224} onChange={noop} preview={label ? <LabelArt kind="details" /> : undefined} />
                     {finger === 'label' ? <Finger runKey={runKey} onTap={onTap} /> : null}
                   </Target>
-                  <Target active={arrived('label2')} height={196}>
-                    <PhotoSlot label={t.home.label2} hint={t.home.label2Hint} icon="file-text" height={188} onChange={noop} preview={label2 ? <LabelArt kind="symbols" /> : undefined} />
+                  <Target active={arrived('label2')} height={224}>
+                    <PhotoSlot label={t.home.label2} hint={t.home.label2Hint} icon="file-text" height={224} onChange={noop} preview={label2 ? <LabelArt kind="symbols" /> : undefined} />
                     {finger === 'label2' ? <Finger runKey={runKey} onTap={onTap} /> : null}
                   </Target>
                 </Row>
@@ -191,6 +224,7 @@ export function TourDemoStage({ kind, runKey }: { kind: TourDemo; runKey: string
                 </View>
               </>
             )}
+            <DemoTabs />
           </View>
 
           {result ? (
