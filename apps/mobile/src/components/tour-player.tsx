@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Easing, PanResponder, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useApp } from '../lib/app-context';
+import { TourDemoStage, demoDuration } from './tour-demo';
 import { Button, Text } from './ui';
 
 type FeatherName = React.ComponentProps<typeof Feather>['name'];
@@ -86,7 +87,7 @@ export function TourPlayer({ slides, onClose }: { slides: TourSlide[]; onClose: 
   // Auto-advance, but stay on the last slide so the person can read it and press the button.
   useEffect(() => {
     progress.setValue(0);
-    const anim = Animated.timing(progress, { toValue: 1, duration: SLIDE_MS, easing: Easing.linear, useNativeDriver: false });
+    const anim = Animated.timing(progress, { toValue: 1, duration: slides[index].demo ? demoDuration(slides[index].demo) : SLIDE_MS, easing: Easing.linear, useNativeDriver: false });
     anim.start(({ finished }) => { if (finished && index < slides.length - 1) setIndex(index + 1); });
     return () => anim.stop();
   }, [index, progress, slides.length]);
@@ -120,6 +121,15 @@ export function TourPlayer({ slides, onClose }: { slides: TourSlide[]; onClose: 
           </Pressable>
         </View>
 
+        {slide.demo ? (
+          <View style={{ flex: 1, gap: space.lg, paddingTop: space.sm, paddingBottom: space.lg }}>
+            <TourDemoStage kind={slide.demo} runKey={`${slide.id}`} />
+            <View style={{ gap: space.sm, alignItems: 'center', paddingHorizontal: space.sm, minHeight: 132 }}>
+              <Text variant="heading" weight="bold" color="#FFFFFF" style={{ textAlign: 'center' }}>{slide.title[locale]}</Text>
+              <Text color="#FFFFFF" style={{ textAlign: 'center', opacity: 0.92 }}>{slide.body[locale]}</Text>
+            </View>
+          </View>
+        ) : (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: space.xxl }}>
           <View style={{ width: '100%', height: 260, alignItems: 'center', justifyContent: 'center' }}>
             <Bubbles />
@@ -130,6 +140,7 @@ export function TourPlayer({ slides, onClose }: { slides: TourSlide[]; onClose: 
             <Text color="#FFFFFF" style={{ textAlign: 'center', opacity: 0.92 }}>{slide.body[locale]}</Text>
           </View>
         </View>
+        )}
 
         <View style={{ flexDirection: 'row', gap: space.md }}>
           <View style={{ flex: 1 }}>

@@ -2,6 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { radius, space } from '@naqa/shared';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
+import type { ReactNode } from 'react';
 import { Alert, Image, Pressable, View } from 'react-native';
 import { useApp } from '../lib/app-context';
 import { IconBubble, Pill, Text, useShadow } from './ui';
@@ -9,8 +10,8 @@ import { IconBubble, Pill, Text, useShadow } from './ui';
 type FeatherName = React.ComponentProps<typeof Feather>['name'];
 
 export function PhotoSlot({
-  label, hint, icon = 'camera', height = 132, uri, onChange,
-}: { label: string; hint?: string; icon?: FeatherName; height?: number; uri?: string; onChange: (uri?: string) => void }) {
+  label, hint, icon = 'camera', height = 132, uri, onChange, preview,
+}: { label: string; hint?: string; icon?: FeatherName; height?: number; uri?: string; onChange: (uri?: string) => void; preview?: ReactNode }) {
   const { colors, t } = useApp();
   const shadow = useShadow(0.6);
 
@@ -45,21 +46,21 @@ export function PhotoSlot({
           flex: 1,
           minHeight: height,
           borderRadius: radius.lg,
-          backgroundColor: uri ? colors.surfaceMuted : colors.primarySoft,
+          backgroundColor: uri || preview ? colors.surfaceMuted : colors.primarySoft,
           overflow: 'hidden',
           justifyContent: 'center',
           padding: space.lg,
           transform: [{ scale: pressed ? 0.985 : 1 }],
         },
-        uri ? shadow : null,
+        uri || preview ? shadow : null,
       ]}
     >
-      {uri ? (
+      {uri || preview ? (
         <>
-          <Image source={{ uri }} style={{ position: 'absolute', width: '100%', height: '100%' }} resizeMode="cover" />
+          {preview ? <View style={{ position: 'absolute', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>{preview}</View> : <Image source={{ uri }} style={{ position: 'absolute', width: '100%', height: '100%' }} resizeMode="cover" />}
           <LinearGradient colors={['transparent', 'rgba(8,14,40,0.62)']} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '55%' }} />
-          <View style={{ position: 'absolute', left: space.lg, right: space.lg, bottom: space.md, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text weight="semibold" color="#FFFFFF" variant="caption">{label}</Text>
+          <View style={{ position: 'absolute', left: space.lg, right: space.lg, bottom: space.md, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
+            <Text weight="semibold" color="#FFFFFF" variant="caption" >{label}</Text>
             <Pill label={t.photo.retake} tone="hero" icon="edit-2" />
           </View>
         </>

@@ -1,7 +1,12 @@
 import type { Bilingual } from '../domain';
 
+/** Slides that play a short scripted demo of the real screen (finger taps, fields fill) instead of an icon. */
+export type TourDemo = 'garment' | 'label' | 'label2' | 'analyze' | 'manual';
+
 export interface TourSlide {
   id: string;
+  /** When set, the player shows a live demo of that step in place of the icon. */
+  demo?: TourDemo;
   /** Feather icon name. */
   icon: string;
   title: Bilingual;
@@ -15,8 +20,8 @@ export type TourKey =
 /** Guides that appear by themselves, once, for anyone who skipped the first-run tour. */
 export const SECTION_TOURS = ['analyze', 'guide', 'stores', 'machines', 'settings', 'result'] as const;
 
-const S = (id: string, icon: string, tAr: string, tEn: string, bAr: string, bEn: string): TourSlide =>
-  ({ id, icon, title: { ar: tAr, en: tEn }, body: { ar: bAr, en: bEn } });
+const S = (id: string, icon: string, tAr: string, tEn: string, bAr: string, bEn: string, demo?: TourDemo): TourSlide =>
+  ({ id, icon, title: { ar: tAr, en: tEn }, body: { ar: bAr, en: bEn }, ...(demo ? { demo } : {}) });
 
 /** Short, plain walkthroughs: one for the whole app, one per section and one for the main inner screens. */
 export const tours: Record<TourKey, TourSlide[]> = {
@@ -35,13 +40,11 @@ export const tours: Record<TourKey, TourSlide[]> = {
     S('help', 'alert-circle', 'نحن معك دائمًا', 'We are always here', 'في أعلى كل قسم وكل صفحة مهمة علامة (!). اضغط عليها في أي وقت لتعرف كيف تعمل.', 'Every section and main page has a (!) at the top. Tap it any time to see how it works.'),
   ],
   analyze: [
-    S('a1', 'camera', 'صورة القطعة', 'Photo of the garment', 'صوّر القطعة كاملة. وتكفي صورة واحدة من الصور الثلاث لتبدأ.', 'Photograph the whole garment. One of the three photos is enough to start.'),
-    S('a2', 'tag', 'صورتا الملصق', 'Two label photos', 'الملصق الأول فيه المواصفات (القماش والمقاس)، والثاني فيه رموز الغسيل. صوّرهما ليقرأهما نقاء بدقة.', 'The first label has the details (fabric, size); the second has the washing symbols. Photograph both so Naqa reads them accurately.'),
-    S('a3', 'edit-3', 'أو أدخل البيانات بنفسك', 'Or enter the details yourself', 'اضغط «أدخل البيانات بنفسي»، واختر القطعة ثم القماش ثم اللون، وأضف البقع إن وجدت. وإن لم تعرف القماش فستجده على الملصق.', 'Tap "Enter it myself", choose the garment, fabric and colour, and add stains if any. If you do not know the fabric, check the label.'),
-    S('a4', 'user', 'ملابسك وأقمشتك أولًا', 'Your clothes and fabrics first', 'القطع والأقمشة التي سجّلتها في بياناتك تظهر لك في أول القوائم لتختار أسرع.', 'The clothes and fabrics you saved appear first in the lists so you can choose faster.'),
-    S('a5', 'check-circle', 'اضغط ابدأ', 'Press start', 'تظهر لك خطة الغسيل مع النصائح والمنتجات المناسبة.', 'You get your wash plan with tips and suitable products.'),
-    S('a6', 'gift', 'العروض', 'Offers', 'في أعلى الصفحة عروض جديدة. اسحبها لترى المزيد، واضغط على زر المشاركة لترسل أي عرض لأصدقائك.', 'New offers sit at the top. Swipe to see more and tap the share button to send one to friends.'),
-    S('a7', 'zap', 'تحليلاتك اليومية', 'Your daily analyses', 'العدد الظاهر أعلى الصفحة هو ما تبقى لك اليوم من تحليل الصور، ويتجدد كل يوم. والإدخال اليدوي بلا حد.', 'The number at the top is what you have left today for photo analysis, renewed daily. Manual entry has no limit.'),
+    S('a1', 'camera', 'صورة القطعة', 'Photo of the garment', 'اضغط الخانة الكبيرة وصوّر القطعة كاملة. وتكفي صورة واحدة من الصور الثلاث لتبدأ.', 'Tap the big box and photograph the whole garment. One of the three photos is enough to start.', 'garment'),
+    S('a2', 'tag', 'ملصق المواصفات', 'The details label', 'الملصق الأول فيه القماش والمقاس. اضغط خانته وصوّره بوضوح.', 'The first label has the fabric and size. Tap its box and photograph it clearly.', 'label'),
+    S('a3', 'file-text', 'ملصق تعليمات الغسيل', 'The washing label', 'الملصق الثاني فيه رموز الغسيل. صوّره ليقرأه نقاء بدقة.', 'The second label has the washing symbols. Photograph it so Naqa reads it accurately.', 'label2'),
+    S('a4', 'search', 'ابدأ التحليل', 'Start the analysis', 'اضغط «ابدأ التحليل» وانتظر ثوانٍ قليلة، فتظهر خطة الغسيل مع النصائح والمنتجات المناسبة.', 'Tap "Start analysis" and wait a few seconds for your wash plan with tips and suitable products.', 'analyze'),
+    S('a5', 'edit-3', 'أو أدخل البيانات بنفسك', 'Or enter the details yourself', 'اضغط «أدخل البيانات بنفسي» واختر القطعة والقماش واللون. وتظهر لك ملابسك وأقمشتك المسجّلة أولًا.', 'Tap "Enter it myself" and pick the garment, fabric and colour. Your saved clothes and fabrics come first.', 'manual'),
   ],
   result: [
     S('r1', 'sliders', 'خطة الغسيل', 'Your wash plan', 'في الأعلى أنسب برنامج ودرجة حرارة. وتحته التفاصيل: العصر، والتجفيف، والكي، والمبيّض.', 'At the top is the best programme and temperature, then the details: spin, drying, ironing and bleach.'),

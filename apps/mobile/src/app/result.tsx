@@ -9,6 +9,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Pressable, ScrollView, View } from 'react-native';
+import { Setting } from '../components/setting-row';
 import { BottomBack, Card, GuideButton, Chip, FadeIn, IconBubble, Pill, Row, Screen, SymbolGlyph, Text } from '../components/ui';
 import { withFabric } from '../lib/analyze';
 import { useApp } from '../lib/app-context';
@@ -19,19 +20,6 @@ import { fetchBranches, type Branch } from '../lib/osm';
 const fabrics: FabricType[] = ['cotton', 'linen', 'wool', 'silk', 'polyester', 'nylon', 'denim', 'cashmere', 'viscose', 'synthetic_blend'];
 type FeatherName = React.ComponentProps<typeof Feather>['name'];
 
-function Setting({ icon, label, value, allowed, last }: { icon: FeatherName; label: string; value: string; allowed?: boolean; last?: boolean }) {
-  const { colors } = useApp();
-  return (
-    <Row style={{ minHeight: 60, borderBottomWidth: last ? 0 : 1, borderBottomColor: colors.line }}>
-      <IconBubble name={icon} size={36} tone={allowed === false ? 'accent' : allowed === true ? 'success' : 'primary'} />
-      <Text muted style={{ flex: 1 }}>{label}</Text>
-      <Row gap={6}>
-        {allowed != null ? <Feather name={allowed ? 'check' : 'x'} size={16} color={allowed ? colors.successText : colors.danger} /> : null}
-        <Text weight="semibold">{value}</Text>
-      </Row>
-    </Row>
-  );
-}
 
 export default function Result() {
   const { t, locale, colors, place, rtl, detergents, softeners } = useApp();
