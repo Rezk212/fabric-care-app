@@ -1,6 +1,7 @@
 import { applianceMaintenance, applianceTypes, capacityGuide, generalMaintenance, space } from '@naqa/shared';
 import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { ApplianceArt } from '../../components/appliance-art';
 import { BackHeader, BottomBack, Card, Chip, FadeIn, Row, Screen, Text } from '../../components/ui';
 import { useApp } from '../../lib/app-context';
 import { goBack } from '../../lib/nav';
@@ -20,8 +21,13 @@ export default function Appliances() {
         {items.map((a, i) => (
           <FadeIn key={a.id} delay={i * 50}>
             <Card style={{ gap: space.md }}>
-              <Text weight="semibold">{a.name[locale]}</Text>
-              <Text muted>{a.how[locale]}</Text>
+              <Row style={{ alignItems: 'flex-start' }}>
+                <ApplianceArt typeId={a.id} size={84} />
+                <View style={{ flex: 1, gap: 4 }}>
+                  <Text weight="semibold">{a.name[locale]}</Text>
+                  <Text muted>{a.how[locale]}</Text>
+                </View>
+              </Row>
               <View style={{ gap: 4 }}>
                 <Text variant="caption" weight="semibold">{t.guide.pros}</Text>
                 {a.pros.map((p, j) => <Text key={j} variant="caption" muted>{`• ${p[locale]}`}</Text>)}

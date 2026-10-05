@@ -3,6 +3,7 @@ import { applianceTypes, space } from '@naqa/shared';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { Image, Pressable, ScrollView, View } from 'react-native';
+import { ApplianceArt } from '../../components/appliance-art';
 import { Button, Card, FadeIn, IconBubble, Row, Screen, Text } from '../../components/ui';
 import { useApp } from '../../lib/app-context';
 import { deleteMachine, listAnalyses, listMachines, rowToAnalysis, type AnalysisRow, type MachineRow } from '../../lib/data';
@@ -34,7 +35,7 @@ export default function Machines() {
             return (
               <Card key={kind} style={{ gap: space.md }}>
                 <Row>
-                  {p?.photo ? <Image source={{ uri: p.photo }} style={{ width: 56, height: 56, borderRadius: 14 }} /> : <IconBubble name={kind === 'washer' ? 'disc' : 'wind'} tone={kind === 'washer' ? 'primary' : 'accent'} size={56} />}
+                  {p?.photo ? <Image source={{ uri: p.photo }} style={{ width: 56, height: 56, borderRadius: 14 }} /> : p?.typeId ? <ApplianceArt typeId={p.typeId} size={56} /> : <IconBubble name={kind === 'washer' ? 'disc' : 'wind'} tone={kind === 'washer' ? 'primary' : 'accent'} size={56} />}
                   <View style={{ flex: 1, gap: 2 }}>
                     <Text weight="semibold">{kind === 'washer' ? t.appliances.washer : t.appliances.dryer}</Text>
                     {lines.length ? lines.map((l, i) => <Text key={i} variant="caption" muted>{l}</Text>) : <Text variant="caption" muted>{t.appliances.notSet}</Text>}

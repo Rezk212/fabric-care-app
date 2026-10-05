@@ -1,8 +1,9 @@
-import { OTHER, applianceBrands, applianceTypes, space, type ApplianceProfile } from '@naqa/shared';
+import { OTHER, applianceBrands, applianceTypes, appliancesForCountry, space, type ApplianceProfile } from '@naqa/shared';
 import { useMemo } from 'react';
 import { View } from 'react-native';
 import { useApp } from '../lib/app-context';
 import { toStoredPhoto } from '../lib/photo';
+import { ApplianceArt } from './appliance-art';
 import { PhotoSlot } from './photo-slot';
 import { Select, type SelectGroup } from './select';
 import { Card, Field, IconBubble, Row, Text } from './ui';
@@ -40,8 +41,10 @@ export function toProfile(d: Draft): ApplianceProfile | undefined {
 
 /** Type, brand, model and an optional photo for one machine (washer or dryer). */
 export function ApplianceCard({ kind, draft, onChange }: { kind: 'washer' | 'dryer'; draft: Draft; onChange: (d: Draft) => void }) {
-  const { t, locale } = useApp();
-  const types = useMemo<SelectGroup[]>(() => [{ items: applianceTypes.filter((a) => a.kind === kind).map((a) => ({ id: a.id, label: a.name[locale] })) }], [kind, locale]);
+  const { t, locale, place } = useApp();
+  // Machine classes sold in the user's country, each with its drawing.
+  const types = useMemo<SelectGroup[]>(() => [{ items: appliancesForCountry(kind, place?.countryCode).map((a) => ({ id: a.id, label: a.name[locale], art: <ApplianceArt typeId={a.id} size={52} /> })) }], [kind, locale, place?.countryCode]);
+  const chosen = applianceTypes.find((a) => a.id === draft.type);
   const brands = useMemo<SelectGroup[]>(() => [{ items: applianceBrands.map((b) => ({ id: b, label: b })) }], []);
   const set = (patch: Partial<Draft>) => onChange({ ...draft, ...patch });
   const washer = kind === 'washer';
@@ -56,6 +59,12 @@ export function ApplianceCard({ kind, draft, onChange }: { kind: 'washer' | 'dry
         accessibilityLabel={`${washer ? t.appliances.washer : t.appliances.dryer}: ${t.appliances.pickType}`}
         extraBottom={[{ id: NONE, label: t.appliances.typeNone }, { id: UNSURE, label: t.appliances.typeUnsure }]}
         otherLabel={t.manual.other} otherPlaceholder={t.appliances.otherType} otherValue={draft.typeOther} onOtherChange={(v) => set({ typeOther: v })} />
+      {chosen ? (
+        <Row style={{ alignItems: 'flex-start' }}>
+          <ApplianceArt typeId={chosen.id} size={72} />
+          <Text variant="caption" muted style={{ flex: 1 }}>{chosen.how[locale]}</Text>
+        </Row>
+      ) : null}
       {draft.type !== NONE ? (
         <>
           <Select placeholder={t.appliances.pickBrand} groups={brands} value={draft.brand} onChange={(id) => set({ brand: id })}

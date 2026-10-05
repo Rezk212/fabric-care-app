@@ -1,11 +1,11 @@
 import { Feather } from '@expo/vector-icons';
 import { OTHER, radius, space } from '@naqa/shared';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { Modal, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { useApp } from '../lib/app-context';
 import { Field, Row, Text } from './ui';
 
-export interface SelectItem { id: string; label: string; swatch?: string[] }
+export interface SelectItem { id: string; label: string; swatch?: string[]; art?: ReactNode; hint?: string }
 export interface SelectGroup { title?: string; items: SelectItem[] }
 
 /**
@@ -45,9 +45,13 @@ export function Select({
     const on = i.id === value;
     return (
       <Pressable key={i.id} accessibilityRole="button" accessibilityState={{ selected: on }} onPress={() => pick(i.id)}
-        style={({ pressed }) => ({ minHeight: 52, flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.sm, borderRadius: radius.md, backgroundColor: on ? colors.primarySoft : pressed ? colors.surfaceMuted : 'transparent' })}>
+        style={({ pressed }) => ({ minHeight: i.art ? 76 : 52, flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.sm, borderRadius: radius.md, backgroundColor: on ? colors.primarySoft : pressed ? colors.surfaceMuted : 'transparent' })}>
         {i.swatch ? <Swatch colors={i.swatch} /> : null}
-        <Text style={{ flex: 1 }} weight={on ? 'semibold' : 'regular'}>{i.label}</Text>
+        {i.art ?? null}
+        <View style={{ flex: 1, paddingVertical: 4 }}>
+          <Text weight={on ? 'semibold' : 'regular'}>{i.label}</Text>
+          {i.hint ? <Text variant="caption" muted>{i.hint}</Text> : null}
+        </View>
         {on ? <Feather name="check" size={18} color={colors.primary} /> : null}
       </Pressable>
     );
@@ -58,6 +62,7 @@ export function Select({
       <Pressable accessibilityRole="button" accessibilityLabel={accessibilityLabel ?? placeholder} onPress={() => setOpen(true)}
         style={{ minHeight: 56, borderRadius: radius.md, borderWidth: 1, borderColor: value ? colors.primary : colors.line, backgroundColor: colors.surface, paddingHorizontal: space.lg, flexDirection: 'row', alignItems: 'center', gap: space.md }}>
         {selected && 'swatch' in selected && selected.swatch ? <Swatch colors={selected.swatch} /> : null}
+        {selected && 'art' in selected && selected.art ? selected.art : null}
         <Text style={{ flex: 1 }} muted={!selected} weight={selected ? 'semibold' : 'regular'}>{selected ? (value === OTHER ? otherLabel ?? '' : selected.label) : placeholder}</Text>
         <Feather name="chevron-down" size={20} color={colors.inkMuted} />
       </Pressable>

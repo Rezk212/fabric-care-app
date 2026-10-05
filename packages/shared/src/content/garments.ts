@@ -116,7 +116,7 @@ export const gulfGarments: GulfGarment[] = [
   },
   {
     id: 'mussar',
-    name: { ar: 'مصر عُماني', en: 'Omani mussar (turban)' },
+    name: { ar: 'مصّر عُماني', en: 'Omani mussar (turban)' },
     icon: 'layers',
     fabric: 'wool',
     fabricNote: {
