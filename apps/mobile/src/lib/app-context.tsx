@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  CONSENT_VERSION, dictionaries, isRTL, palette,
+  CONSENT_VERSION, SECTION_TOURS, dictionaries, isRTL, palette,
   type ApplianceProfile, type Dictionary, type Locale, type Palette, type Place,
 } from '@naqa/shared';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
@@ -28,10 +28,12 @@ interface Persisted {
   detergents: string[]; detergentsOther: string; softeners: string[]; softenersOther: string;
   /** Acceptance of the terms, privacy policy and disclaimer, and the optional notifications choice. */
   consent?: { version: string; at: string; notifications: boolean };
+  /** Onboarding tour: `pending` until watched or skipped. After a skip, each section shows its own guide once. */
+  tour: { intro: 'pending' | 'done' | 'skipped'; seen: string[] };
 }
 // First launch follows the device language (Arabic or English); the user can change it any time.
 const deviceLocale = (): Locale => (getLocales()[0]?.languageCode === 'en' ? 'en' : 'ar');
-const defaults: Persisted = { locale: deviceLocale(), place: null, onboarded: false, theme: 'auto', profileDone: false, wardrobe: [], wardrobeOther: '', fabrics: [], fabricsOther: '', detergents: [], detergentsOther: '', softeners: [], softenersOther: '' };
+const defaults: Persisted = { locale: deviceLocale(), place: null, onboarded: false, theme: 'auto', profileDone: false, wardrobe: [], wardrobeOther: '', fabrics: [], fabricsOther: '', detergents: [], detergentsOther: '', softeners: [], softenersOther: '', tour: { intro: 'pending', seen: [] } };
 
 export type AuthError = 'invalid' | 'exists' | 'weak' | 'generic' | 'cancelled';
 export type AuthResult = { ok: true; needsConfirmation?: boolean } | { ok: false; error: AuthError };
@@ -46,6 +48,9 @@ interface Ctx extends Persisted {
   deleteAccount: () => Promise<boolean>;
   setTheme: (t: ThemeChoice) => void;
   acceptConsent: (notifications: boolean) => void;
+  finishIntro: (completed: boolean) => void;
+  markSectionSeen: (key: string) => void;
+  replayIntro: () => void;
   setNotifications: (on: boolean) => void;
   saveProfile: (patch: Partial<Pick<Persisted, 'place' | 'washer' | 'dryer' | 'wardrobe' | 'wardrobeOther' | 'fabrics' | 'fabricsOther' | 'detergents' | 'detergentsOther' | 'softeners' | 'softenersOther'>> & { done?: boolean }) => void;
   t: Dictionary;
@@ -73,7 +78,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
         if (!raw) return;
         const saved = JSON.parse(raw);
         // People who finished the older setup steps do not see the new details page again.
-        setState({ ...defaults, ...saved, profileDone: saved.profileDone ?? Boolean(saved.place && saved.appliancesAsked) });
+        const profileDone = saved.profileDone ?? Boolean(saved.place && saved.appliancesAsked);
+        // People who were already using the app do not get the first-time tour forced on them.
+        const tour = saved.tour ?? (profileDone ? { intro: 'done', seen: [...SECTION_TOURS] } : defaults.tour);
+        setState({ ...defaults, ...saved, profileDone, tour });
       })
       .catch(() => {})
       .finally(() => setReady(true));
@@ -139,6 +147,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return true;
     },
     setTheme: (theme) => update({ theme }),
+    finishIntro: (completed) => update({ tour: { intro: completed ? 'done' : 'skipped', seen: completed ? [...SECTION_TOURS] : [] } }),
+    markSectionSeen: (key) => setState((prev) => {
+      if (prev.tour.seen.includes(key)) return prev;
+      const next = { ...prev, tour: { ...prev.tour, seen: [...prev.tour.seen, key] } };
+      AsyncStorage.setItem(KEY, JSON.stringify(next)).catch(() => {});
+      return next;
+    }),
+    replayIntro: () => update({ tour: { intro: 'pending', seen: [] } }),
     acceptConsent: (notifications) => update({ consent: { version: CONSENT_VERSION, at: new Date().toISOString(), notifications } }),
     setNotifications: (on) => setState((prev) => {
       const next = { ...prev, consent: { version: prev.consent?.version ?? CONSENT_VERSION, at: prev.consent?.at ?? new Date().toISOString(), notifications: on } };

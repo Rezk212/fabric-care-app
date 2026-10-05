@@ -10,7 +10,7 @@ import { ShareSheet } from '../../components/share-sheet';
 import { appPayload, type SharePayload } from '../../lib/share';
 
 export default function Settings() {
-  const { consent, setNotifications, t, locale, setLocale, place, session, signOut, theme, setTheme, deleteAccount, colors, rtl, washer, dryer } = useApp();
+  const { replayIntro, consent, setNotifications, t, locale, setLocale, place, session, signOut, theme, setTheme, deleteAccount, colors, rtl, washer, dryer } = useApp();
   const [sharing, setSharing] = useState<SharePayload | null>(null);
   const country = countries.find((c) => c.code === place?.countryCode);
   const city = country?.cities.find((c) => c.id === place?.cityId);
@@ -114,6 +114,16 @@ export default function Settings() {
               <Chip label={t.settings.notificationsOn} selected={!!consent?.notifications} onPress={() => setNotifications(true)} />
               <Chip label={t.settings.notificationsOff} selected={!consent?.notifications} onPress={() => setNotifications(false)} />
             </Row>
+          </Card>
+        </FadeIn>
+
+        <FadeIn delay={175}>
+          <Card style={{ gap: space.md }}>
+            <Row><IconBubble name="play-circle" /><View style={{ flex: 1 }}>
+              <Text weight="semibold">{t.tour.replay}</Text>
+              <Text variant="caption" muted>{t.tour.replayHint}</Text>
+            </View></Row>
+            <Button variant="quiet" icon="play" label={t.tour.replayButton} onPress={() => { replayIntro(); router.replace('/tour'); }} />
           </Card>
         </FadeIn>
 

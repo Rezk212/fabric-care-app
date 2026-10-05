@@ -243,6 +243,13 @@ export const en = {
     decline: 'I do not accept (sign out)',
     needAgree: 'You must accept the terms to continue.',
   },
+  tour: {
+    next: 'Next', back: 'Back', skip: 'Skip', start: 'Get started', done: 'Got it',
+    help: 'How this section works',
+    replay: 'Watch the intro tour',
+    replayHint: 'A short walkthrough of the app.',
+    replayButton: 'Watch again',
+  },
   common: {
     share: 'Share', shareApp: 'Share Naqa with friends',
     shareAppText: 'Naqa: know how to wash every garment. Photo in, wash plan out.',

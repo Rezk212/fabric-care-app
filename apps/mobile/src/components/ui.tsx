@@ -1,12 +1,12 @@
 import { Feather } from '@expo/vector-icons';
-import { fontWeights, radius, space, typeScale, type SymbolKind } from '@naqa/shared';
-import { useEffect, useRef, type ReactNode } from 'react';
+import { SECTION_TOURS, fontWeights, radius, space, tours, typeScale, type SymbolKind, type TourKey } from '@naqa/shared';
+import { useFocusEffect, useSegments } from 'expo-router';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import {
-  Animated, Easing, Pressable, Text as RNText, TextInput, View,
+  Animated, Easing, Image, Modal, Pressable, Text as RNText, TextInput, View,
   type StyleProp, type TextProps, type TextStyle, type ViewStyle,
 } from 'react-native';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
-import { Image } from 'react-native';
 import Svg, { Circle, Path, Text as SvgText } from 'react-native-svg';
 import { useApp } from '../lib/app-context';
 
@@ -364,16 +364,45 @@ export function ProductThumb({ imageUrl, kind, size = 64 }: { imageUrl?: string;
   );
 }
 
-/** Top bar of the main tabs: the app logo and name, ready for a future notifications or profile action. */
+// Loaded on first use: the player itself uses Text and Button from this file, so importing it at the top would be circular.
+function LazyTour(props: { slides: import('@naqa/shared').TourSlide[]; onClose: (completed: boolean) => void }) {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { TourPlayer } = require('./tour-player') as typeof import('./tour-player');
+  return <TourPlayer {...props} />;
+}
+
+/** Top bar of the main tabs: logo and name, plus a small (!) that opens this section's guide any time. */
 export function AppBar() {
-  const { colors, locale } = useApp();
+  const { colors, locale, t, tour, markSectionSeen } = useApp();
+  const segments = useSegments();
+  const raw = (segments as string[])[1] ?? 'index';
+  const key = (raw === 'index' ? 'analyze' : raw) as TourKey;
+  const known = (SECTION_TOURS as readonly string[]).includes(key);
+  const [open, setOpen] = useState(false);
   const ar = locale === 'ar';
-  // Follows the reading direction: logo at the start (right in Arabic, left in English), name beside it.
-  // Arabic letters sit a little smaller than Latin at the same size, so the Arabic name gets a slight bump.
+
+  // Whoever skipped the first-run tour gets each section's guide automatically, once.
+  useFocusEffect(useCallback(() => {
+    if (known && tour.intro === 'skipped' && !tour.seen.includes(key)) setOpen(true);
+  }, [known, tour.intro, tour.seen, key]));
+
+  const close = () => { setOpen(false); if (known) markSectionSeen(key); };
+
   return (
     <View style={{ direction: ar ? 'rtl' : 'ltr', flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingTop: space.md, paddingBottom: space.xs }}>
       <Logo size={34} color={colors.primary} wave={colors.accent} />
-      <Text variant="title" weight="bold" color={colors.primary} style={{ fontSize: ar ? 24 : 21, lineHeight: 30, writingDirection: ar ? 'rtl' : 'ltr' }}>{ar ? 'نقاء' : 'Naqa'}</Text>
+      <Text variant="title" weight="bold" color={colors.primary} style={{ flex: 1, fontSize: ar ? 24 : 21, lineHeight: 30, writingDirection: ar ? 'rtl' : 'ltr' }}>{ar ? 'نقاء' : 'Naqa'}</Text>
+      {known ? (
+        <Pressable accessibilityRole="button" accessibilityLabel={t.tour.help} onPress={() => setOpen(true)} hitSlop={10}
+          style={{ width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primarySoft }}>
+          <Feather name="alert-circle" size={20} color={colors.primary} />
+        </Pressable>
+      ) : null}
+      {known ? (
+        <Modal visible={open} animationType="slide" onRequestClose={close}>
+          {open ? <LazyTour slides={tours[key]} onClose={close} /> : null}
+        </Modal>
+      ) : null}
     </View>
   );
 }
