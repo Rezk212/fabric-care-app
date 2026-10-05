@@ -54,6 +54,12 @@ export interface Product {
   /** Optional photo. Only use images you own or have written permission to show (brand or store partner). */
   imageUrl?: string;
   brand?: string;
+  /** What it is, how to use it and what to watch for. */
+  description?: Bilingual;
+  usage?: Bilingual[];
+  caution?: Bilingual;
+  /** Shelf price in Omani rial, once a store or sponsor supplies it. Never guessed. */
+  priceOMR?: number;
 }
 
 export interface Store {

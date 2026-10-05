@@ -19,6 +19,18 @@ const fontByWeight = {
 
 type Variant = keyof typeof typeScale;
 
+const ARABIC_DIGITS = '٠١٢٣٤٥٦٧٨٩';
+/** Arabic text reads with Arabic-Indic digits. Numbers inside Latin words (model codes like WW90T) are left alone. */
+function toArabicDigits(text: string): string {
+  return text.replace(/\b\d+(?:\.\d+)?\b/g, (n) => n.replace(/\d/g, (d) => ARABIC_DIGITS[Number(d)]).replace('.', '٫'));
+}
+function localizeChildren(children: ReactNode): ReactNode {
+  if (typeof children === 'string') return toArabicDigits(children);
+  if (typeof children === 'number') return toArabicDigits(String(children));
+  if (Array.isArray(children)) return children.map((c) => (typeof c === 'string' || typeof c === 'number' ? localizeChildren(c) : c));
+  return children;
+}
+
 export function Text({
   variant = 'body', weight = 'regular', muted, color, style, ...rest
 }: TextProps & { variant?: Variant; weight?: keyof typeof fontWeights; muted?: boolean; color?: string }) {
@@ -27,6 +39,7 @@ export function Text({
   return (
     <RNText
       {...rest}
+      children={rtl ? localizeChildren(rest.children) : rest.children}
       style={[
         {
           fontFamily: fontByWeight[weight],

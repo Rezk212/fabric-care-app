@@ -17,3 +17,4 @@ export * from './content/appliances';
 export * from './data/offers';
 export * from './content/legal';
 export * from './content/wardrobe';
+export * from './content/care-products';

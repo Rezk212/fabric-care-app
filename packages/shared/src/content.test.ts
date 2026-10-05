@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { fabricFamilies, applyDetails, fabricFromDetails, fabricOptions, colorOptions, garmentGroups, orderedFabricOptions, toAnalysis, wardrobeItems, applianceMaintenance, applianceTypes, matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
+import { careProductAdvice, careProductOptions, products, fabricFamilies, applyDetails, fabricFromDetails, fabricOptions, colorOptions, garmentGroups, orderedFabricOptions, toAnalysis, wardrobeItems, applianceMaintenance, applianceTypes, matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
 
 const nonEmpty = (b: { ar: string; en: string }) => b.ar.trim().length > 0 && b.en.trim().length > 0;
 
@@ -127,4 +127,19 @@ test('applyDetails only makes advice safer', () => {
   const seen = [...o.owned, ...o.common, ...o.families.flatMap((g) => g.items)].map((f) => f.id);
   assert.equal(new Set(seen).size, seen.length);
   assert.equal(seen.length, fabricOptions.length);
+});
+
+test('care product advice', () => {
+  const base = { fabric: 'cotton' as const, detergents: [] as string[], softeners: [] as string[] };
+  assert.deepEqual(careProductAdvice(base), []);
+  const silkPowder = careProductAdvice({ ...base, fabric: 'silk', detergents: ['det_powder'] });
+  assert.equal(silkPowder[0].tone, 'warn');
+  assert.equal(careProductAdvice({ ...base, fabric: 'silk', detergents: ['det_delicate'] })[0].tone, 'good');
+  const dark = careProductAdvice({ ...base, colorId: 'dark', detergents: ['det_powder'] });
+  assert.ok(dark.some((l) => l.tone === 'warn'));
+  assert.ok(careProductAdvice({ ...base, colorId: 'dark', detergents: ['det_liquid'] }).every((l) => l.tone === 'good'));
+  assert.ok(careProductAdvice({ ...base, garmentId: 'sportswear', softeners: ['sof_liquid'] }).some((l) => l.tone === 'warn'));
+  assert.ok(careProductAdvice({ ...base, program: 'cottons', detergents: ['det_handwash'] }).some((l) => l.tone === 'warn'));
+  for (const o of careProductOptions) assert.ok(nonEmpty(o.name), o.id);
+  for (const p of products) if (p.description) assert.ok(nonEmpty(p.description) && (p.usage ?? []).every(nonEmpty), p.id);
 });

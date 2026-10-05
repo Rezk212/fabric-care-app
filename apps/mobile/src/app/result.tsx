@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import {
-  applyDetails, colourLabel, countries, explainSymbols, fabricLabel, format, garmentLabel, gulfGarments, matchMachineProgram,
+  applyDetails, careProductAdvice, colourLabel, countries, explainSymbols, fabricLabel, format, garmentLabel, gulfGarments, matchMachineProgram,
   radius, recommendProducts, space, stainAdvice, wardrobeItems,
   type FabricType, type GarmentAnalysis, type GarmentDetails,
 } from '@naqa/shared';
@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 import { BottomBack, Card, Chip, FadeIn, IconBubble, Pill, Row, Screen, SymbolGlyph, Text } from '../components/ui';
 import { withFabric } from '../lib/analyze';
 import { useApp } from '../lib/app-context';
@@ -34,7 +34,7 @@ function Setting({ icon, label, value, allowed, last }: { icon: FeatherName; lab
 }
 
 export default function Result() {
-  const { t, locale, colors, place, rtl } = useApp();
+  const { t, locale, colors, place, rtl, detergents, softeners } = useApp();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ analysis: string; machinePrograms?: string; details?: string }>();
   const details = useMemo<GarmentDetails | null>(() => { try { return params.details ? (JSON.parse(params.details) as GarmentDetails) : null; } catch { return null; } }, [params.details]);
@@ -72,6 +72,10 @@ export default function Result() {
     });
   }, [machineLabels.length]);
   const machineLabel = matchMachineProgram(r.program, machineLabels);
+  const careAdvice = useMemo(
+    () => careProductAdvice({ fabric: analysis.fabric, colorId: details?.colorId, garmentId: details?.garmentId, program: r.program, detergents, softeners }),
+    [analysis.fabric, details?.colorId, details?.garmentId, r.program, detergents, softeners],
+  );
   const symbols = useMemo(() => explainSymbols(analysis.careSymbolsDetected), [analysis.careSymbolsDetected]);
 
   return (
@@ -168,6 +172,20 @@ export default function Result() {
             </FadeIn>
           ) : null}
 
+          {careAdvice.length > 0 ? (
+            <FadeIn delay={140}>
+              <Card style={{ gap: space.sm }}>
+                <Text weight="semibold">{t.result.careAdvice}</Text>
+                {careAdvice.map((l, i) => (
+                  <Row key={i} gap={space.sm} style={{ alignItems: 'flex-start' }}>
+                    <Feather name={l.tone === 'good' ? 'check-circle' : 'alert-circle'} size={18} color={l.tone === 'good' ? colors.successText : colors.accentText} style={{ marginTop: 3 }} />
+                    <Text style={{ flex: 1 }} muted>{l.text[locale]}</Text>
+                  </Row>
+                ))}
+              </Card>
+            </FadeIn>
+          ) : null}
+
           {details && ((details.stains?.length ?? 0) > 0 || details.stainOther) ? (
             <View style={{ gap: space.md }}>
               <Text variant="title" weight="semibold">{t.result.stainSection}</Text>
@@ -216,6 +234,7 @@ export default function Result() {
             {!known ? <Text muted>{t.result.buyEmpty}</Text> : null}
             {picks.map(({ product, store, km }, i) => (
               <FadeIn key={product.id} delay={160 + i * 50}>
+                <Pressable accessibilityRole="button" onPress={() => router.push({ pathname: '/product/[id]', params: { id: product.id } })}>
                 <Card style={{ gap: space.sm }}>
                   <Row style={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <Text weight="semibold" style={{ flex: 1 }}>{product.name[locale]}</Text>
@@ -236,7 +255,12 @@ export default function Result() {
                       </>
                     );
                   })()}
+                  <Row gap={6}>
+                    <Text variant="caption" weight="semibold" color={colors.primary}>{t.product.tapForDetails}</Text>
+                    <Feather name={rtl ? 'chevron-left' : 'chevron-right'} size={16} color={colors.primary} />
+                  </Row>
                 </Card>
+                </Pressable>
               </FadeIn>
             ))}
           </View>

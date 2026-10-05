@@ -1,7 +1,8 @@
 import { Feather } from '@expo/vector-icons';
 import { categoryOf, format, omanChains, productCategories, products, space, type ProductCategory } from '@naqa/shared';
 import { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { router } from 'expo-router';
+import { Pressable, ScrollView, View } from 'react-native';
 import { BackHeader, BottomBack, Card, Chip, FadeIn, Pill, ProductThumb, Row, Screen, Text } from '../../components/ui';
 import { useApp } from '../../lib/app-context';
 import { goBack } from '../../lib/nav';
@@ -42,6 +43,7 @@ export default function Products() {
           const chains = omanChains.filter((c) => p.chainIds?.includes(c.id)).map((c) => c.name[locale]).join(' · ');
           return (
             <FadeIn key={p.id} delay={i * 50}>
+              <Pressable accessibilityRole="button" onPress={() => router.push({ pathname: '/product/[id]', params: { id: p.id } })}>
               <Card style={{ gap: space.sm }}>
                 <Row style={{ alignItems: 'flex-start' }}>
                   <ProductThumb imageUrl={p.imageUrl} kind={p.kind} />
@@ -58,6 +60,7 @@ export default function Products() {
                   </Row>
                 ) : null}
               </Card>
+              </Pressable>
             </FadeIn>
           );
             })}

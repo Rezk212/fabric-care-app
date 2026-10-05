@@ -1,6 +1,7 @@
 import { fabricFamilies, fabricOptions, garmentGroups, space, wardrobeItems } from '@naqa/shared';
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { CareProductsPicker, type CareProductsValue } from '../components/care-products-picker';
 import { MultiSelect, type SelectGroup } from '../components/select';
 import { BackHeader, BottomBack, Button, Screen, Text } from '../components/ui';
 import { useApp } from '../lib/app-context';
@@ -9,7 +10,8 @@ import { format } from '@naqa/shared';
 
 /** Edit the clothing types the user usually washes. */
 export default function Wardrobe() {
-  const { t, locale, wardrobe, wardrobeOther, fabrics, fabricsOther, saveProfile } = useApp();
+  const { t, locale, wardrobe, wardrobeOther, fabrics, fabricsOther, detergents, detergentsOther, softeners, softenersOther, saveProfile } = useApp();
+  const [care, setCare] = useState<CareProductsValue>({ detergents, detergentsOther, softeners, softenersOther });
   const [fabIds, setFabIds] = useState(fabrics);
   const [fabOther, setFabOther] = useState(fabricsOther);
   const [ids, setIds] = useState(wardrobe);
@@ -28,9 +30,11 @@ export default function Wardrobe() {
         <MultiSelect placeholder={t.profile.pickFabrics} groups={fabricGroups} values={fabIds} onChange={setFabIds} searchPlaceholder={t.profile.searchFabric}
           summary={format(t.profile.selected, { n: fabIds.length })} doneLabel={t.profile.done}
           otherPlaceholder={t.profile.otherFabrics} otherValue={fabOther} onOtherChange={setFabOther} />
+        <Text muted>{t.profile.productsIntro}</Text>
+        <CareProductsPicker value={care} onChange={setCare} />
       </ScrollView>
       <View style={{ gap: space.sm, paddingBottom: space.lg }}>
-        <Button label={t.appliances.save} onPress={() => { saveProfile({ wardrobe: ids, wardrobeOther: other.trim(), fabrics: fabIds, fabricsOther: fabOther.trim() }); goBack(); }} />
+        <Button label={t.appliances.save} onPress={() => { saveProfile({ wardrobe: ids, wardrobeOther: other.trim(), fabrics: fabIds, fabricsOther: fabOther.trim(), detergents: care.detergents, detergentsOther: care.detergentsOther.trim(), softeners: care.softeners, softenersOther: care.softenersOther.trim() }); goBack(); }} />
         <BottomBack onPress={goBack} />
       </View>
     </Screen>

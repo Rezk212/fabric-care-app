@@ -4,13 +4,14 @@ import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ApplianceCard, toDraft, toProfile } from '../components/appliance-card';
+import { CareProductsPicker, type CareProductsValue } from '../components/care-products-picker';
 import { MultiSelect, Select, type SelectGroup } from '../components/select';
 import { Button, Card, FadeIn, IconBubble, Row, Screen, Text } from '../components/ui';
 import { useApp } from '../lib/app-context';
 
 /** Shown once after creating an account. Everything is optional; "Later" skips it. */
 export default function Profile() {
-  const { t, locale, place, washer, dryer, wardrobe, wardrobeOther, fabrics, fabricsOther, saveProfile } = useApp();
+  const { t, locale, place, washer, dryer, wardrobe, wardrobeOther, fabrics, fabricsOther, detergents, detergentsOther, softeners, softenersOther, saveProfile } = useApp();
   const country = countries[0];
   const [cityId, setCityId] = useState<string | undefined>(place?.cityId);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | undefined>(place?.lat != null && place?.lng != null ? { lat: place.lat, lng: place.lng } : undefined);
@@ -21,6 +22,7 @@ export default function Profile() {
   const [other, setOther] = useState(wardrobeOther);
   const [fabIds, setFabIds] = useState(fabrics);
   const [fabOther, setFabOther] = useState(fabricsOther);
+  const [care, setCare] = useState<CareProductsValue>({ detergents, detergentsOther, softeners, softenersOther });
 
   const cities = useMemo<SelectGroup[]>(() => [{ items: country.cities.map((c) => ({ id: c.id, label: c.name[locale] })) }], [country, locale]);
   const clothes = useMemo<SelectGroup[]>(() => garmentGroups.map((g) => ({ title: g.name[locale], items: wardrobeItems.filter((x) => x.group === g.id).map((x) => ({ id: x.id, label: x.name[locale] })) })), [locale]);
@@ -38,7 +40,8 @@ export default function Profile() {
   function save() {
     saveProfile({
       place: cityId ? { countryCode: country.code, cityId, ...coords } : undefined,
-      washer: toProfile(w), dryer: toProfile(d), wardrobe: ids, wardrobeOther: other.trim(), fabrics: fabIds, fabricsOther: fabOther.trim(), done: true,
+      washer: toProfile(w), dryer: toProfile(d), wardrobe: ids, wardrobeOther: other.trim(), fabrics: fabIds, fabricsOther: fabOther.trim(),
+      detergents: care.detergents, detergentsOther: care.detergentsOther.trim(), softeners: care.softeners, softenersOther: care.softenersOther.trim(), done: true,
     });
     router.replace('/');
   }
@@ -81,6 +84,13 @@ export default function Profile() {
             <MultiSelect placeholder={t.profile.pickFabrics} groups={fabricGroups} values={fabIds} onChange={setFabIds} searchPlaceholder={t.profile.searchFabric}
               summary={format(t.profile.selected, { n: fabIds.length })} doneLabel={t.profile.done}
               otherPlaceholder={t.profile.otherFabrics} otherValue={fabOther} onOtherChange={setFabOther} />
+          </Card>
+        </FadeIn>
+        <FadeIn delay={180}>
+          <Card style={{ gap: space.md }}>
+            <Row><IconBubble name="droplet" tone="success" /><Text weight="semibold">{t.profile.products}</Text></Row>
+            <Text variant="caption" muted>{t.profile.productsIntro}</Text>
+            <CareProductsPicker value={care} onChange={setCare} />
           </Card>
         </FadeIn>
         <Text variant="caption" muted>{t.appliances.editHint}</Text>

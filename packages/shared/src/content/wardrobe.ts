@@ -220,9 +220,9 @@ export interface ColorOption {
 
 export const colorOptions: ColorOption[] = [
   { id: 'white', swatch: ['#FFFFFF'], name: { ar: 'أبيض', en: 'White' },
-    note: { ar: 'اغسله مع الأبيض فقط حتى لا يأخذ لونًا من غيره.', en: 'Wash with whites only so it does not pick up colour.' } },
+    note: { ar: 'اغسله مع الملابس البيضاء فقط حتى لا يتلوّن بغيره.', en: 'Wash with whites only so it does not pick up colour.' } },
   { id: 'light', swatch: ['#CFE3F5'], name: { ar: 'فاتح (كريمي، بيج، باستيل)', en: 'Light (cream, beige, pastel)' }, maxTemp: 40,
-    note: { ar: 'اغسله مع الألوان الفاتحة فقط.', en: 'Wash with light colours only.' } },
+    note: { ar: 'اغسله مع الملابس ذات الألوان الفاتحة فقط.', en: 'Wash with light colours only.' } },
   { id: 'dark', swatch: ['#1B2233'], name: { ar: 'داكن (أسود، كحلي، رمادي غامق)', en: 'Dark (black, navy, charcoal)' }, maxTemp: 30,
     note: { ar: 'اغسله مقلوبًا مع الملابس الداكنة، وجفّفه بعيدًا عن الشمس المباشرة كي لا يبهت.', en: 'Turn it inside out, wash with darks and dry away from direct sun so it does not fade.' } },
   { id: 'bright', swatch: ['#E5483B'], name: { ar: 'ألوان زاهية (أحمر، أزرق ساطع، أخضر)', en: 'Bright (red, vivid blue, green)' }, maxTemp: 30,
@@ -293,18 +293,18 @@ export function applyDetails(a: GarmentAnalysis, d: GarmentDetails, locale: Loca
     if (rec.spin === 'medium' || rec.spin === 'high') rec.spin = 'low';
     rec.tumbleDry = false;
   }
-  if (item?.dryClean) add({ ar: 'الأفضل التنظيف الجاف لهذه القطعة. إن كان الملصق يسمح بالغسل، فاتبعه حرفيًا.', en: 'Dry cleaning is the safe choice for this garment. If the label allows washing, follow it exactly.' });
+  if (item?.dryClean) add({ ar: 'التنظيف الجاف هو الأنسب لهذه القطعة. وإن كان الملصق يسمح بالغسل فاتبعه بدقة.', en: 'Dry cleaning is the safe choice for this garment. If the label allows washing, follow it exactly.' });
   add(item?.note);
   if (fab?.noMachine) {
     rec.tumbleDry = false;
     rec.bleachAllowed = false;
-    add({ ar: 'لا يُغسل الجلد والسويد بالغسالة. نظّفه عند مختص أو بمنتج مخصص.', en: 'Leather and suede are not machine washable. Use a specialist cleaner or a dedicated product.' });
+    add({ ar: 'لا يُغسل الجلد والسويد في الغسالة. نظّفهما عند مختص أو بمنتج مخصص لهما.', en: 'Leather and suede are not machine washable. Use a specialist cleaner or a dedicated product.' });
   }
   add(colour?.note);
-  if (d.colorOther && !d.colorId) add({ ar: 'لا نعرف لونك بالضبط، فعاملناه معاملة الألوان الزاهية احتياطًا.', en: 'We do not know your exact colour, so we treated it like a strong dye to be safe.' });
+  if (d.colorOther && !d.colorId) add({ ar: 'لا نعرف لون القطعة بالضبط، فعاملناها معاملة الألوان الزاهية احتياطًا.', en: 'We do not know your exact colour, so we treated it like a strong dye to be safe.' });
   if (hasStains(d)) {
     rec.tumbleDry = false;
-    add({ ar: 'عالج البقع قبل الغسيل (التفاصيل أدناه)، ولا تجفّفها بحرارة قبل أن تزول تمامًا.', en: 'Treat the stains before washing (steps below) and do not heat-dry until they are fully gone.' });
+    add({ ar: 'عالج البقع قبل الغسيل (الخطوات أدناه)، ولا تعرّض القطعة للحرارة قبل أن تزول البقع تمامًا.', en: 'Treat the stains before washing (steps below) and do not heat-dry until they are fully gone.' });
   }
   return { ...a, recommendation: rec };
 }
