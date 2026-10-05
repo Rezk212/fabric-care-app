@@ -41,13 +41,13 @@ export const CONSENT_VERSION = '2026-10-01';
 
 /** DRAFT disclaimer: have a lawyer review it, like the other legal text, before publishing. */
 export const disclaimer: LegalSection[] = [
-  { title: { ar: 'إرشاد عام فقط', en: 'General guidance only' },
+  { title: { ar: 'نصائح تساعدك', en: 'Advice to help you' },
     body: { ar: 'النصائح والخطط في نقاء مكتوبة بحسب معلومات عامة عن الأقمشة والغسيل، وهي للإرشاد فقط. وهي ليست بديلًا عن ملصق العناية في قطعتك ولا عن تعليمات الجهة المصنِّعة للقطعة أو الغسالة أو المنتج، وعند أي اختلاف فالمرجع هو الملصق والتعليمات.', en: 'The advice and plans in Naqa are based on general knowledge about fabrics and laundry and are for guidance only. They do not replace your garment\'s care label or the instructions of the maker of the garment, machine or product. If they differ, the label and the maker\'s instructions win.' } },
-  { title: { ar: 'لا ضمان للنتائج', en: 'No guarantee of results' },
+  { title: { ar: 'نتائج الغسيل', en: 'Washing results' },
     body: { ar: 'لا نضمن نتيجة أي غسيل أو إزالة بقعة. ولا نتحمل أي تلف يلحق بالملابس أو الأجهزة، ولا أي خسارة أو ضرر ينتج عن اتباع النصائح أو الاعتماد عليها، إلى أقصى حد يسمح به القانون.', en: 'We do not guarantee the outcome of any wash or stain removal. To the fullest extent the law allows, we are not liable for damage to clothes or appliances, or any loss or harm, resulting from following or relying on the advice.' } },
   { title: { ar: 'تحليل الصور بالذكاء الاصطناعي', en: 'AI photo analysis' },
     body: { ar: 'قد يخطئ الذكاء الاصطناعي في تحديد القماش أو قراءة الملصق. تحقق دائمًا من ملصق العناية بنفسك قبل الغسل.', en: 'AI can misjudge a fabric or misread a label. Always check the care label yourself before washing.' } },
-  { title: { ar: 'سلامتك أنت', en: 'Your safety' },
+  { title: { ar: 'لسلامتك', en: 'For your safety' },
     body: { ar: 'جرّب أي منتج على مكان خفي أولًا، واتبع تحذيرات العبوة، ولا تخلط المبيّضات أو المنظفات ببعضها، وأبعد المواد الكيميائية عن الأطفال. قد تسبب بعض المنتجات تهيجًا في الجلد أو العين أو التنفس.', en: 'Test any product on a hidden spot first, follow the pack\'s warnings, never mix bleaches or cleaners, and keep chemicals away from children. Some products can irritate skin, eyes or breathing.' } },
   { title: { ar: 'المنتجات والأسعار والمتاجر', en: 'Products, prices and stores' },
     body: { ar: 'معلومات المنتجات والأسعار والفروع والتوفر تقريبية وقد تتغير أو تتأخر. تأكد من المتجر. والعروض تأتي من معلنين وتحمل علامة «برعاية»، والسعر والتفاصيل مسؤولية المعلن.', en: 'Product, price, branch and availability information is approximate and may change or lag. Confirm with the store. Offers come from advertisers and are labelled "Sponsored"; price and details are the advertiser\'s responsibility.' } },
