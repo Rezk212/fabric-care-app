@@ -8,6 +8,8 @@ import { backendConfigured, supabase, supabaseAnonKey, supabaseUrl } from './sup
 export interface AnalyzeInput {
   garmentUri?: string;
   labelUri?: string;
+  /** Second label: the product label (fabric, size) and the washing label are often separate. */
+  label2Uri?: string;
   machineUri?: string;
   modelNumber?: string;
 }
@@ -47,6 +49,7 @@ export async function analyzeGarment(input: AnalyzeInput): Promise<AnalyzeResult
   const images = await Promise.all([
     input.garmentUri ? toPayload('garment', input.garmentUri) : null,
     input.labelUri ? toPayload('label', input.labelUri) : null,
+    input.label2Uri ? toPayload('label', input.label2Uri) : null,
     input.machineUri ? toPayload('machine', input.machineUri) : null,
   ]).then((list) => list.filter((i): i is NonNullable<typeof i> => i !== null));
 

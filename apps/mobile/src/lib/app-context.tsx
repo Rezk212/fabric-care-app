@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   dictionaries, isRTL, palette,
-  type Dictionary, type Locale, type Palette, type Place,
+  type ApplianceProfile, type Dictionary, type Locale, type Palette, type Place,
 } from '@naqa/shared';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { getLocales } from 'expo-localization';
@@ -16,10 +16,14 @@ WebBrowser.maybeCompleteAuthSession();
 const KEY = 'naqa.settings.v1';
 
 export type ThemeChoice = 'auto' | 'light' | 'dark';
-interface Persisted { locale: Locale; place: Place | null; onboarded: boolean; theme: ThemeChoice }
+interface Persisted {
+  locale: Locale; place: Place | null; onboarded: boolean; theme: ThemeChoice;
+  /** The washer and dryer questions are asked once; true after the user saved or skipped. */
+  appliancesAsked: boolean; washer?: ApplianceProfile; dryer?: ApplianceProfile;
+}
 // First launch follows the device language (Arabic or English); the user can change it any time.
 const deviceLocale = (): Locale => (getLocales()[0]?.languageCode === 'en' ? 'en' : 'ar');
-const defaults: Persisted = { locale: deviceLocale(), place: null, onboarded: false, theme: 'auto' };
+const defaults: Persisted = { locale: deviceLocale(), place: null, onboarded: false, theme: 'auto', appliancesAsked: false };
 
 export type AuthError = 'invalid' | 'exists' | 'weak' | 'generic' | 'cancelled';
 export type AuthResult = { ok: true; needsConfirmation?: boolean } | { ok: false; error: AuthError };
@@ -33,6 +37,7 @@ interface Ctx extends Persisted {
   signOut: () => Promise<void>;
   deleteAccount: () => Promise<boolean>;
   setTheme: (t: ThemeChoice) => void;
+  saveAppliances: (washer?: ApplianceProfile, dryer?: ApplianceProfile) => void;
   t: Dictionary;
   rtl: boolean;
   colors: Palette;
@@ -118,6 +123,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return true;
     },
     setTheme: (theme) => update({ theme }),
+    saveAppliances: (washer, dryer) => update({ washer, dryer, appliancesAsked: true }),
     t: dictionaries[state.locale],
     rtl: isRTL(state.locale),
     colors: dark ? palette.dark : palette.light,

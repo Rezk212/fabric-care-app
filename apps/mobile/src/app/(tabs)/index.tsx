@@ -5,17 +5,16 @@ import { ScrollView, View } from 'react-native';
 import { ManualForm } from '../../components/manual-form';
 import { OffersSlider } from '../../components/offers-slider';
 import { PhotoSlot } from '../../components/photo-slot';
-import { Button, Chip, FadeIn, Field, Pill, Row, Screen, Text } from '../../components/ui';
+import { Button, Chip, FadeIn, Pill, Row, Screen, Text } from '../../components/ui';
 import { AnalyzeError, analyzeGarment, fetchUsage } from '../../lib/analyze';
 import { useApp } from '../../lib/app-context';
 import { saveAnalysis } from '../../lib/data';
 
 export default function Analyze() {
-  const { t, colors } = useApp();
+  const { t, colors, washer } = useApp();
   const [garmentUri, setGarment] = useState<string>();
   const [labelUri, setLabel] = useState<string>();
-  const [machineUri, setMachine] = useState<string>();
-  const [modelNumber, setModel] = useState('');
+  const [label2Uri, setLabel2] = useState<string>();
   const [mode, setMode] = useState<'photos' | 'manual'>('photos');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
@@ -24,16 +23,18 @@ export default function Analyze() {
   const left = usage ? Math.max(usage.limit - usage.used, 0) : null;
   const exhausted = left === 0;
 
-  const ready = !!(garmentUri || labelUri) && !exhausted;
+  const ready = !!(garmentUri || labelUri || label2Uri) && !exhausted;
+  // The machine is described once in the app (washer model), not photographed every time.
+  const machineModel = [washer?.brand, washer?.model].filter(Boolean).join(' ') || undefined;
 
   async function run() {
     setBusy(true);
     setError(undefined);
     try {
-      const { analysis, machine, usage: used } = await analyzeGarment({ garmentUri, labelUri, machineUri, modelNumber: modelNumber.trim() || undefined });
+      const { analysis, machine, usage: used } = await analyzeGarment({ garmentUri, labelUri, label2Uri, modelNumber: machineModel });
       if (used) setUsage(used);
       void saveAnalysis(analysis, machine);
-      router.push({ pathname: '/result', params: { analysis: JSON.stringify(analysis), modelNumber: modelNumber.trim(), machinePrograms: JSON.stringify(machine?.programs ?? []) } });
+      router.push({ pathname: '/result', params: { analysis: JSON.stringify(analysis), modelNumber: machineModel ?? '', machinePrograms: JSON.stringify(machine?.programs ?? []) } });
     } catch (e) {
       const code = e instanceof AnalyzeError ? e.code : 'server';
       if (e instanceof AnalyzeError && e.usage) setUsage(e.usage);
@@ -74,20 +75,8 @@ export default function Analyze() {
           <FadeIn delay={140}>
             <Row style={{ alignItems: 'stretch' }} gap={space.md}>
               <PhotoSlot label={t.home.label} hint={t.home.labelHint} icon="tag" height={168} uri={labelUri} onChange={setLabel} />
-              <PhotoSlot label={t.home.machine} hint={t.home.machineHint2} icon="disc" height={168} uri={machineUri} onChange={setMachine} />
+              <PhotoSlot label={t.home.label2} hint={t.home.label2Hint} icon="file-text" height={168} uri={label2Uri} onChange={setLabel2} />
             </Row>
-          </FadeIn>
-
-          <FadeIn delay={200}>
-            <Field
-              icon="hash"
-              value={modelNumber}
-              onChangeText={setModel}
-              placeholder={t.home.modelNumberOptional}
-              autoCapitalize="characters"
-              autoCorrect={false}
-              accessibilityLabel={t.home.modelNumberOptional}
-            />
           </FadeIn>
 
           <View style={{ gap: space.sm }}>

@@ -71,3 +71,14 @@ export interface Store {
 export interface UsageInfo { used: number; limit: number; plan: 'free' | 'plus' }
 
 export interface Bilingual { ar: string; en: string }
+
+/** What the user told us about a machine of theirs, once. Everything is optional. */
+export interface ApplianceProfile {
+  /** Id from `applianceTypes`. */
+  typeId?: string;
+  typeOther?: string;
+  /** The user has no such machine. */
+  none?: boolean;
+  brand?: string;
+  model?: string;
+}

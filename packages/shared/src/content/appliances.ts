@@ -181,3 +181,6 @@ export const generalMaintenance: Bilingual[] = [
   { ar: 'ثبّت الجهاز على أرض مستوية لتقليل الاهتزاز', en: 'Level the machine on the floor to cut vibration' },
   { ar: 'إن ظهر عطل أو رمز خطأ، فراجع دليل الجهاز أو الوكيل المعتمد', en: 'For faults or error codes, check the manual or the authorised dealer' },
 ];
+
+/** Brands common in Oman and the Gulf, offered in the "my machine" form. Anything else can be typed. */
+export const applianceBrands = ['LG', 'Samsung', 'Bosch', 'Siemens', 'Hitachi', 'Toshiba', 'Panasonic', 'Midea', 'Hisense', 'Haier', 'Beko', 'Electrolux', 'Whirlpool', 'Candy', 'Indesit', 'Zanussi', 'Ariston'];

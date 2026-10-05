@@ -1,5 +1,5 @@
 import { Feather } from '@expo/vector-icons';
-import { countries, space } from '@naqa/shared';
+import { applianceTypes, countries, space, type ApplianceProfile } from '@naqa/shared';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import { useState } from 'react';
@@ -10,7 +10,7 @@ import { ShareSheet } from '../../components/share-sheet';
 import { appPayload, type SharePayload } from '../../lib/share';
 
 export default function Settings() {
-  const { t, locale, setLocale, place, session, signOut, theme, setTheme, deleteAccount, colors, rtl } = useApp();
+  const { t, locale, setLocale, place, session, signOut, theme, setTheme, deleteAccount, colors, rtl, washer, dryer } = useApp();
   const [sharing, setSharing] = useState<SharePayload | null>(null);
   const country = countries.find((c) => c.code === place?.countryCode);
   const city = country?.cities.find((c) => c.id === place?.cityId);
@@ -23,6 +23,12 @@ export default function Settings() {
       } },
     ]);
   }
+  const describe = (p?: ApplianceProfile) => {
+    if (!p) return t.appliances.notSet;
+    if (p.none) return t.appliances.typeNone;
+    const type = p.typeOther ?? applianceTypes.find((a) => a.id === p.typeId)?.name[locale];
+    return [type, p.brand, p.model].filter(Boolean).join(' · ') || t.appliances.notSet;
+  };
   const link = (label: string, href: '/legal/privacy' | '/legal/terms') => (
     <Pressable accessibilityRole="button" onPress={() => router.push(href)} style={{ minHeight: 44, justifyContent: 'center' }}>
       <Row style={{ justifyContent: 'space-between' }}>
@@ -54,6 +60,17 @@ export default function Settings() {
               <Chip label={t.settings.themeLight} selected={theme === 'light'} onPress={() => setTheme('light')} />
               <Chip label={t.settings.themeDark} selected={theme === 'dark'} onPress={() => setTheme('dark')} />
             </Row>
+          </Card>
+        </FadeIn>
+
+        <FadeIn delay={60}>
+          <Card style={{ gap: space.md }}>
+            <Row><IconBubble name="disc" /><Text weight="semibold">{t.appliances.title}</Text></Row>
+            <View style={{ gap: 4 }}>
+              <Text variant="caption" muted>{`${t.appliances.washer}: ${describe(washer)}`}</Text>
+              <Text variant="caption" muted>{`${t.appliances.dryer}: ${describe(dryer)}`}</Text>
+            </View>
+            <Button variant="quiet" label={t.settings.change} onPress={() => router.push('/appliances')} />
           </Card>
         </FadeIn>
 
