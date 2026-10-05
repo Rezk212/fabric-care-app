@@ -81,4 +81,6 @@ export interface ApplianceProfile {
   none?: boolean;
   brand?: string;
   model?: string;
+  /** Small photo of the machine panel or rating plate, kept on the device as a data URI. */
+  photo?: string;
 }

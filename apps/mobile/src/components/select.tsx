@@ -114,3 +114,79 @@ export function Swatch({ colors: cs, size = 22 }: { colors: string[]; size?: num
     </View>
   );
 }
+
+/**
+ * Multi-choice dropdown: opens the same kind of sheet, each row toggles, and "Done" closes it.
+ * Optionally lets people type extra items of their own.
+ */
+export function MultiSelect({
+  placeholder, groups, values, onChange, searchPlaceholder, summary, doneLabel, otherPlaceholder, otherValue, onOtherChange,
+}: {
+  placeholder: string;
+  groups: SelectGroup[];
+  values: string[];
+  onChange: (ids: string[]) => void;
+  searchPlaceholder?: string;
+  summary: string;
+  doneLabel: string;
+  otherPlaceholder?: string;
+  otherValue?: string;
+  onOtherChange?: (text: string) => void;
+}) {
+  const { t, colors, rtl } = useApp();
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const q = query.trim().toLowerCase();
+  const filtered = q ? groups.map((g) => ({ ...g, items: g.items.filter((i) => i.label.toLowerCase().includes(q)) })).filter((g) => g.items.length > 0) : groups;
+  const toggle = (id: string) => onChange(values.includes(id) ? values.filter((v) => v !== id) : [...values, id]);
+  const count = values.length;
+
+  return (
+    <View style={{ gap: space.sm }}>
+      <Pressable accessibilityRole="button" accessibilityLabel={placeholder} onPress={() => setOpen(true)}
+        style={{ minHeight: 56, borderRadius: radius.md, borderWidth: 1, borderColor: count ? colors.primary : colors.line, backgroundColor: colors.surface, paddingHorizontal: space.lg, flexDirection: 'row', alignItems: 'center', gap: space.md }}>
+        <Text style={{ flex: 1 }} muted={!count} weight={count ? 'semibold' : 'regular'}>{count ? summary : placeholder}</Text>
+        <Feather name="chevron-down" size={20} color={colors.inkMuted} />
+      </Pressable>
+      {onOtherChange ? <Field icon="edit-3" value={otherValue ?? ''} onChangeText={onOtherChange} placeholder={otherPlaceholder} accessibilityLabel={otherPlaceholder} /> : null}
+
+      <Modal visible={open} transparent animationType="slide" onRequestClose={() => setOpen(false)}>
+        <Pressable accessibilityLabel={t.manual.close} onPress={() => setOpen(false)} style={{ flex: 1, backgroundColor: 'rgba(8,14,40,0.5)', justifyContent: 'flex-end' }}>
+          <Pressable style={{ maxHeight: '86%', backgroundColor: colors.surface, borderTopLeftRadius: radius.lg, borderTopRightRadius: radius.lg, paddingTop: space.lg, direction: rtl ? 'rtl' : 'ltr' }}>
+            <Row style={{ paddingHorizontal: space.xl, paddingBottom: space.md }}>
+              <Text variant="title" weight="semibold" style={{ flex: 1 }}>{placeholder}</Text>
+              <Pressable accessibilityRole="button" accessibilityLabel={doneLabel} hitSlop={10} onPress={() => setOpen(false)}>
+                <Text weight="semibold" color={colors.primary}>{doneLabel}</Text>
+              </Pressable>
+            </Row>
+            <View style={{ paddingHorizontal: space.xl, paddingBottom: space.md }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm, minHeight: 48, borderRadius: radius.md, backgroundColor: colors.surfaceMuted, paddingHorizontal: space.md }}>
+                <Feather name="search" size={18} color={colors.inkMuted} />
+                <TextInput value={query} onChangeText={setQuery} placeholder={searchPlaceholder} placeholderTextColor={colors.inkMuted} autoCorrect={false}
+                  style={{ flex: 1, minHeight: 44, color: colors.ink, textAlign: 'auto', writingDirection: rtl ? 'rtl' : 'ltr' }} />
+              </View>
+            </View>
+            <ScrollView contentContainerStyle={{ paddingHorizontal: space.lg, paddingBottom: space.xxxl, gap: 2 }} keyboardShouldPersistTaps="handled">
+              {filtered.map((g, gi) => (
+                <View key={gi} style={{ gap: 2 }}>
+                  {g.title ? <Text variant="caption" weight="semibold" muted style={{ paddingHorizontal: space.sm, paddingTop: space.md, paddingBottom: space.xs }}>{g.title}</Text> : null}
+                  {g.items.map((i) => {
+                    const on = values.includes(i.id);
+                    return (
+                      <Pressable key={i.id} accessibilityRole="checkbox" accessibilityState={{ checked: on }} onPress={() => toggle(i.id)}
+                        style={({ pressed }) => ({ minHeight: 52, flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.sm, borderRadius: radius.md, backgroundColor: on ? colors.primarySoft : pressed ? colors.surfaceMuted : 'transparent' })}>
+                        <Text style={{ flex: 1 }} weight={on ? 'semibold' : 'regular'}>{i.label}</Text>
+                        <Feather name={on ? 'check-square' : 'square'} size={20} color={on ? colors.primary : colors.inkMuted} />
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              ))}
+              {filtered.length === 0 ? <Text muted style={{ padding: space.lg }}>{t.manual.noResults}</Text> : null}
+            </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
+    </View>
+  );
+}

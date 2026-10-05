@@ -11,7 +11,7 @@ import { Button, Card, Chip, Field, FadeIn, Row, Text } from './ui';
 
 /** Questionnaire that builds a wash plan without photos: garment, fabric, colour, then optional stains. */
 export function ManualForm({ onUsePhotos }: { onUsePhotos: () => void }) {
-  const { t, locale } = useApp();
+  const { t, locale, wardrobe } = useApp();
   const [garment, setGarment] = useState<string>();
   const [garmentOther, setGarmentOther] = useState('');
   const [fabric, setFabric] = useState<string>();
@@ -21,10 +21,14 @@ export function ManualForm({ onUsePhotos }: { onUsePhotos: () => void }) {
   const [stains, setStains] = useState<string[]>([]);
   const [stainOther, setStainOther] = useState('');
 
-  const garmentGroupsUi = useMemo<SelectGroup[]>(() => garmentGroups.map((g) => ({
-    title: g.name[locale],
-    items: wardrobeItems.filter((w) => w.group === g.id).map((w) => ({ id: w.id, label: w.name[locale] })),
-  })), [locale]);
+  const garmentGroupsUi = useMemo<SelectGroup[]>(() => {
+    const mine = wardrobeItems.filter((w) => wardrobe.includes(w.id)).map((w) => ({ id: w.id, label: w.name[locale] }));
+    const all = garmentGroups.map((g) => ({
+      title: g.name[locale],
+      items: wardrobeItems.filter((w) => w.group === g.id).map((w) => ({ id: w.id, label: w.name[locale] })),
+    }));
+    return mine.length ? [{ title: t.appliances.myClothes, items: mine }, ...all] : all;
+  }, [locale, wardrobe, t]);
 
   const fabricGroups = useMemo<SelectGroup[]>(() => {
     const o = orderedFabricOptions(garment === OTHER ? undefined : garment);

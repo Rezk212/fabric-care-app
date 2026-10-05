@@ -18,12 +18,14 @@ const KEY = 'naqa.settings.v1';
 export type ThemeChoice = 'auto' | 'light' | 'dark';
 interface Persisted {
   locale: Locale; place: Place | null; onboarded: boolean; theme: ThemeChoice;
-  /** The washer and dryer questions are asked once; true after the user saved or skipped. */
-  appliancesAsked: boolean; washer?: ApplianceProfile; dryer?: ApplianceProfile;
+  /** The "complete your details" page is shown once after signing up; true after the user saved or skipped it. */
+  profileDone: boolean; washer?: ApplianceProfile; dryer?: ApplianceProfile;
+  /** Ids from `wardrobeItems` the user says they usually wash, plus free text. */
+  wardrobe: string[]; wardrobeOther: string;
 }
 // First launch follows the device language (Arabic or English); the user can change it any time.
 const deviceLocale = (): Locale => (getLocales()[0]?.languageCode === 'en' ? 'en' : 'ar');
-const defaults: Persisted = { locale: deviceLocale(), place: null, onboarded: false, theme: 'auto', appliancesAsked: false };
+const defaults: Persisted = { locale: deviceLocale(), place: null, onboarded: false, theme: 'auto', profileDone: false, wardrobe: [], wardrobeOther: '' };
 
 export type AuthError = 'invalid' | 'exists' | 'weak' | 'generic' | 'cancelled';
 export type AuthResult = { ok: true; needsConfirmation?: boolean } | { ok: false; error: AuthError };
@@ -37,7 +39,7 @@ interface Ctx extends Persisted {
   signOut: () => Promise<void>;
   deleteAccount: () => Promise<boolean>;
   setTheme: (t: ThemeChoice) => void;
-  saveAppliances: (washer?: ApplianceProfile, dryer?: ApplianceProfile) => void;
+  saveProfile: (patch: Partial<Pick<Persisted, 'place' | 'washer' | 'dryer' | 'wardrobe' | 'wardrobeOther'>> & { done?: boolean }) => void;
   t: Dictionary;
   rtl: boolean;
   colors: Palette;
@@ -59,7 +61,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     AsyncStorage.getItem(KEY)
-      .then((raw) => { if (raw) setState({ ...defaults, ...JSON.parse(raw) }); })
+      .then((raw) => {
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        // People who finished the older setup steps do not see the new details page again.
+        setState({ ...defaults, ...saved, profileDone: saved.profileDone ?? Boolean(saved.place && saved.appliancesAsked) });
+      })
       .catch(() => {})
       .finally(() => setReady(true));
   }, []);
@@ -123,7 +130,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return true;
     },
     setTheme: (theme) => update({ theme }),
-    saveAppliances: (washer, dryer) => update({ washer, dryer, appliancesAsked: true }),
+    saveProfile: ({ done, ...patch }) => update(done ? { ...patch, profileDone: true } : patch),
     t: dictionaries[state.locale],
     rtl: isRTL(state.locale),
     colors: dark ? palette.dark : palette.light,

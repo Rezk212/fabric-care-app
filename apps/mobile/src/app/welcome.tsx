@@ -32,7 +32,7 @@ export default function Welcome() {
         </View>
 
         <View style={{ paddingBottom: space.xl }}>
-          <Button variant="onHero" icon={rtl ? 'arrow-left' : 'arrow-right'} label={t.welcome.start} onPress={() => { finishOnboarding(); router.replace('/place'); }} />
+          <Button variant="onHero" icon={rtl ? 'arrow-left' : 'arrow-right'} label={t.welcome.start} onPress={() => { finishOnboarding(); router.replace('/'); }} />
         </View>
       </Screen>
     </LinearGradient>

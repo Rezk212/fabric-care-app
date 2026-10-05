@@ -74,6 +74,13 @@ export default function Settings() {
           </Card>
         </FadeIn>
 
+        <FadeIn delay={70}>
+          <Card style={{ gap: space.md }}>
+            <Row><IconBubble name="user" /><Text weight="semibold">{t.appliances.wardrobeTitle}</Text></Row>
+            <Button variant="quiet" label={t.settings.change} onPress={() => router.push('/wardrobe')} />
+          </Card>
+        </FadeIn>
+
         <FadeIn delay={80}>
           <Card style={{ gap: space.md }}>
             <Row><IconBubble name="map-pin" tone="accent" /><View style={{ flex: 1 }}>
