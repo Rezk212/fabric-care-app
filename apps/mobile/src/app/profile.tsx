@@ -1,4 +1,4 @@
-import { countries, format, garmentGroups, space, wardrobeItems } from '@naqa/shared';
+import { countries, fabricFamilies, fabricOptions, format, garmentGroups, space, wardrobeItems } from '@naqa/shared';
 import * as Location from 'expo-location';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
@@ -10,7 +10,7 @@ import { useApp } from '../lib/app-context';
 
 /** Shown once after creating an account. Everything is optional; "Later" skips it. */
 export default function Profile() {
-  const { t, locale, place, washer, dryer, wardrobe, wardrobeOther, saveProfile } = useApp();
+  const { t, locale, place, washer, dryer, wardrobe, wardrobeOther, fabrics, fabricsOther, saveProfile } = useApp();
   const country = countries[0];
   const [cityId, setCityId] = useState<string | undefined>(place?.cityId);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | undefined>(place?.lat != null && place?.lng != null ? { lat: place.lat, lng: place.lng } : undefined);
@@ -19,9 +19,13 @@ export default function Profile() {
   const [d, setD] = useState(() => toDraft(dryer));
   const [ids, setIds] = useState(wardrobe);
   const [other, setOther] = useState(wardrobeOther);
+  const [fabIds, setFabIds] = useState(fabrics);
+  const [fabOther, setFabOther] = useState(fabricsOther);
 
   const cities = useMemo<SelectGroup[]>(() => [{ items: country.cities.map((c) => ({ id: c.id, label: c.name[locale] })) }], [country, locale]);
   const clothes = useMemo<SelectGroup[]>(() => garmentGroups.map((g) => ({ title: g.name[locale], items: wardrobeItems.filter((x) => x.group === g.id).map((x) => ({ id: x.id, label: x.name[locale] })) })), [locale]);
+
+  const fabricGroups = useMemo<SelectGroup[]>(() => fabricFamilies.map((fam) => ({ title: fam.name[locale], items: fabricOptions.filter((f) => f.family === fam.id).map((f) => ({ id: f.id, label: f.name[locale] })) })), [locale]);
 
   async function useMyLocation() {
     const perm = await Location.requestForegroundPermissionsAsync();
@@ -34,7 +38,7 @@ export default function Profile() {
   function save() {
     saveProfile({
       place: cityId ? { countryCode: country.code, cityId, ...coords } : undefined,
-      washer: toProfile(w), dryer: toProfile(d), wardrobe: ids, wardrobeOther: other.trim(), done: true,
+      washer: toProfile(w), dryer: toProfile(d), wardrobe: ids, wardrobeOther: other.trim(), fabrics: fabIds, fabricsOther: fabOther.trim(), done: true,
     });
     router.replace('/');
   }
@@ -67,6 +71,16 @@ export default function Profile() {
             <MultiSelect placeholder={t.profile.pickClothes} groups={clothes} values={ids} onChange={setIds} searchPlaceholder={t.manual.searchGarment}
               summary={format(t.profile.selected, { n: ids.length })} doneLabel={t.profile.done}
               otherPlaceholder={t.profile.otherClothes} otherValue={other} onOtherChange={setOther} />
+          </Card>
+        </FadeIn>
+
+        <FadeIn delay={150}>
+          <Card style={{ gap: space.md }}>
+            <Row><IconBubble name="layers" tone="accent" /><Text weight="semibold">{t.profile.fabrics}</Text></Row>
+            <Text variant="caption" muted>{t.profile.fabricsIntro}</Text>
+            <MultiSelect placeholder={t.profile.pickFabrics} groups={fabricGroups} values={fabIds} onChange={setFabIds} searchPlaceholder={t.profile.searchFabric}
+              summary={format(t.profile.selected, { n: fabIds.length })} doneLabel={t.profile.done}
+              otherPlaceholder={t.profile.otherFabrics} otherValue={fabOther} onOtherChange={setFabOther} />
           </Card>
         </FadeIn>
         <Text variant="caption" muted>{t.appliances.editHint}</Text>

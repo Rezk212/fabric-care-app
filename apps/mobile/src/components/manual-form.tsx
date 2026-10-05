@@ -11,7 +11,7 @@ import { Button, Card, Chip, Field, FadeIn, Row, Text } from './ui';
 
 /** Questionnaire that builds a wash plan without photos: garment, fabric, colour, then optional stains. */
 export function ManualForm({ onUsePhotos }: { onUsePhotos: () => void }) {
-  const { t, locale, wardrobe } = useApp();
+  const { t, locale, wardrobe, fabrics } = useApp();
   const [garment, setGarment] = useState<string>();
   const [garmentOther, setGarmentOther] = useState('');
   const [fabric, setFabric] = useState<string>();
@@ -31,14 +31,14 @@ export function ManualForm({ onUsePhotos }: { onUsePhotos: () => void }) {
   }, [locale, wardrobe, t]);
 
   const fabricGroups = useMemo<SelectGroup[]>(() => {
-    const o = orderedFabricOptions(garment === OTHER ? undefined : garment);
+    const o = orderedFabricOptions(garment === OTHER ? undefined : garment, fabrics);
     const map = (list: typeof o.common) => list.map((f) => ({ id: f.id, label: f.name[locale] }));
     return [
+      ...(o.owned.length ? [{ title: t.appliances.myFabrics, items: map(o.owned) }] : []),
       ...(o.common.length ? [{ title: t.manual.commonFor, items: map(o.common) }] : []),
-      { title: o.common.length ? t.manual.moreFabrics : undefined, items: map(o.rest) },
-      { title: t.manual.lessCommon, items: map(o.more) },
+      ...o.families.map((g) => ({ title: g.family.name[locale], items: map(g.items) })),
     ];
-  }, [garment, locale, t]);
+  }, [garment, locale, t, fabrics]);
 
   const colourGroups = useMemo<SelectGroup[]>(() => [{ items: colorOptions.map((c) => ({ id: c.id, label: c.name[locale], swatch: c.swatch })) }], [locale]);
 
@@ -77,7 +77,7 @@ export function ManualForm({ onUsePhotos }: { onUsePhotos: () => void }) {
       {garmentOk ? (
         <FadeIn style={{ gap: space.sm }}>
           {step(t.manual.stepFabric)}
-          <Select placeholder={t.manual.pickFabric} groups={fabricGroups} value={fabric} onChange={setFabric}
+          <Select placeholder={t.manual.pickFabric} searchPlaceholder={t.profile.searchFabric} groups={fabricGroups} value={fabric} onChange={setFabric}
             extraBottom={[{ id: UNKNOWN_FABRIC, label: t.manual.dontKnow }]}
             otherLabel={t.manual.other} otherPlaceholder={t.manual.otherFabric} otherValue={fabricOther} onOtherChange={setFabricOther} />
           <Card style={{ gap: space.sm }}>

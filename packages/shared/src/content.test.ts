@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { applyDetails, fabricFromDetails, fabricOptions, colorOptions, garmentGroups, orderedFabricOptions, toAnalysis, wardrobeItems, applianceMaintenance, applianceTypes, matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
+import { fabricFamilies, applyDetails, fabricFromDetails, fabricOptions, colorOptions, garmentGroups, orderedFabricOptions, toAnalysis, wardrobeItems, applianceMaintenance, applianceTypes, matchChain, dictionaries, explainSymbol, explainSymbols, gulfGarments, matchMachineProgram, stainAdvice, stainGuides, symbolGuide } from './index';
 
 const nonEmpty = (b: { ar: string; en: string }) => b.ar.trim().length > 0 && b.en.trim().length > 0;
 
@@ -94,7 +94,10 @@ test('wardrobe: ids unique, every label has both languages, fabrics are valid', 
     if (g.note) assert.ok(nonEmpty(g.note), g.id);
     if (g.tipId) assert.ok(gulfGarments.some((x) => x.id === g.tipId), g.id);
   }
-  for (const f of fabricOptions) assert.ok(nonEmpty(f.name), f.id);
+  assert.equal(new Set(fabricOptions.map((f) => f.id)).size, fabricOptions.length);
+  for (const f of fabricOptions) assert.ok(nonEmpty(f.name) && fabricFamilies.some((x) => x.id === f.family), f.id);
+  assert.equal(fabricOptions.find((f) => f.id === 'linen')?.name.ar.includes('كتان صافي'), true);
+  assert.ok(fabricOptions.some((f) => f.id === 'linen_cotton'));
   for (const c of colorOptions) assert.ok(nonEmpty(c.name) && nonEmpty(c.note), c.id);
   // every group has something to pick
   for (const grp of garmentGroups) assert.ok(wardrobeItems.some((g) => g.group === grp.id), grp.id);
@@ -118,6 +121,10 @@ test('applyDetails only makes advice safer', () => {
   assert.ok(applyDetails(base, { colorOther: 'turquoise' }, 'en').recommendation.temperature <= 30);
   assert.equal(fabricFromDetails({ fabricOptionId: 'satin' }), 'viscose');
   assert.equal(fabricFromDetails({}), 'unknown');
-  const o = orderedFabricOptions('jeans');
-  assert.deepEqual(o.common.map((f) => f.id), ['denim']);
+  const o = orderedFabricOptions('jeans', ['linen']);
+  assert.ok(o.common.some((f) => f.id === 'denim'));
+  assert.deepEqual(o.owned.map((f) => f.id), ['linen']);
+  const seen = [...o.owned, ...o.common, ...o.families.flatMap((g) => g.items)].map((f) => f.id);
+  assert.equal(new Set(seen).size, seen.length);
+  assert.equal(seen.length, fabricOptions.length);
 });

@@ -119,36 +119,93 @@ export const wardrobeItems: WardrobeItem[] = [
     note: { ar: 'يفضّل الغسل اليدوي، وجفّفها على شكل قالب حتى تحتفظ بشكلها.', en: 'Hand wash if you can, and dry it on a form to keep its shape.' } }),
 ];
 
+export type FabricFamily = 'cotton' | 'linen' | 'wool' | 'silk' | 'synthetic' | 'cellulose' | 'special';
+
+export const fabricFamilies: { id: FabricFamily; name: Bilingual }[] = [
+  { id: 'cotton', name: { ar: 'القطن ومشتقاته', en: 'Cotton and cotton fabrics' } },
+  { id: 'linen', name: { ar: 'الكتان والألياف النباتية', en: 'Linen and plant fibres' } },
+  { id: 'wool', name: { ar: 'الصوف والألياف الحيوانية', en: 'Wool and animal fibres' } },
+  { id: 'silk', name: { ar: 'الحرير', en: 'Silk' } },
+  { id: 'synthetic', name: { ar: 'الأقمشة الصناعية', en: 'Synthetic fabrics' } },
+  { id: 'cellulose', name: { ar: 'الألياف شبه الصناعية (الفيسكوز وأخواتها)', en: 'Semi-synthetic fibres (viscose and relatives)' } },
+  { id: 'special', name: { ar: 'أقمشة خاصة', en: 'Special fabrics' } },
+];
+
 export interface FabricOption {
   id: string;
-  /** What the care rules treat it as. Lookalikes map to the safest matching type. */
+  /** What the care rules treat it as. Blends and lookalikes map to the safest matching type. */
   fabric: FabricType;
   name: Bilingual;
-  /** Shown first for everyone; the rest are tucked under "more fabrics". */
-  basic?: boolean;
+  family: FabricFamily;
   /** Not for the machine: the plan says so. */
   noMachine?: boolean;
 }
 
+const F = (id: string, family: FabricFamily, fabric: FabricType, ar: string, en: string, extra: Partial<FabricOption> = {}): FabricOption =>
+  ({ id, family, fabric, name: { ar, en }, ...extra });
+
+/** Fabrics by their proper names, including common blends. Each maps to the closest care rule. */
 export const fabricOptions: FabricOption[] = [
-  { id: 'cotton', fabric: 'cotton', basic: true, name: { ar: 'قطن', en: 'Cotton' } },
-  { id: 'linen', fabric: 'linen', basic: true, name: { ar: 'كتان', en: 'Linen' } },
-  { id: 'wool', fabric: 'wool', basic: true, name: { ar: 'صوف', en: 'Wool' } },
-  { id: 'silk', fabric: 'silk', basic: true, name: { ar: 'حرير', en: 'Silk' } },
-  { id: 'polyester', fabric: 'polyester', basic: true, name: { ar: 'بوليستر', en: 'Polyester' } },
-  { id: 'nylon', fabric: 'nylon', basic: true, name: { ar: 'نايلون', en: 'Nylon' } },
-  { id: 'denim', fabric: 'denim', basic: true, name: { ar: 'جينز (دنيم)', en: 'Denim' } },
-  { id: 'cashmere', fabric: 'cashmere', basic: true, name: { ar: 'كشمير', en: 'Cashmere' } },
-  { id: 'viscose', fabric: 'viscose', basic: true, name: { ar: 'فيسكوز / رايون', en: 'Viscose / rayon' } },
-  { id: 'synthetic_blend', fabric: 'synthetic_blend', basic: true, name: { ar: 'خليط صناعي (قطن مع بوليستر)', en: 'Synthetic blend (cotton-polyester)' } },
-  { id: 'satin', fabric: 'viscose', name: { ar: 'ساتان', en: 'Satin' } },
-  { id: 'chiffon', fabric: 'viscose', name: { ar: 'شيفون', en: 'Chiffon' } },
-  { id: 'velvet', fabric: 'viscose', name: { ar: 'مخمل / قطيفة', en: 'Velvet' } },
-  { id: 'modal', fabric: 'viscose', name: { ar: 'مودال / بامبو', en: 'Modal / bamboo' } },
-  { id: 'fleece', fabric: 'polyester', name: { ar: 'فليس (صوف صناعي)', en: 'Fleece' } },
-  { id: 'acrylic', fabric: 'synthetic_blend', name: { ar: 'أكريليك', en: 'Acrylic' } },
-  { id: 'elastane', fabric: 'synthetic_blend', name: { ar: 'ليكرا / سبانديكس', en: 'Elastane / spandex' } },
-  { id: 'leather', fabric: 'unknown', noMachine: true, name: { ar: 'جلد / سويد', en: 'Leather / suede' } },
+  // Cotton
+  F('cotton', 'cotton', 'cotton', 'قطن صافي (١٠٠٪ قطن)', 'Pure cotton'),
+  F('cotton_egyptian', 'cotton', 'cotton', 'قطن مصري / بيما', 'Egyptian / Pima cotton'),
+  F('cotton_organic', 'cotton', 'cotton', 'قطن عضوي', 'Organic cotton'),
+  F('cotton_poly', 'cotton', 'synthetic_blend', 'قطن مخلوط بالبوليستر', 'Cotton-polyester blend'),
+  F('cotton_stretch', 'cotton', 'synthetic_blend', 'قطن مع إيلاستين (ستريتش)', 'Stretch cotton (with elastane)'),
+  F('jersey', 'cotton', 'cotton', 'جيرسيه (قطن محبوك)', 'Cotton jersey'),
+  F('poplin', 'cotton', 'cotton', 'بوبلين', 'Poplin'),
+  F('flannel', 'cotton', 'cotton', 'فلانيل', 'Flannel'),
+  F('corduroy', 'cotton', 'cotton', 'كوردروي (قطيفة مضلّعة)', 'Corduroy'),
+  F('terry', 'cotton', 'cotton', 'قطن منشفي (تيري)', 'Terry cloth'),
+  F('denim', 'cotton', 'denim', 'جينز (دنيم)', 'Denim'),
+  F('denim_stretch', 'cotton', 'denim', 'جينز ستريتش', 'Stretch denim'),
+  // Linen and plant fibres
+  F('linen', 'linen', 'linen', 'كتان صافي (١٠٠٪ كتان)', 'Pure linen'),
+  F('linen_cotton', 'linen', 'linen', 'كتان مخلوط بالقطن', 'Linen-cotton blend'),
+  F('linen_viscose', 'linen', 'viscose', 'كتان مخلوط بالفيسكوز', 'Linen-viscose blend'),
+  F('linen_poly', 'linen', 'synthetic_blend', 'كتان مخلوط بالبوليستر', 'Linen-polyester blend'),
+  F('hemp', 'linen', 'linen', 'قنب', 'Hemp'),
+  F('ramie', 'linen', 'linen', 'رامي', 'Ramie'),
+  // Wool and animal fibres
+  F('wool', 'wool', 'wool', 'صوف صافي', 'Pure wool'),
+  F('merino', 'wool', 'wool', 'صوف ميرينو', 'Merino wool'),
+  F('wool_blend', 'wool', 'wool', 'صوف مخلوط', 'Wool blend'),
+  F('cashmere', 'wool', 'cashmere', 'كشمير', 'Cashmere'),
+  F('pashmina', 'wool', 'cashmere', 'باشمينا', 'Pashmina'),
+  F('mohair', 'wool', 'wool', 'موهير / أنغورا', 'Mohair / angora'),
+  F('camel_hair', 'wool', 'wool', 'وبر الإبل', 'Camel hair'),
+  F('tweed', 'wool', 'wool', 'تويد', 'Tweed'),
+  // Silk
+  F('silk', 'silk', 'silk', 'حرير طبيعي', 'Natural silk'),
+  F('silk_blend', 'silk', 'silk', 'حرير مخلوط', 'Silk blend'),
+  F('silk_satin', 'silk', 'silk', 'ساتان حرير', 'Silk satin'),
+  // Synthetic
+  F('polyester', 'synthetic', 'polyester', 'بوليستر', 'Polyester'),
+  F('microfiber', 'synthetic', 'polyester', 'ميكروفايبر', 'Microfibre'),
+  F('nylon', 'synthetic', 'nylon', 'نايلون (بولي أميد)', 'Nylon (polyamide)'),
+  F('acrylic', 'synthetic', 'synthetic_blend', 'أكريليك', 'Acrylic'),
+  F('elastane', 'synthetic', 'synthetic_blend', 'إيلاستين / ليكرا / سبانديكس', 'Elastane / Lycra / spandex'),
+  F('fleece', 'synthetic', 'polyester', 'فليس', 'Fleece'),
+  F('crepe', 'synthetic', 'polyester', 'كريب', 'Crepe'),
+  F('nida', 'synthetic', 'polyester', 'نيدا (قماش العبايات)', 'Nida (abaya fabric)'),
+  F('toyobo', 'synthetic', 'synthetic_blend', 'قماش دشداشة ياباني (مثل تويوبو)', 'Japanese thobe fabric (Toyobo type)'),
+  F('synthetic_blend', 'synthetic', 'synthetic_blend', 'خليط صناعي', 'Synthetic blend'),
+  // Semi-synthetic
+  F('viscose', 'cellulose', 'viscose', 'فيسكوز / رايون', 'Viscose / rayon'),
+  F('modal', 'cellulose', 'viscose', 'مودال', 'Modal'),
+  F('lyocell', 'cellulose', 'viscose', 'ليوسيل / تينسل', 'Lyocell / Tencel'),
+  F('bamboo', 'cellulose', 'viscose', 'بامبو (ألياف الخيزران)', 'Bamboo viscose'),
+  F('cupro', 'cellulose', 'viscose', 'كوبرو', 'Cupro'),
+  F('acetate', 'cellulose', 'viscose', 'أسيتات', 'Acetate'),
+  // Special
+  F('satin', 'special', 'viscose', 'ساتان', 'Satin'),
+  F('chiffon', 'special', 'viscose', 'شيفون', 'Chiffon'),
+  F('georgette', 'special', 'viscose', 'جورجيت', 'Georgette'),
+  F('organza', 'special', 'viscose', 'أورجانزا / تول', 'Organza / tulle'),
+  F('lace', 'special', 'viscose', 'دانتيل', 'Lace'),
+  F('velvet', 'special', 'viscose', 'مخمل / قطيفة', 'Velvet'),
+  F('leather', 'special', 'unknown', 'جلد طبيعي / سويد', 'Leather / suede', { noMachine: true }),
+  F('faux_leather', 'special', 'unknown', 'جلد صناعي', 'Faux leather', { noMachine: true }),
 ];
 
 export type ColorId = 'white' | 'light' | 'dark' | 'bright' | 'multi';
@@ -200,14 +257,19 @@ export function fabricFromDetails(d: GarmentDetails): FabricType {
   return fabricOptions.find((f) => f.id === d.fabricOptionId)?.fabric ?? 'unknown';
 }
 
-/** Fabric options in the order to show: the garment's usual fabrics first, then the rest of the basic ones, then the less common. */
-export function orderedFabricOptions(garmentId: string | undefined) {
+/**
+ * Fabric choices in the order to show: the ones the user said they own, then those usual for the garment,
+ * then everything else grouped by family. Nothing appears twice.
+ */
+export function orderedFabricOptions(garmentId: string | undefined, mine: string[] = []) {
   const item = wardrobeItems.find((g) => g.id === garmentId);
-  const basics = fabricOptions.filter((f) => f.basic);
-  const common = item ? basics.filter((f) => item.fabrics.includes(f.fabric)) : [];
-  const rest = basics.filter((f) => !common.includes(f));
-  const more = fabricOptions.filter((f) => !f.basic);
-  return { common, rest, more };
+  const owned = fabricOptions.filter((f) => mine.includes(f.id));
+  const common = item ? fabricOptions.filter((f) => item.fabrics.includes(f.fabric) && !mine.includes(f.id)) : [];
+  const shown = new Set([...owned, ...common].map((f) => f.id));
+  const families = fabricFamilies
+    .map((fam) => ({ family: fam, items: fabricOptions.filter((f) => f.family === fam.id && !shown.has(f.id)) }))
+    .filter((g) => g.items.length > 0);
+  return { owned, common, families };
 }
 
 const TEMPS: Temperature[] = [20, 30, 40, 60, 90];

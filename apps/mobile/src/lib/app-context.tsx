@@ -22,10 +22,12 @@ interface Persisted {
   profileDone: boolean; washer?: ApplianceProfile; dryer?: ApplianceProfile;
   /** Ids from `wardrobeItems` the user says they usually wash, plus free text. */
   wardrobe: string[]; wardrobeOther: string;
+  /** Ids from `fabricOptions` the user owns, plus free text. */
+  fabrics: string[]; fabricsOther: string;
 }
 // First launch follows the device language (Arabic or English); the user can change it any time.
 const deviceLocale = (): Locale => (getLocales()[0]?.languageCode === 'en' ? 'en' : 'ar');
-const defaults: Persisted = { locale: deviceLocale(), place: null, onboarded: false, theme: 'auto', profileDone: false, wardrobe: [], wardrobeOther: '' };
+const defaults: Persisted = { locale: deviceLocale(), place: null, onboarded: false, theme: 'auto', profileDone: false, wardrobe: [], wardrobeOther: '', fabrics: [], fabricsOther: '' };
 
 export type AuthError = 'invalid' | 'exists' | 'weak' | 'generic' | 'cancelled';
 export type AuthResult = { ok: true; needsConfirmation?: boolean } | { ok: false; error: AuthError };
@@ -39,7 +41,7 @@ interface Ctx extends Persisted {
   signOut: () => Promise<void>;
   deleteAccount: () => Promise<boolean>;
   setTheme: (t: ThemeChoice) => void;
-  saveProfile: (patch: Partial<Pick<Persisted, 'place' | 'washer' | 'dryer' | 'wardrobe' | 'wardrobeOther'>> & { done?: boolean }) => void;
+  saveProfile: (patch: Partial<Pick<Persisted, 'place' | 'washer' | 'dryer' | 'wardrobe' | 'wardrobeOther' | 'fabrics' | 'fabricsOther'>> & { done?: boolean }) => void;
   t: Dictionary;
   rtl: boolean;
   colors: Palette;
